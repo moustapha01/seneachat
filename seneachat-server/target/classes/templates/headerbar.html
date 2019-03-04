@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="top-bar" class="d-flex flex-row justify-content-around topbar lighten">
+        <div class="col-sm-9">
+            <ul class="contact-info clearfix">
+                <li><i class="fa fa-phone"></i>
+                    +12345678901</li>
+                <li><i class="fa fa-envelope"></i>
+                    <a href="mailto:example@example.com">info@seneachat.com</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-2">
+            <ul class="nav justify-content-end mr-2">
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-user" style="color:#8f9495;"> </span>
+                        Mon Compte
+                        <span class="caret"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" th:href="@{/web/login}" href="#">Accéder à mon compte</a>
+                        <a class="dropdown-item" href="#">Créer un nouveau compte</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

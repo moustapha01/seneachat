@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:replace="head-section :: head-main">
+
+</head>
+<body>
+
+<header th:fragment="header-main">
+    <div th:replace="headerbar :: top-bar">
+    </div>
+    <div class="d-flex flex-row justify-content-around main-header">
+        <div th:replace="logo :: logo-main">
+        </div>
+        <div th:replace="navigation :: navbar-main">
+        </div>
+    </div>
+</header>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="head-section :: head-main">
+
+</head>
+<body>
+
+<header th:replace="header :: header-main">
+</header>
+
+<section class="mb70">
+    <!-- START container for featured advertisement -->
+    <div class="container-fluid p-3 ad-category-container">
+        <div class="row justify-content-center">
+
+            <!-- MIDDLE container -->
+            <div class="col-md-11 bg-white border box-shadow">
+<!--                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="./#annonces" data-toggle="tab" class="active">Annonces
+                            <span class="label label-primary">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item"><a href="./#credits" data-toggle="tab">Credits <span class="label label-success">5</span></a></li>
+                    <li class="nav-item"><a href="/#analytics" data-toggle="tab">Statistiques <span class="label label-info">0</span></a></li>
+                    <li class="nav-item"><a href="/#billings" data-toggle="tab">Billings <span class="label label-warning">0</span></a></li>
+                    <li class="nav-item"><a href="/#attachments" data-toggle="tab">Attachments <span class="label label-danger">0</span></a></li>
+                    <li class="nav-item"><a href="/#notes" data-toggle="tab">Notes <span class="label label-default">0</span></a></li>
+                </ul>
+                <br/>-->
+
+                <div class="row">
+                    <div class="col-sm-6 float-left">
+
+                        <h5 class="box-title mt-3 mb-5">Mes Annonces</h5>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mt-3 mb-5 float-right">
+                            <span align="left" class="new-ad p-2" onclick="createNewAd('/web/advertisements/new');">
+                            <i class="fas fa-plus-square"></i>
+                            Nouvelle Annonce
+                        </span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div class="active tab-pane" id="policies">
+
+                        <br/>
+                        <br/>
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <div class="box-tools">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <div class="alert alert-warning" th:if="${sellerAds == null || #Lists.isEmpty(sellerAds)}">
+                                    <strong>Note:</strong> Aucune annonce disponible sur votre compte en ce moment. Cliquer ci-dessus
+                                    pour ajouter une nouvelle annonce.
+                            </div>-->
+                            <form name="sellerAdsForm" id="sellerAdsForm" th:action="@{/web/advertisements/view}" method="POST">
+                                <input type="hidden" name="adUuid" id="adUuid">
+                                <input type="hidden" name="adPage" id="adPage">
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Categorie</th>
+                                        <th>Prix</th>
+                                        <th>Statut</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tr th:each="ad : ${sellerAds}">
+                                        <td><a th:text="${ad.title}" href="#" th:onclick="'viewAd(\'' + ${ad.uuidString} + '\')'"></a></td>
+                                        <td th:text="${ad.category.name}"></td>
+                                        <td th:text="${ad.price}"></td>
+                                        <td>
+                                            <span th:if="${ad.status == 'A'}" class="badge badge-success">approve</span>
+                                            <span th:if="${ad.status == 'P'}"
+                                                  class="badge badge-warning">en cours</span>
+                                            <span th:if="${ad.status == 'R'}" class="badge badge-danger">rejette</span>
+                                        </td>
+                                        <td th:text="${ad.lastModifiedDate}"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm btn-link" th:onclick="'deleteAd(\'' + ${ad.uuidString} + '\')'">effacer</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </form>
+                        </div>
+                    </div> <!-- policies tab content -->
+                </div> <!-- /.nav-tab-content-->
+
+                <nav aria-label="Page navigation example" th:if="${ numPages > 1}">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <th:block th:each="i: ${#numbers.sequence(1, numPages)}">
+                            <li class="page-item"><a class="page-link" href="#" th:onclick="'viewAdsPage(\'' + ${i} + '\')'" th:text="${i}"></a></li>
+                        </th:block>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- /.nav-tab-custom -->
+            </div>	<!-- /.col-md-10 -->
+        </div>	<!-- /.row -->
+    </div>
+
+    <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCenterTitle">Effacer cette annonce</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Etes vous sure vous voulez effacer cette annonce?
+                </div>
+                <div class="modal-footer">
+                    <button>Effacer</button>
+                    <button>Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer th:replace="footer :: footer-main">
+
+</footer>
+<script type="text/javascript">
+    function viewAd(uuid) {
+        alert(uuid);
+        document.getElementById('adUuid').value = uuid;
+        document.getElementById('sellerAdsForm').action = '/web/advertisements/view';
+        document.sellerAdsForm.submit();
+    }
+
+    function viewAdsPage(pageNumber) {
+        alert(pageNumber);
+        document.getElementById('adPage').value = pageNumber;
+        document.getElementById('sellerAdsForm').action = '/web/seller/dashboard';
+        document.sellerAdsForm.submit();
+    }
+
+    function deleteAd(uuid) {
+       // alert(uuid);
+        document.getElementById('adUuid').value = uuid;
+        document.getElementById('sellerAdsForm').action = '/web/advertisements/delete';
+        document.sellerAdsForm.submit();
+    }
+</script>
+</body>
+</html>
+
