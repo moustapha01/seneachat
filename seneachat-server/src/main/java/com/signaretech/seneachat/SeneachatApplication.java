@@ -31,7 +31,7 @@ public class SeneachatApplication {
 
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServer2012Dialect");
-//		properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+		//properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         properties.setProperty("hibernate.show_sql", "true");
 //		properties.setProperty("org.hibernate.flushMode", "COMMIT");
         em.setJpaProperties(properties);

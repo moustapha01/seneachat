@@ -1,7 +1,7 @@
 package com.signaretech.seneachat.controller;
 
-import com.signaretech.seneachat.model.AdvertisementDTO;
-import com.signaretech.seneachat.model.SellerDTO;
+import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
+import com.signaretech.seneachat.persistence.entity.EntSeller;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.ISellerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ public class SellerController {
     @GetMapping("/web/seller/dashboard")
     public String dashboard(Model model, HttpServletRequest req) {
         HttpSession session = req.getSession();
-        SellerDTO seller = (SellerDTO) session.getAttribute("user");
+        EntSeller seller = (EntSeller) session.getAttribute("user");
 
-        List<AdvertisementDTO> sellerAds = adService.getSellerAds(seller.getId(), 0, 5);//existingSeller.getAds();
+        List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), 0, 5);//existingSeller.getAds();
         model.addAttribute("sellerAds", sellerAds);
         model.addAttribute("numPages", 3);
 
@@ -42,10 +42,10 @@ public class SellerController {
     public String getSellerAds(Model model, HttpServletRequest req) {
 
         HttpSession session = req.getSession();
-        SellerDTO seller = (SellerDTO) session.getAttribute("user");
+        EntSeller seller = (EntSeller) session.getAttribute("user");
 
         String selectedPage = (String)req.getParameter("adPage");
-        List<AdvertisementDTO> sellerAds = adService.getSellerAds(seller.getId(), Integer.valueOf(selectedPage), 5);
+        List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), Integer.valueOf(selectedPage), 5);
         model.addAttribute("sellerAds", sellerAds);
         model.addAttribute("numPages", 3);
         return "sellerads";

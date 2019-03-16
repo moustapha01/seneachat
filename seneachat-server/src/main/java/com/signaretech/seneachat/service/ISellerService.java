@@ -2,31 +2,31 @@ package com.signaretech.seneachat.service;
 
 import com.signaretech.seneachat.exception.SeneachatException;
 import com.signaretech.seneachat.model.AuthenticationResult;
-import com.signaretech.seneachat.model.SellerDTO;
+import com.signaretech.seneachat.persistence.entity.EntSeller;
 
 import java.sql.SQLException;
 
 public interface ISellerService {
 
     /**
-     * @param seller, {@link SellerDTO} object to be created
+     * @param seller, {@link EntSeller} object to be created
      * @throws SQLException
      */
-    void createSeller(SellerDTO seller);
+    void createSeller(EntSeller seller);
 
-    void updateSeller(SellerDTO seller);
+    void updateSeller(EntSeller seller);
 
     /**
-     * @param email, email id of the {@link SellerDTO}
-     * @return, the {@link SellerDTO} object with email @param email.
+     * @param email, email id of the {@link EntSeller}
+     * @return, the {@link EntSeller} object with email @param email.
      */
-    SellerDTO fetchSeller(String email);
+    EntSeller fetchSeller(String email);
 
-    void activateAccount(SellerDTO seller, String activationCode) throws SeneachatException;
+    void activateAccount(EntSeller seller, String activationCode) throws SeneachatException;
 
-    void resendActivationCode(SellerDTO seller) throws SeneachatException;
+    void resendActivationCode(EntSeller seller) throws SeneachatException;
 
-    void register(SellerDTO seller, String password2) throws SeneachatException;
+    void register(EntSeller seller, String password2) throws SeneachatException;
 
-    AuthenticationResult authenticateUser(SellerDTO user);
+    AuthenticationResult authenticateUser(EntSeller user);
 }

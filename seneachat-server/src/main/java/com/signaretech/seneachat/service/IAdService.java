@@ -1,21 +1,21 @@
 package com.signaretech.seneachat.service;
 
-import com.signaretech.seneachat.model.AdvertisementDTO;
+import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface IAdService {
 
-    AdvertisementDTO createAd(AdvertisementDTO ad);
+    EntAdvertisement createAd(EntAdvertisement ad);
 
-    AdvertisementDTO updateAd(AdvertisementDTO ad);
+    EntAdvertisement updateAd(EntAdvertisement ad);
 
-    AdvertisementDTO fetchAd(UUID id);
+    EntAdvertisement fetchAd(UUID id);
 
-    void deleteAd(AdvertisementDTO ad);
+    void deleteAd(EntAdvertisement ad);
 
-    List<AdvertisementDTO> getSellerAds(UUID sellerId, int fromPage, int maxAds);
+    List<EntAdvertisement> getSellerAds(UUID sellerId, int fromPage, int maxAds);
 
-    AdvertisementDTO approveAd(AdvertisementDTO ad);
+    EntAdvertisement approveAd(EntAdvertisement ad);
 }

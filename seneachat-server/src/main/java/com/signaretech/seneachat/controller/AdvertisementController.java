@@ -1,9 +1,9 @@
 package com.signaretech.seneachat.controller;
 
-import com.signaretech.seneachat.model.AdvertisementDTO;
-import com.signaretech.seneachat.model.CategoryDTO;
-import com.signaretech.seneachat.model.PhotoDTO;
-import com.signaretech.seneachat.model.SellerDTO;
+import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
+import com.signaretech.seneachat.persistence.entity.EntCategory;
+import com.signaretech.seneachat.persistence.entity.EntPhoto;
+import com.signaretech.seneachat.persistence.entity.EntSeller;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.ICategoryService;
 import com.signaretech.seneachat.service.ISellerService;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
@@ -40,26 +39,26 @@ public class AdvertisementController {
 
     @GetMapping("/web/advertisements/new")
     public String newAd(Model model, HttpServletRequest req) {
-        if(!model.containsAttribute("advertisement")) model.addAttribute("advertisement", new AdvertisementDTO());
-        List<CategoryDTO> rootCategories = categoryService.getRootCategories();
+        if(!model.containsAttribute("advertisement")) model.addAttribute("advertisement", new EntAdvertisement());
+        List<EntCategory> rootCategories = categoryService.getRootCategories();
         model.addAttribute("rootCategories", rootCategories);
         model.addAttribute("action", "newAd");
 
-        req.getSession().setAttribute("currAd", new AdvertisementDTO());
+        req.getSession().setAttribute("currAd", new EntAdvertisement());
 
         return "ad-new";
     }
 
     @PostMapping("/web/advertisements/new")
-    public String getAdSubCategories(@ModelAttribute("advertisement") AdvertisementDTO advertisement, Model model, BindingResult binding,
+    public String getAdSubCategories(@ModelAttribute("advertisement") EntAdvertisement advertisement, Model model, BindingResult binding,
                                      HttpServletRequest req) {
 
-        setModelCategories(model, advertisement);
+       // setModelCategories(model, advertisement);
 
-        AdvertisementDTO currAd = (AdvertisementDTO)req.getSession().getAttribute("currAd");
+        EntAdvertisement currAd = (EntAdvertisement)req.getSession().getAttribute("currAd");
 
         if(currAd == null){
-            currAd = new AdvertisementDTO();
+            currAd = new EntAdvertisement();
         }
 
         advertisement.getPhotos().addAll(currAd.getPhotos());
@@ -70,14 +69,14 @@ public class AdvertisementController {
     }
 
     @PostMapping("/web/advertisements/save")
-    public String save(@ModelAttribute("advertisement") AdvertisementDTO advertisement, Model model, BindingResult binding,
+    public String save(@ModelAttribute("advertisement") EntAdvertisement advertisement, Model model, BindingResult binding,
                        HttpServletRequest req) {
 
-        AdvertisementDTO currAd = (AdvertisementDTO) req.getSession().getAttribute("currAd");
+        EntAdvertisement currAd = (EntAdvertisement) req.getSession().getAttribute("currAd");
 
         if(AdvertisementValidation.validateAdvertisement(currAd)){
 
-            SellerDTO sellerDTO = (SellerDTO) req.getSession().getAttribute("currentUser");
+            EntSeller sellerDTO = (EntSeller) req.getSession().getAttribute("currentUser");
             currAd.setSeller(sellerDTO);
 
             if(currAd.getId() == null){
@@ -87,7 +86,7 @@ public class AdvertisementController {
             }
             //AdvertisementDTO ad = adService.createAd(currAd);
 
-            List<AdvertisementDTO> sellerAds = sellerService.fetchSeller(sellerDTO.getEmail()).getAds();
+            List<EntAdvertisement> sellerAds = sellerService.fetchSeller(sellerDTO.getEmail()).getAds();
             model.addAttribute("sellerAds", sellerAds);
             return "sellerads";
         }
@@ -105,7 +104,7 @@ public class AdvertisementController {
     public String viewAd(Model model, HttpServletRequest req){
         String adUuid = req.getParameter("adUuid");
 
-        AdvertisementDTO ad = adService.fetchAd(UUID.fromString(adUuid));
+        EntAdvertisement ad = adService.fetchAd(UUID.fromString(adUuid));
 
         req.getSession().setAttribute("currAd", ad);
         setModelCategories(model, ad);
@@ -120,7 +119,7 @@ public class AdvertisementController {
 
        // AdvertisementDTO ad = adService.fetchAd(UUID.fromString(adUuid));
 
-        AdvertisementDTO ad = (AdvertisementDTO)req.getSession().getAttribute("currAd");
+        EntAdvertisement ad = (EntAdvertisement) req.getSession().getAttribute("currAd");
        // req.getSession().setAttribute("currAd", ad);
         setModelCategories(model, ad);
         model.addAttribute("advertisement", ad);
@@ -132,13 +131,13 @@ public class AdvertisementController {
     public String deleteAd(Model model, HttpServletRequest req){
         String adUuid = req.getParameter("adUuid");
 
-        AdvertisementDTO ad = adService.fetchAd(UUID.fromString(adUuid));
+        EntAdvertisement ad = adService.fetchAd(UUID.fromString(adUuid));
 
         adService.deleteAd(ad);
 
-        SellerDTO sellerDTO = (SellerDTO) req.getSession().getAttribute("currentUser");
+        EntSeller sellerDTO = (EntSeller) req.getSession().getAttribute("currentUser");
 
-        List<AdvertisementDTO> sellerAds = sellerService.fetchSeller(sellerDTO.getEmail()).getAds();
+        List<EntAdvertisement> sellerAds = sellerService.fetchSeller(sellerDTO.getEmail()).getAds();
         model.addAttribute("sellerAds", sellerAds);
 
         return "sellerads";
@@ -147,13 +146,13 @@ public class AdvertisementController {
     @PostMapping("/web/advertisements/ad-photo")
     public String adPhoto(Model model, HttpServletRequest req) {
 
-        AdvertisementDTO currAd = (AdvertisementDTO) req.getSession().getAttribute("currAd");
+        EntAdvertisement currAd = (EntAdvertisement) req.getSession().getAttribute("currAd");
 
         if(currAd == null) {
-            currAd = new AdvertisementDTO();
+            currAd = new EntAdvertisement();
         }
 
-        SellerDTO sellerDTO = (SellerDTO)req.getSession().getAttribute("currentUser");
+        EntSeller sellerDTO = (EntSeller)req.getSession().getAttribute("currentUser");
         currAd.setSeller(sellerService.fetchSeller(sellerDTO.getEmail()));
 
         setModelCategories(model, currAd);
@@ -163,7 +162,7 @@ public class AdvertisementController {
             final Part filePart = req.getParts().iterator().next();
             String fileName = filePart.getSubmittedFileName();
             try(InputStream fis = filePart.getInputStream();){
-                try( ByteArrayOutputStream bos = new ByteArrayOutputStream();){
+                try(ByteArrayOutputStream bos = new ByteArrayOutputStream();){
                     byte[] buffer = new byte[4996];
 
                     int count;
@@ -171,7 +170,7 @@ public class AdvertisementController {
                         bos.write(buffer, 0, count);
                     }
                     byte[] photoBytes = bos.toByteArray();
-                    PhotoDTO photo = new PhotoDTO();
+                    EntPhoto photo = new EntPhoto();
                     photo.setImageBytes(photoBytes);
                     photo.setName(fileName);
                     currAd.getPhotos().add(photo);
@@ -193,7 +192,7 @@ public class AdvertisementController {
 
     @PostMapping("/web/advertisements/remove-photo")
     public String removePhoto(Model model, HttpServletRequest req) {
-        AdvertisementDTO currAd = (AdvertisementDTO) req.getSession().getAttribute("currAd");
+        EntAdvertisement currAd = (EntAdvertisement) req.getSession().getAttribute("currAd");
         String photoId = req.getParameter("photoUUID");
 
         currAd.getPhotos().remove(Integer.valueOf(photoId));
@@ -205,14 +204,14 @@ public class AdvertisementController {
         return "ad-new";
     }
 
-    private void setModelCategories(Model model, AdvertisementDTO advertisement) {
-        List<CategoryDTO> rootCategories = categoryService.getRootCategories();
+    private void setModelCategories(Model model, EntAdvertisement advertisement) {
+        List<EntCategory> rootCategories = categoryService.getRootCategories();
         model.addAttribute("rootCategories", rootCategories);
 
-        List<CategoryDTO> categoriesLevel2 = categoryService.getCategoriesByParent(advertisement.getCategory().getCategoryLevel1());
+        List<EntCategory> categoriesLevel2 = categoryService.getCategoriesByParent(advertisement.getCategory().getName());
         model.addAttribute("categoriesLevel2", categoriesLevel2);
 
-        List<CategoryDTO> categoriesLevel3 = categoryService.getCategoriesByParent(advertisement.getCategory().getCategoryLevel2());
+        List<EntCategory> categoriesLevel3 = categoryService.getCategoriesByParent(advertisement.getCategory().getName());
         model.addAttribute("categoriesLevel3", categoriesLevel3);
 
         boolean showCategoryLevel2 = (categoriesLevel2 != null && !categoriesLevel2.isEmpty()) ? true : false;

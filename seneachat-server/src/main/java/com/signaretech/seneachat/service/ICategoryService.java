@@ -1,20 +1,20 @@
 package com.signaretech.seneachat.service;
 
-import com.signaretech.seneachat.model.CategoryDTO;
+import com.signaretech.seneachat.persistence.entity.EntCategory;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ICategoryService {
 
-    List<CategoryDTO> getCategoriesByParent(String name);
+    List<EntCategory> getCategoriesByParent(String name);
 
-    List<CategoryDTO> getAllCategories();
+    List<EntCategory> getAllCategories();
 
-    List<CategoryDTO> getRootCategories();
+    List<EntCategory> getRootCategories();
 
-    CategoryDTO getCatgeoryByName(String name);
+    EntCategory getCatgeoryByName(String name);
 
-    CategoryDTO createCategory(CategoryDTO categoryDTO);
+    EntCategory createCategory(EntCategory category);
 }
 

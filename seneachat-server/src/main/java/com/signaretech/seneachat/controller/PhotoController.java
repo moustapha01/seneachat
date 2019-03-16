@@ -1,7 +1,7 @@
 package com.signaretech.seneachat.controller;
 
-import com.signaretech.seneachat.model.AdvertisementDTO;
-import com.signaretech.seneachat.model.PhotoDTO;
+import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
+import com.signaretech.seneachat.persistence.entity.EntPhoto;
 import com.signaretech.seneachat.util.FileUtility;
 import com.signaretech.seneachat.util.ImageScalingFactor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,13 @@ public class PhotoController {
     @GetMapping("/web/adphotos/{photoUuid}")
     public void loadPhoto(@PathVariable String photoUuid, HttpServletRequest req, HttpServletResponse resp) {
 
-        AdvertisementDTO ad = (AdvertisementDTO)req.getSession().getAttribute("currAd");
+        EntAdvertisement ad = (EntAdvertisement)req.getSession().getAttribute("currAd");
 
-        List<PhotoDTO> photos = ad.getPhotos();
+        List<EntPhoto> photos = ad.getPhotos();
 
         //PhotoDTO photo = photos.stream().filter( p -> p.getId().equals(UUID.fromString(photoUuid))).findFirst().get();
 
-        PhotoDTO photo = photos.get(Integer.parseInt(photoUuid));
+        EntPhoto photo = photos.get(Integer.parseInt(photoUuid));
 
         try{
             writeImage(photo,resp, ImageScalingFactor.SMALL);
@@ -43,7 +43,7 @@ public class PhotoController {
 
     }
 
-    private void writeImage(PhotoDTO photo, HttpServletResponse resp,
+    private void writeImage(EntPhoto photo, HttpServletResponse resp,
                             ImageScalingFactor scalingFactor) throws IOException {
 
         String mimeType = context.getMimeType(photo.getName());

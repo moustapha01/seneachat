@@ -1,9 +1,10 @@
 package com.signaretech.seneachat.controller;
 
 import com.signaretech.seneachat.exception.SeneachatException;
-import com.signaretech.seneachat.model.AdvertisementDTO;
+
 import com.signaretech.seneachat.model.AuthenticationResult;
-import com.signaretech.seneachat.model.SellerDTO;
+import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
+import com.signaretech.seneachat.persistence.entity.EntSeller;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.ISellerService;
 import org.slf4j.Logger;
@@ -32,13 +33,13 @@ public class LoginController {
     @GetMapping("/web/login")
     public String loginForm(Model model){
         if(!model.containsAttribute("currentUser")){
-            model.addAttribute("currentUser", new SellerDTO());
+            model.addAttribute("currentUser", new EntSeller());
         }
         return "login";
     }
 
     @PostMapping("/web/login")
-    public String loginSubmit(@ModelAttribute("currentUser") SellerDTO currentUser, Model model, BindingResult result, HttpServletRequest req) {
+    public String loginSubmit(@ModelAttribute("currentUser") EntSeller currentUser, Model model, BindingResult result, HttpServletRequest req) {
         LOG.info("Login request from user {}", currentUser.getEmail());
 
         if(result.hasErrors()){
@@ -48,7 +49,7 @@ public class LoginController {
         AuthenticationResult authResult = sellerService.authenticateUser(currentUser);
 
         if(authResult.isAuthenticated() && authResult.getSellerStatus().equals("A")){
-            SellerDTO existingSeller = sellerService.fetchSeller(currentUser.getEmail());
+            EntSeller existingSeller = sellerService.fetchSeller(currentUser.getEmail());
             req.getSession().setAttribute("user", existingSeller);
 //            List<AdvertisementDTO> sellerAds = adService.getSellerAds(existingSeller.getId());//existingSeller.getAds();
 //            model.addAttribute("sellerAds", sellerAds);
@@ -65,12 +66,12 @@ public class LoginController {
 
     @GetMapping("/web/register")
     public String register(Model model){
-        if(!model.containsAttribute("currentUser")) model.addAttribute("currentUser", new SellerDTO());
+        if(!model.containsAttribute("currentUser")) model.addAttribute("currentUser", new EntSeller());
         return "register";
     }
 
     @PostMapping("/web/register")
-    public String register(@ModelAttribute("currentUser") SellerDTO currentUser, Model model, BindingResult result,
+    public String register(@ModelAttribute("currentUser") EntSeller currentUser, Model model, BindingResult result,
                            HttpServletRequest req){
 
         LOG.info("New user registration request from {}", currentUser.getEmail());
@@ -89,9 +90,9 @@ public class LoginController {
     }
 
     @PostMapping("/web/activate")
-    public String activateAccount(@ModelAttribute("currentUser") SellerDTO currentUser, HttpServletRequest req, Model model){
+    public String activateAccount(@ModelAttribute("currentUser") EntSeller currentUser, HttpServletRequest req, Model model){
 
-        List<AdvertisementDTO> sellerAds = null;
+        List<EntAdvertisement> sellerAds = null;
         String activationCode = req.getParameter("activationCode");
 //        String email = (String) req.getSession().getAttribute("sellerEmail");
         String email = currentUser.getEmail();
@@ -112,7 +113,7 @@ public class LoginController {
     public String resendActivationCode(Model model, HttpServletRequest req){
 
         HttpSession session = req.getSession();
-        SellerDTO currentSeller = (SellerDTO) session.getAttribute("currentSeller");
+        EntSeller currentSeller = (EntSeller) session.getAttribute("currentSeller");
 
         try {
             sellerService.resendActivationCode(currentSeller);

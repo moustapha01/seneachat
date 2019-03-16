@@ -5,12 +5,8 @@ import com.signaretech.seneachat.persistence.dao.repo.EntCategoryRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntSellerRepo;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
-import com.signaretech.seneachat.persistence.entity.EntSeller;
-import com.signaretech.seneachat.mapper.AdMapper;
 import com.signaretech.seneachat.mapper.CategoryMapper;
-import com.signaretech.seneachat.model.AdvertisementDTO;
 import com.signaretech.seneachat.model.AdvertisementStatus;
-import com.signaretech.seneachat.model.CategoryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +19,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AdServiceImpl implements IAdService {
@@ -34,8 +29,6 @@ public class AdServiceImpl implements IAdService {
     private EntCategoryRepo categoryRepo;
 
     private final TransactionTemplate transactionTemplate;
-
-    private AdMapper adMapper = new AdMapper();
     private CategoryMapper categoryMapper = new CategoryMapper();
 
     private static final Logger LOG = LoggerFactory.getLogger(AdServiceImpl.class);
@@ -51,65 +44,65 @@ public class AdServiceImpl implements IAdService {
     }
 
     @Override
-    public AdvertisementDTO createAd(AdvertisementDTO ad) {
+    public EntAdvertisement createAd(EntAdvertisement ad) {
         ad.setStatus(AdvertisementStatus.PENDING.getValue());
-        EntAdvertisement adEnt = adMapper.convertToEntity(ad);
 
         EntAdvertisement savedAd = transactionTemplate.execute(new TransactionCallback<EntAdvertisement>() {
             @Override
             public EntAdvertisement doInTransaction(TransactionStatus transactionStatus) {
 
-                EntSeller seller = sellerRepo.findEntSellerByEmail(ad.getSeller().getEmail());
-                adEnt.setSeller(seller);
-
-                CategoryDTO catDTO = null;
-
-                if(ad.getCategory().getCategoryLevel3() != null){
-                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel3());
-                }
-                else if(ad.getCategory().getCategoryLevel2() != null){
-                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel2());
-                }
-                else if(ad.getCategory().getCategoryLevel1() != null){
-                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel2());
-                }
-
-                EntCategory entCategory = categoryRepo.findByName(catDTO.getName());
-                adEnt.setCategory(entCategory);
-                EntAdvertisement savedAd = adRepo.create(adEnt);
-                return savedAd;
+//                EntSeller seller = sellerRepo.findEntSellerByEmail(ad.getSeller().getEmail());
+//                ad.setSeller(seller);
+//
+//                CategoryDTO catDTO = null;
+//
+//                if(ad.getCategory().getCategoryLevel3() != null){
+//                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel3());
+//                }
+//                else if(ad.getCategory().getCategoryLevel2() != null){
+//                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel2());
+//                }
+//                else if(ad.getCategory().getCategoryLevel1() != null){
+//                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel2());
+//                }
+//
+//                EntCategory entCategory = categoryRepo.findByName(catDTO.getName());
+//                adEnt.setCategory(entCategory);
+//                EntAdvertisement savedAd = adRepo.create(adEnt);
+//                return savedAd;
+                return null;
             }
         });
 
-        AdvertisementDTO savedAdDto = adMapper.convertToDto(savedAd);
-        return savedAdDto;
+//        EntAdvertisement savedAdDto = adMapper.convertToDto(savedAd);
+//        return savedAdDto;
+        return null;
     }
 
 
     @Override
-    public AdvertisementDTO updateAd(AdvertisementDTO ad) {
+    public EntAdvertisement updateAd(EntAdvertisement ad) {
         LOG.info("Updating advertisement with id {} and number of photos {}", ad.getId(), ad.getPhotos().size());
-        EntAdvertisement adEnt = adMapper.convertToEntity(ad);
 
         EntCategory entCategory = null;
 
-        if(ad.getCategory().getCategoryLevel3() != null){
-            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel3());
-        }
-        else if(ad.getCategory().getCategoryLevel2() != null){
-            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel2());
-        }
-        else if(ad.getCategory().getCategoryLevel1() != null){
-            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel2());
-        }
+//        if(ad.getCategory().getCategoryLevel3() != null){
+//            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel3());
+//        }
+//        else if(ad.getCategory().getCategoryLevel2() != null){
+//            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel2());
+//        }
+//        else if(ad.getCategory().getCategoryLevel1() != null){
+//            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel2());
+//        }
 
-        adEnt.setCategory(entCategory);
+        ad.setCategory(entCategory);
 
         EntAdvertisement updatedAd  = transactionTemplate.execute(new TransactionCallback<EntAdvertisement>() {
 
             @Override
             public EntAdvertisement doInTransaction(TransactionStatus transactionStatus) {
-                return adRepo.update(adEnt);
+                return adRepo.update(ad);
             }
         });
 
@@ -118,24 +111,24 @@ public class AdServiceImpl implements IAdService {
 
 
     @Override
-    public AdvertisementDTO fetchAd(UUID id) {
+    public EntAdvertisement fetchAd(UUID id) {
         LOG.info("Fetching advertisement with id {}", id.toString());
         EntAdvertisement ad = adRepo.findById(id);
-        CategoryDTO categoryDTO = categoryMapper.convertToDto(ad.getCategory());
-        AdvertisementDTO advertisementDTO = adMapper.convertToDto(ad);
-        advertisementDTO.setCategory(categoryDTO);
-        return advertisementDTO;
+//        CategoryDTO categoryDTO = categoryMapper.convertToDto(ad.getCategory());
+//        AdvertisementDTO advertisementDTO = adMapper.convertToDto(ad);
+//        advertisementDTO.setCategory(categoryDTO);
+        return ad;
     }
 
 
     @Override
-    public void deleteAd(AdvertisementDTO ad) {
-        EntAdvertisement adEnt = adMapper.convertToEntity(ad);
+    public void deleteAd(EntAdvertisement ad) {
+       // EntAdvertisement adEnt = adMapper.convertToEntity(ad);
 
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                adRepo.delete(adEnt);
+                adRepo.delete(ad);
             }
         });
 
@@ -144,21 +137,21 @@ public class AdServiceImpl implements IAdService {
 
 
     @Override
-    public List<AdvertisementDTO> getSellerAds(UUID sellerId, int fromPage, int maxAds) {
+    public List<EntAdvertisement> getSellerAds(UUID sellerId, int fromPage, int maxAds) {
         List<EntAdvertisement> sellerAds = transactionTemplate.execute(new TransactionCallback<List<EntAdvertisement>>() {
             @Override
             public List<EntAdvertisement> doInTransaction(TransactionStatus transactionStatus) {
                 return adRepo.findBySellerIdByPage(sellerId, fromPage, maxAds);
             }
         });
-        return sellerAds.stream().map(ad -> AdMapper.convertToDto(ad)).collect(Collectors.toList());
+        return sellerAds;
     }
 
 
 
 
     @Override
-    public AdvertisementDTO approveAd(AdvertisementDTO ad) {
+    public EntAdvertisement approveAd(EntAdvertisement ad) {
         ad.setStatus(AdvertisementStatus.ACTIVE.name());
         return updateAd(ad);
     }

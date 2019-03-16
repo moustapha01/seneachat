@@ -4,9 +4,7 @@ import com.signaretech.seneachat.controller.ValidationManager;
 import com.signaretech.seneachat.persistence.dao.repo.EntSellerRepo;
 import com.signaretech.seneachat.persistence.entity.EntSeller;
 import com.signaretech.seneachat.exception.SeneachatException;
-import com.signaretech.seneachat.mapper.SellerMapper;
 import com.signaretech.seneachat.model.AuthenticationResult;
-import com.signaretech.seneachat.model.SellerDTO;
 import com.signaretech.seneachat.model.SellerStatus;
 import com.signaretech.seneachat.util.Authentication;
 import com.signaretech.seneachat.util.RandomCodeGenerator;
@@ -30,8 +28,6 @@ public class SellerService implements ISellerService {
 
     private IMailService mailService;
 
-    private SellerMapper sellerMapper = new SellerMapper();
-
     private final TransactionTemplate transactionTemplate;
 
     private static final Logger LOG = LoggerFactory.getLogger(SellerService.class);
@@ -45,7 +41,7 @@ public class SellerService implements ISellerService {
 
 
     @Override
-    public void createSeller(SellerDTO seller) {
+    public void createSeller(EntSeller seller) {
 
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -56,43 +52,39 @@ public class SellerService implements ISellerService {
                 Authentication auth = new Authentication();
                 String hashCode = auth.hash(seller.getPassword().toCharArray());
                 seller.setSecret(hashCode);
-                EntSeller entSeller = sellerMapper.convertToEntity(seller);
 
-                sellerRepo.create(entSeller);
+                sellerRepo.create(seller);
             }
         } );
 
     }
 
     @Override
-    public void updateSeller(SellerDTO seller) {
-
-        EntSeller entSeller = sellerMapper.convertToEntity(seller);
-
+    public void updateSeller(EntSeller seller) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                sellerRepo.update(entSeller);
+                sellerRepo.update(seller);
             }
         });
     }
 
     @Override
-    public SellerDTO fetchSeller(String email) {
+    public EntSeller fetchSeller(String email) {
         EntSeller entSeller = transactionTemplate.execute(new TransactionCallback<EntSeller>() {
             @Override
             public EntSeller doInTransaction(TransactionStatus transactionStatus) {
                 return sellerRepo.findEntSellerByEmail(email);
             }
         });
-        return sellerMapper.convertToDTO(entSeller);
+        return entSeller;
     }
 
     @Override
-    public void activateAccount(SellerDTO seller, String activationCode) throws SeneachatException {
+    public void activateAccount(EntSeller seller, String activationCode) throws SeneachatException {
         LOG.info("Activating account for seller {}", seller.getEmail());
 
-        SellerDTO dbSeller = fetchSeller(seller.getEmail());
+        EntSeller dbSeller = fetchSeller(seller.getEmail());
 
         if(!StringUtils.isEmpty(activationCode) &&
                 activationCode.equals(dbSeller.getActivationCode())){
@@ -108,7 +100,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public void resendActivationCode(SellerDTO seller) throws SeneachatException {
+    public void resendActivationCode(EntSeller seller) throws SeneachatException {
 
         String activationCode = RandomCodeGenerator.generateCode();
         String body = "Bienvenu sur senachat. Ci-dessous vous trouverez votre code d'activation"
@@ -117,7 +109,7 @@ public class SellerService implements ISellerService {
                 + "\n\n"
                 + "Merci.";
 
-        SellerDTO dbSeller = fetchSeller(seller.getEmail());
+        EntSeller dbSeller = fetchSeller(seller.getEmail());
         dbSeller.setActivationCode(activationCode);
 
         try {
@@ -132,7 +124,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public void register(SellerDTO seller, String password2) throws SeneachatException {
+    public void register(EntSeller seller, String password2) throws SeneachatException {
 
         String validationResult = ValidationManager.validateInput(seller.getPassword()
                 , password2, seller.getEmail(), seller.getCellPhone());
@@ -142,7 +134,7 @@ public class SellerService implements ISellerService {
             try {
 
                 createSeller(seller);
-                SellerDTO savedSeller = fetchSeller(seller.getEmail());
+                EntSeller savedSeller = fetchSeller(seller.getEmail());
 
                 String body = "Bienvenu sur senachat. Ci-dessous vous trouverez votre code d'activation"
                         + " qui vous permettra d'activer votre compte.\n\n"
@@ -168,9 +160,9 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public AuthenticationResult authenticateUser(SellerDTO user) {
+    public AuthenticationResult authenticateUser(EntSeller user) {
 
-        SellerDTO existingSeller = fetchSeller(user.getEmail());
+        EntSeller existingSeller = fetchSeller(user.getEmail());
         AuthenticationResult result = new AuthenticationResult(existingSeller.getStatus());
 
         if(existingSeller != null){

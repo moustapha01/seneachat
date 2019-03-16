@@ -2,9 +2,7 @@ package com.signaretech.seneachat.service;
 
 import com.signaretech.seneachat.persistence.dao.repo.EntCategoryRepo;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
-import com.signaretech.seneachat.mapper.AdMapper;
 import com.signaretech.seneachat.mapper.CategoryMapper;
-import com.signaretech.seneachat.model.CategoryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +22,9 @@ public class CategoryServiceImpl implements ICategoryService {
     private EntCategoryRepo categoryRepo;
     private final TransactionTemplate transactionTemplate;
 
-    private AdMapper adMapper = new AdMapper();
     private CategoryMapper catMapper = new CategoryMapper();
 
-    private List<CategoryDTO> allCategories;
+    private List<EntCategory> allCategories;
 
     private Logger LOG = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
@@ -38,11 +35,11 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public List<CategoryDTO> getCategoriesByParent(String name) {
+    public List<EntCategory> getCategoriesByParent(String name) {
 
-        List<CategoryDTO> childCategories = allCategories.stream().filter( cat ->
-                (cat.getCategoryLevel1() != null && cat.getCategoryLevel1().equals(name) && cat.getCategoryLevel2() != null && cat.getCategoryLevel2().equals(cat.getName()) ||
-                        (cat.getCategoryLevel2() != null && cat.getCategoryLevel2().equals(name) && cat.getCategoryLevel3() != null && cat.getCategoryLevel3().equals(cat.getName()))
+        List<EntCategory> childCategories = allCategories.stream().filter( cat ->
+                (cat.getParent() != null && cat.getParent().equals(name) && cat.getParent().getParent() != null && cat.getParent().getParent().equals(cat.getName()) ||
+                        (cat.getParent().getParent() != null && cat.getParent().getParent().equals(name) && cat.getParent().getParent().getParent() != null && cat.getParent().getParent().getParent().equals(cat.getName()))
                 )).collect(Collectors.toList());
 
         childCategories.sort(Comparator.comparing( cats -> cats.getName()));
@@ -50,18 +47,18 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public List<CategoryDTO> getRootCategories() {
+    public List<EntCategory> getRootCategories() {
         if(allCategories == null){
             getAllCategories();
         }
 
-        List<CategoryDTO> rootCategories = allCategories.stream().filter( cat -> cat.getCategoryLevel2() == null).collect(Collectors.toList());
+        List<EntCategory> rootCategories = allCategories.stream().filter( cat -> cat.getParent() == null).collect(Collectors.toList());
         rootCategories.sort(Comparator.comparing( cats -> cats.getName()));
         return rootCategories;
     }
 
     @Override
-    public CategoryDTO getCatgeoryByName(String name) {
+    public EntCategory getCatgeoryByName(String name) {
         if(allCategories == null){
             getAllCategories();
         }
@@ -70,7 +67,7 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
+    public List<EntCategory> getAllCategories() {
 
         if(allCategories == null){
             LOG.info("START retrieving all advertisement categories");
@@ -81,17 +78,13 @@ public class CategoryServiceImpl implements ICategoryService {
                 }
             });
 
-            allCategories = categories.stream().map( cat -> CategoryMapper.convertToDto(cat)).collect(Collectors.toList());
+            return categories;
         }
         return allCategories;
     }
 
-
-
     @Override
-    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        EntCategory category = catMapper.convertToEntity(categoryDTO);
-
+    public EntCategory createCategory(EntCategory category) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
@@ -99,9 +92,7 @@ public class CategoryServiceImpl implements ICategoryService {
             }
         });
 
-        return categoryDTO;
+        return category;
     }
-
-
 }
 

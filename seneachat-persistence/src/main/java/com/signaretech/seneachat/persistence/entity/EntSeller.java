@@ -31,9 +31,11 @@ public class EntSeller extends AuditableEntity{
     @Column( name = "email", unique = true)
     private String email;
 
-//    @Basic
-//    @Column( name = "password")
-//    private String password;
+    @Transient
+    private String password;
+
+    @Transient
+    private String password2;
 
     @Basic
     @Column( name = "home_phone", length = 12)
@@ -92,13 +94,21 @@ public class EntSeller extends AuditableEntity{
         this.email = email;
     }
 
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
 
     public String getHomePhone() {
         return homePhone;
