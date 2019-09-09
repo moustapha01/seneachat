@@ -1,9 +1,10 @@
 package com.signaretech.seneachat.service;
 
-import com.signaretech.seneachat.controller.ValidationManager;
+import com.signaretech.seneachat.MessageTranslator;
+import com.signaretech.seneachat.common.validation.EntityValidator;
+import com.signaretech.seneachat.model.exceptions.SeneachatErrorException;
 import com.signaretech.seneachat.persistence.dao.repo.EntSellerRepo;
 import com.signaretech.seneachat.persistence.entity.EntSeller;
-import com.signaretech.seneachat.exception.SeneachatException;
 import com.signaretech.seneachat.model.AuthenticationResult;
 import com.signaretech.seneachat.model.SellerStatus;
 import com.signaretech.seneachat.util.Authentication;
@@ -12,79 +13,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.validation.ConstraintViolationException;
 
 @Service
 public class SellerService implements ISellerService {
 
     private EntSellerRepo sellerRepo;
-
     private IMailService mailService;
 
-    private final TransactionTemplate transactionTemplate;
+    private final EntityValidator entityValidator = new EntityValidator();
 
     private static final Logger LOG = LoggerFactory.getLogger(SellerService.class);
 
     @Autowired
-    public SellerService(IMailService mailService, EntSellerRepo sellerRepo, PlatformTransactionManager transactionManager){
+    public SellerService(IMailService mailService, EntSellerRepo sellerRepo){
         this.mailService = mailService;
         this.sellerRepo = sellerRepo;
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
 
     @Override
-    public void createSeller(EntSeller seller) {
-
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                String activationCode = RandomCodeGenerator.generateCode();
-                seller.setActivationCode(activationCode);
-                seller.setStatus(SellerStatus.PENDING.getValue());
-                Authentication auth = new Authentication();
-                String hashCode = auth.hash(seller.getPassword().toCharArray());
-                seller.setSecret(hashCode);
-
-                sellerRepo.create(seller);
-            }
-        } );
-
+    //@Transactional
+    public EntSeller createSeller(EntSeller seller) {
+        String activationCode = RandomCodeGenerator.generateCode();
+        seller.setActivationCode(activationCode);
+        seller.setStatus(SellerStatus.PENDING.getValue());
+        Authentication auth = new Authentication();
+        String hashCode = auth.hash(seller.getPassword().toCharArray());
+        seller.setSecret(hashCode);
+        return sellerRepo.save(seller);
     }
 
     @Override
-    public void updateSeller(EntSeller seller) {
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                sellerRepo.update(seller);
-            }
-        });
+   // @Transactional
+    public EntSeller updateSeller(EntSeller seller) {
+        return sellerRepo.save(seller);
     }
 
     @Override
-    public EntSeller fetchSeller(String email) {
-        EntSeller entSeller = transactionTemplate.execute(new TransactionCallback<EntSeller>() {
-            @Override
-            public EntSeller doInTransaction(TransactionStatus transactionStatus) {
-                return sellerRepo.findEntSellerByEmail(email);
-            }
-        });
-        return entSeller;
+    public EntSeller findByEmail(String email) {
+        return sellerRepo.findByEmail(email);
     }
 
     @Override
-    public void activateAccount(EntSeller seller, String activationCode) throws SeneachatException {
+    public void activateAccount(EntSeller seller, String activationCode) {
         LOG.info("Activating account for seller {}", seller.getEmail());
 
-        EntSeller dbSeller = fetchSeller(seller.getEmail());
+        EntSeller dbSeller = findByEmail(seller.getEmail());
 
         if(!StringUtils.isEmpty(activationCode) &&
                 activationCode.equals(dbSeller.getActivationCode())){
@@ -94,22 +74,18 @@ public class SellerService implements ISellerService {
             LOG.info("Account for seller {} has been successfully activated", seller.getEmail());
 
         }else{
-            throw new SeneachatException("Le code d'activation inscrit ne correspond pas au code d'activation que nous vous avons envoye.");
+            throw new SeneachatErrorException(MessageTranslator.getLocaleMessage("activationcode.invalid"));
         }
 
     }
 
     @Override
-    public void resendActivationCode(EntSeller seller) throws SeneachatException {
+    public void resendActivationCode(EntSeller seller) {
 
         String activationCode = RandomCodeGenerator.generateCode();
-        String body = "Bienvenu sur senachat. Ci-dessous vous trouverez votre code d'activation"
-                + " qui vous permettra d'activer votre compte.\n\n"
-                + "code d'activation: " + activationCode
-                + "\n\n"
-                + "Merci.";
+        String body = MessageTranslator.getLocaleMessage("registration.confirmation") + activationCode;
 
-        EntSeller dbSeller = fetchSeller(seller.getEmail());
+        EntSeller dbSeller = findByEmail(seller.getEmail());
         dbSeller.setActivationCode(activationCode);
 
         try {
@@ -117,44 +93,38 @@ public class SellerService implements ISellerService {
             mailService.sendMail(dbSeller.getEmail(), "Code d'Activation", body);
 
         } catch (AddressException adx) {
-            throw new SeneachatException("Error sending email to newly registered user. Please contact support");
+            throw new SeneachatErrorException("Error sending email to newly registered user. Please contact support");
         } catch (javax.mail.MessagingException mex) {
-            throw new SeneachatException("Error sending email to newly registered user. Please contact support");
+            throw new SeneachatErrorException("Error sending email to newly registered user. Please contact support");
         }
     }
 
     @Override
-    public void register(EntSeller seller, String password2) throws SeneachatException {
+    public void register(EntSeller seller) {
 
-        String validationResult = ValidationManager.validateInput(seller.getPassword()
-                , password2, seller.getEmail(), seller.getCellPhone());
-
-        if(validationResult.equals("valid")){
-
-            try {
-
-                createSeller(seller);
-                EntSeller savedSeller = fetchSeller(seller.getEmail());
-
-                String body = "Bienvenu sur senachat. Ci-dessous vous trouverez votre code d'activation"
-                        + " qui vous permettra d'activer votre compte.\n\n"
-                        + "code d'activation: " + savedSeller.getActivationCode()
-                        + "\n\n"
-                        + "Merci.";
-
-                // mailService.sendMail(seller.getEmail(), "Code d'Activation", body);
-
-            } /*catch (MessagingException mex) {
-                LOG.info("An error occured while registering seller {} due to {}", seller.getEmail(), mex);
-                throw new SenachatException(String.format("An error occurred while registering user %s. Please contact support", seller.getEmail(), mex.getMessage()));
-
-            }*/ catch (Exception ex){
-                LOG.info("An error occured while registering seller {}", seller.getEmail(), ex.getMessage());
-                throw new SeneachatException(String.format("An error occurred while registering user %s. Please contact support", seller.getEmail(), ex.getMessage()));
+        try {
+            entityValidator.validate(seller);
+            if (sellerRepo.existsByEmail(seller.getEmail())){
+                throw new SeneachatErrorException(MessageTranslator.getLocaleMessage("email.exist"));
             }
-        }else{
-            LOG.info("An error occured while registering seller {}. The passwords entered do not match.", seller.getEmail());
-            throw new SeneachatException(String.format("An error occurred while registering user %s. The passwords entered do not match", seller.getEmail()));
+
+            EntSeller savedSeller = createSeller(seller);
+            String body = MessageTranslator.getLocaleMessage("registration.confirmation") + savedSeller.getActivationCode();
+            mailService.sendMail(seller.getEmail(), "Code d'Activation", body);
+
+        } catch (ConstraintViolationException vex) {
+            throw new SeneachatErrorException(String.format(
+                    "The EntitySeller object passed to register is invalid due to: %s",
+                    vex.getConstraintViolations().toString()));
+
+        }catch (MessagingException mex) {
+                LOG.info("An error occured while registering seller {} due to {}", seller.getEmail(), mex);
+
+        } catch (Exception ex) {
+            LOG.info("An error occured while registering seller {}", seller.getEmail(), ex.getMessage());
+            throw new SeneachatErrorException(String.format(
+                    "The following error occurred while registering user %s. %s. Please contact support",
+                    seller.getEmail(), ex.getMessage()));
         }
 
     }
@@ -162,7 +132,7 @@ public class SellerService implements ISellerService {
     @Override
     public AuthenticationResult authenticateUser(EntSeller user) {
 
-        EntSeller existingSeller = fetchSeller(user.getEmail());
+        EntSeller existingSeller = findByEmail(user.getEmail());
         AuthenticationResult result = new AuthenticationResult(existingSeller.getStatus());
 
         if(existingSeller != null){
@@ -172,13 +142,13 @@ public class SellerService implements ISellerService {
                 result.setAuthenticated(auth.authenticate(user.getPassword().toCharArray(), passSecret));
 
                 if(!result.isAuthenticated()) {
-                    result.setError("Votre mot de passe est invalide.");
+                    result.setError(MessageTranslator.getLocaleMessage("password.invalid"));
                 }
             } else {
-                result.setError("Votre mot de passe est invalide.");
+                result.setError(MessageTranslator.getLocaleMessage("password.invalid"));
             }
         } else{
-            result.setError("L'addresse email fournie est invalide.");
+            result.setError(MessageTranslator.getLocaleMessage("email.invalid"));
         }
 
         return result;

@@ -25,28 +25,42 @@
                                 <div class="form-group row">
                                     <label for="category1" class="col-sm-2 col-form-label">Type</label>
                                     <div class="col-sm-8">
-                                    <select class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.categoryLevel1}"
+                                    <select th:if="${categoriesLevel2 == null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.name}"
                                             id="category1" onchange="getSubCategories()">
                                         <option th:value="None">Selectionnez le type d'Annonce</option>
                                         <option th:each="category : ${rootCategories}" th:value="${category.name}"
                                                 th:text="${category.name}">Option 1
                                         </option>
                                     </select>
+                                        <select th:if="${categoriesLevel2 != null && categoriesLevel3 == null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.parent.name}"
+                                                id="category1" onchange="getSubCategories()">
+                                            <option th:value="None">Selectionnez le type d'Annonce</option>
+                                            <option th:each="category : ${rootCategories}" th:value="${category.name}"
+                                                    th:text="${category.name}">Option 1
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group row" th:if="${showCategoryLevel2}">
+                                <div class="form-group row" th:if="${categoriesLevel2 != null && #lists.size(categoriesLevel2) > 0}">
                                     <label for="category2" class="col-sm-2 col-form-label">Categorie I</label>
                                     <div class="col-sm-8">
-                                    <select class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.categoryLevel2}"
+                                    <select th:if="${categoriesLevel2 != null && categoriesLevel3 == null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.name}"
                                             id="category2" onchange="getSubCategories()">
                                         <option th:value="None">Selectionnez une categorie</option>
                                         <option th:each="category : ${categoriesLevel2}" th:value="${category.name}"
                                                 th:text="${category.name}">Option 1
                                         </option>
                                     </select>
+                                        <select th:if="${categoriesLevel3 != null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.parent.name}"
+                                                id="category2" onchange="getSubCategories()">
+                                            <option th:value="None">Selectionnez une categorie</option>
+                                            <option th:each="category : ${categoriesLevel2}" th:value="${category.name}"
+                                                    th:text="${category.name}">Option 1
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group row" th:if="${showCategoryLevel3}">
+                                <div class="form-group row" th:if="${categoriesLevel3 != null && #lists.size(categoriesLevel3) > 0}">
                                     <label for="category3" class="col-sm-2 col-form-label">Categorie II</label>
                                     <div class="col-sm-8">
                                     <select class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.categoryLevel3}"
@@ -95,7 +109,7 @@
                                 <div class="row mb-2" style="vertical-align: baseline;">
                                     <form name="removePhotoForm" id="removePhotoForm" th:action="@{/web/advertisements/remove-photo}" method="POST">
                                         <input type="hidden" name="photoUUID" id="photoUUID" />
-                                        <div class="col-sm-3 col-xs-6" th:each="adPhoto : ${session.currAd.photos}">
+                                        <div class="col-sm-3 col-xs-6" th:each="adPhoto : ${advertisement.photos}">
                                             <div align="center">
                                                 <img alt="" align="top" th:src="@{${'/web/adphotos/' + adPhotoStat.index}}"  style="vertical-align: baseline;"/>
                                             </div>

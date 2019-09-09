@@ -3,8 +3,16 @@ package com.signaretech.seneachat.persistence.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Entity object that represents a {@link EntAdvertisement} category.
+ * In addition to the UUID primary key, it includes a name and a parent
+ * property that represents the parent category. Therefore, all the categories
+ * are organized in a tree format. At the top of the tree, you have the root
+ * categories which have a null parent. All other categories have non null parent.
+ */
 @Entity
 @Table(name = "ad_categories")
 public class EntCategory {
@@ -16,7 +24,7 @@ public class EntCategory {
     private UUID id;
 
     @Basic
-    @Column(name = "category_name")
+    @Column(name = "category_name", unique = true)
     private String name;
 
     @OneToOne
@@ -24,6 +32,10 @@ public class EntCategory {
     private EntCategory parent;
 
     public EntCategory() {
+    }
+
+    public EntCategory(String name) {
+        this.name = name;
     }
 
     public UUID getId() {
@@ -48,6 +60,19 @@ public class EntCategory {
 
     public void setParent(EntCategory parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EntCategory)) return false;
+        EntCategory category = (EntCategory) o;
+        return Objects.equals(getId(), category.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
 

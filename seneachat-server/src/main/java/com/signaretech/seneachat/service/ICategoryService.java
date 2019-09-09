@@ -9,11 +9,11 @@ public interface ICategoryService {
 
     List<EntCategory> getCategoriesByParent(String name);
 
-    List<EntCategory> getAllCategories();
+    Iterable<EntCategory> getAllCategories();
 
     List<EntCategory> getRootCategories();
 
-    EntCategory getCatgeoryByName(String name);
+    EntCategory getCategoryByName(String name);
 
     EntCategory createCategory(EntCategory category);
 }

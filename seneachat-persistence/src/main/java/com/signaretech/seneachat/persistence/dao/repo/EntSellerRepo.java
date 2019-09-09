@@ -1,16 +1,15 @@
 package com.signaretech.seneachat.persistence.dao.repo;
 
 import com.signaretech.seneachat.persistence.entity.EntSeller;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-public interface EntSellerRepo {
+@Repository
+public interface EntSellerRepo extends CrudRepository<EntSeller, UUID> {
 
-    EntSeller findEntSellerByEmail(String email);
+    EntSeller findByEmail(String email);
 
-    EntSeller findBySellerId(UUID id);
-
-    void create(EntSeller seller);
-
-    void update(EntSeller seller);
+    boolean existsByEmail(String email);
 }

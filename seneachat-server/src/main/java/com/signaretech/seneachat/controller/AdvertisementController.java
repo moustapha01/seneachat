@@ -7,14 +7,12 @@ import com.signaretech.seneachat.persistence.entity.EntSeller;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.ICategoryService;
 import com.signaretech.seneachat.service.ISellerService;
-import com.signaretech.seneachat.util.AdvertisementValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
@@ -24,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
+@SessionAttributes({"rootCategories", "categoriesLevel2", "currentUser"})
 public class AdvertisementController {
 
     private ICategoryService categoryService;
@@ -53,8 +52,7 @@ public class AdvertisementController {
     public String getAdSubCategories(@ModelAttribute("advertisement") EntAdvertisement advertisement, Model model, BindingResult binding,
                                      HttpServletRequest req) {
 
-       // setModelCategories(model, advertisement);
-
+        setModelCategories(model, advertisement);
         EntAdvertisement currAd = (EntAdvertisement)req.getSession().getAttribute("currAd");
 
         if(currAd == null){
@@ -69,30 +67,18 @@ public class AdvertisementController {
     }
 
     @PostMapping("/web/advertisements/save")
-    public String save(@ModelAttribute("advertisement") EntAdvertisement advertisement, Model model, BindingResult binding,
-                       HttpServletRequest req) {
+    public String save(@ModelAttribute("advertisement") EntAdvertisement advertisement, ModelMap model, BindingResult binding, HttpServletRequest req) {
 
-        EntAdvertisement currAd = (EntAdvertisement) req.getSession().getAttribute("currAd");
+        EntCategory category = categoryService.getCategoryByName(advertisement.getCategory().getName());
+        advertisement.setCategory(category);
+        EntSeller seller = (EntSeller) model.get("currentUser");
+        advertisement.setSeller(seller);
 
-        if(AdvertisementValidation.validateAdvertisement(currAd)){
+        adService.createAd(advertisement);
 
-            EntSeller sellerDTO = (EntSeller) req.getSession().getAttribute("currentUser");
-            currAd.setSeller(sellerDTO);
-
-            if(currAd.getId() == null){
-                adService.createAd(currAd);
-            }else{
-                adService.updateAd(currAd);
-            }
-            //AdvertisementDTO ad = adService.createAd(currAd);
-
-            List<EntAdvertisement> sellerAds = sellerService.fetchSeller(sellerDTO.getEmail()).getAds();
-            model.addAttribute("sellerAds", sellerAds);
-            return "sellerads";
-        }
-        else{
-            return "ad-new";
-        }
+        List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), 0, 10);
+        model.addAttribute("sellerAds", sellerAds);
+        return "sellerads";
     }
 
     @PostMapping("/web/advertisements/cancel")
@@ -105,8 +91,7 @@ public class AdvertisementController {
         String adUuid = req.getParameter("adUuid");
 
         EntAdvertisement ad = adService.fetchAd(UUID.fromString(adUuid));
-
-        req.getSession().setAttribute("currAd", ad);
+        setModelCategories(model, ad);
         setModelCategories(model, ad);
         model.addAttribute("advertisement", ad);
         model.addAttribute("action", "view");
@@ -137,7 +122,7 @@ public class AdvertisementController {
 
         EntSeller sellerDTO = (EntSeller) req.getSession().getAttribute("currentUser");
 
-        List<EntAdvertisement> sellerAds = sellerService.fetchSeller(sellerDTO.getEmail()).getAds();
+        List<EntAdvertisement> sellerAds = sellerService.findByEmail(sellerDTO.getEmail()).getAds();
         model.addAttribute("sellerAds", sellerAds);
 
         return "sellerads";
@@ -153,7 +138,7 @@ public class AdvertisementController {
         }
 
         EntSeller sellerDTO = (EntSeller)req.getSession().getAttribute("currentUser");
-        currAd.setSeller(sellerService.fetchSeller(sellerDTO.getEmail()));
+        currAd.setSeller(sellerService.findByEmail(sellerDTO.getEmail()));
 
         setModelCategories(model, currAd);
 
@@ -208,17 +193,18 @@ public class AdvertisementController {
         List<EntCategory> rootCategories = categoryService.getRootCategories();
         model.addAttribute("rootCategories", rootCategories);
 
-        List<EntCategory> categoriesLevel2 = categoryService.getCategoriesByParent(advertisement.getCategory().getName());
-        model.addAttribute("categoriesLevel2", categoriesLevel2);
-
-        List<EntCategory> categoriesLevel3 = categoryService.getCategoriesByParent(advertisement.getCategory().getName());
-        model.addAttribute("categoriesLevel3", categoriesLevel3);
-
-        boolean showCategoryLevel2 = (categoriesLevel2 != null && !categoriesLevel2.isEmpty()) ? true : false;
-        model.addAttribute("showCategoryLevel2", showCategoryLevel2);
-
-        boolean showCategoryLevel3 = (categoriesLevel3 != null && !categoriesLevel3.isEmpty()) ? true : false;
-        model.addAttribute("showCategoryLevel3", showCategoryLevel3);
+        if(advertisement.getCategory().getParent() == null) {
+            EntCategory parent = categoryService.getCategoryByName(advertisement.getCategory().getName());
+            advertisement.getCategory().setParent(parent);
+            List<EntCategory> categoriesLevel2 = categoryService.getCategoriesByParent(advertisement.getCategory().getName());
+            model.addAttribute("categoriesLevel2", categoriesLevel2);
+        }
+        else if (advertisement.getCategory().getParent().getParent() == null) {
+            EntCategory parent = categoryService.getCategoryByName(advertisement.getCategory().getParent().getName());
+            advertisement.getCategory().setParent(parent);
+            List<EntCategory> categoriesLevel2 = categoryService.getCategoriesByParent(advertisement.getCategory().getParent().getName());
+            model.addAttribute("categoriesLevel2", categoriesLevel2);
+        }
     }
 }
 

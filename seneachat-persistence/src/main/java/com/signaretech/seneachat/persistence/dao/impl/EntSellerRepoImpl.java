@@ -9,8 +9,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.UUID;
 
+/*
 @Repository
-public class EntSellerRepoImpl implements EntSellerRepo {
+public class EntSellerRepoImpl {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -39,3 +40,4 @@ public class EntSellerRepoImpl implements EntSellerRepo {
         return entityManager.find(EntSeller.class, id);
     }
 }
+*/

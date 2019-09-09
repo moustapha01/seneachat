@@ -1,7 +1,10 @@
 package com.signaretech.seneachat.persistence.entity;
 
 import com.google.common.base.MoreObjects;
+import com.signaretech.seneachat.common.validation.Patterns;
+import com.signaretech.seneachat.common.validation.ValidPhone;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,14 +23,17 @@ public class EntSeller extends AuditableEntity{
     private UUID id;
 
     @Basic
+    //@NotBlank(message = "first name cannot be null or empty")
     @Column( name = "first_name")
     private String firstName;
 
     @Basic
+    //@NotBlank(message = "last name cannot be null or empty")
     @Column( name = "last_name")
     private String lastName;
 
     @Basic
+    @NotBlank(message = "email cannot be null or empty")
     @Column( name = "email", unique = true)
     private String email;
 
@@ -38,10 +44,12 @@ public class EntSeller extends AuditableEntity{
     private String password2;
 
     @Basic
+    @ValidPhone(pattern = "\\d{9,10}")
     @Column( name = "home_phone", length = 12)
     private String homePhone;
 
     @Basic
+    @ValidPhone(pattern = "\\d{9,10}")
     @Column( name = "cell_phone", length = 12)
     private String cellPhone;
 
@@ -60,6 +68,12 @@ public class EntSeller extends AuditableEntity{
     private List<EntAdvertisement> ads;
 
     public EntSeller() {
+    }
+
+    public EntSeller(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     public UUID getId() {
@@ -124,6 +138,9 @@ public class EntSeller extends AuditableEntity{
 
     public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
+        if(homePhone == null) {
+            homePhone = cellPhone;
+        }
     }
 
     public String getStatus() {

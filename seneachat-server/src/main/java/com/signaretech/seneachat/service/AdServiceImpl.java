@@ -28,9 +28,6 @@ public class AdServiceImpl implements IAdService {
     private ICategoryService categoryService;
     private EntCategoryRepo categoryRepo;
 
-    private final TransactionTemplate transactionTemplate;
-    private CategoryMapper categoryMapper = new CategoryMapper();
-
     private static final Logger LOG = LoggerFactory.getLogger(AdServiceImpl.class);
 
     @Autowired
@@ -40,111 +37,38 @@ public class AdServiceImpl implements IAdService {
         this.sellerRepo = sellerRepo;
         this.categoryService = categoryService;
         this.categoryRepo = categoryRepo;
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
     @Override
     public EntAdvertisement createAd(EntAdvertisement ad) {
         ad.setStatus(AdvertisementStatus.PENDING.getValue());
-
-        EntAdvertisement savedAd = transactionTemplate.execute(new TransactionCallback<EntAdvertisement>() {
-            @Override
-            public EntAdvertisement doInTransaction(TransactionStatus transactionStatus) {
-
-//                EntSeller seller = sellerRepo.findEntSellerByEmail(ad.getSeller().getEmail());
-//                ad.setSeller(seller);
-//
-//                CategoryDTO catDTO = null;
-//
-//                if(ad.getCategory().getCategoryLevel3() != null){
-//                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel3());
-//                }
-//                else if(ad.getCategory().getCategoryLevel2() != null){
-//                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel2());
-//                }
-//                else if(ad.getCategory().getCategoryLevel1() != null){
-//                    catDTO = categoryService.getCatgeoryByName(ad.getCategory().getCategoryLevel2());
-//                }
-//
-//                EntCategory entCategory = categoryRepo.findByName(catDTO.getName());
-//                adEnt.setCategory(entCategory);
-//                EntAdvertisement savedAd = adRepo.create(adEnt);
-//                return savedAd;
-                return null;
-            }
-        });
-
-//        EntAdvertisement savedAdDto = adMapper.convertToDto(savedAd);
-//        return savedAdDto;
-        return null;
+        return adRepo.save(ad);
     }
 
 
     @Override
     public EntAdvertisement updateAd(EntAdvertisement ad) {
         LOG.info("Updating advertisement with id {} and number of photos {}", ad.getId(), ad.getPhotos().size());
-
-        EntCategory entCategory = null;
-
-//        if(ad.getCategory().getCategoryLevel3() != null){
-//            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel3());
-//        }
-//        else if(ad.getCategory().getCategoryLevel2() != null){
-//            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel2());
-//        }
-//        else if(ad.getCategory().getCategoryLevel1() != null){
-//            entCategory = categoryRepo.findByName(ad.getCategory().getCategoryLevel2());
-//        }
-
-        ad.setCategory(entCategory);
-
-        EntAdvertisement updatedAd  = transactionTemplate.execute(new TransactionCallback<EntAdvertisement>() {
-
-            @Override
-            public EntAdvertisement doInTransaction(TransactionStatus transactionStatus) {
-                return adRepo.update(ad);
-            }
-        });
-
-        return fetchAd(ad.getId());
+        return adRepo.save(ad);
     }
 
 
     @Override
     public EntAdvertisement fetchAd(UUID id) {
         LOG.info("Fetching advertisement with id {}", id.toString());
-        EntAdvertisement ad = adRepo.findById(id);
-//        CategoryDTO categoryDTO = categoryMapper.convertToDto(ad.getCategory());
-//        AdvertisementDTO advertisementDTO = adMapper.convertToDto(ad);
-//        advertisementDTO.setCategory(categoryDTO);
-        return ad;
+        return adRepo.findById(id).orElse(null);
     }
 
 
     @Override
     public void deleteAd(EntAdvertisement ad) {
-       // EntAdvertisement adEnt = adMapper.convertToEntity(ad);
-
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                adRepo.delete(ad);
-            }
-        });
-
-
+        adRepo.delete(ad);
     }
 
 
     @Override
     public List<EntAdvertisement> getSellerAds(UUID sellerId, int fromPage, int maxAds) {
-        List<EntAdvertisement> sellerAds = transactionTemplate.execute(new TransactionCallback<List<EntAdvertisement>>() {
-            @Override
-            public List<EntAdvertisement> doInTransaction(TransactionStatus transactionStatus) {
-                return adRepo.findBySellerIdByPage(sellerId, fromPage, maxAds);
-            }
-        });
-        return sellerAds;
+                return adRepo.findBySellerId(sellerId);
     }
 
 

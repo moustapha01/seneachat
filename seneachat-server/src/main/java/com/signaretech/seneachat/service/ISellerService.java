@@ -1,32 +1,38 @@
 package com.signaretech.seneachat.service;
 
-import com.signaretech.seneachat.exception.SeneachatException;
 import com.signaretech.seneachat.model.AuthenticationResult;
 import com.signaretech.seneachat.persistence.entity.EntSeller;
 
-import java.sql.SQLException;
-
 public interface ISellerService {
 
+
     /**
-     * @param seller, {@link EntSeller} object to be created
-     * @throws SQLException
+     * Persists the seller object to the data store.
+     * @param seller, {@link EntSeller} model object to create
      */
-    void createSeller(EntSeller seller);
-
-    void updateSeller(EntSeller seller);
+    EntSeller createSeller(EntSeller seller);
 
     /**
-     * @param email, email id of the {@link EntSeller}
+     * Updates the seller object to the data store
+     * @param seller, the {@link EntSeller} model object to update
+     */
+    EntSeller updateSeller(EntSeller seller);
+
+    /**
+     * @param email, email id of the seller to fetch
      * @return, the {@link EntSeller} object with email @param email.
      */
-    EntSeller fetchSeller(String email);
+    EntSeller findByEmail(String email);
 
-    void activateAccount(EntSeller seller, String activationCode) throws SeneachatException;
+    /**
+     * @param seller, a new Seller not yet activated into the system
+     * @param activationCode, a generated code sent to the Seller and used to activate the new Seller
+     */
+    void activateAccount(EntSeller seller, String activationCode);
 
-    void resendActivationCode(EntSeller seller) throws SeneachatException;
+    void resendActivationCode(EntSeller seller);
 
-    void register(EntSeller seller, String password2) throws SeneachatException;
+    void register(EntSeller seller);
 
     AuthenticationResult authenticateUser(EntSeller user);
 }

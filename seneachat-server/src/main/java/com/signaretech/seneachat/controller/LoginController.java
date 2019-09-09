@@ -49,10 +49,11 @@ public class LoginController {
         AuthenticationResult authResult = sellerService.authenticateUser(currentUser);
 
         if(authResult.isAuthenticated() && authResult.getSellerStatus().equals("A")){
-            EntSeller existingSeller = sellerService.fetchSeller(currentUser.getEmail());
+            EntSeller existingSeller = sellerService.findByEmail(currentUser.getEmail());
+            model.addAttribute("currentUser", existingSeller);
             req.getSession().setAttribute("user", existingSeller);
-//            List<AdvertisementDTO> sellerAds = adService.getSellerAds(existingSeller.getId());//existingSeller.getAds();
-//            model.addAttribute("sellerAds", sellerAds);
+            List<EntAdvertisement> sellerAds = adService.getSellerAds(existingSeller.getId(), 0, 10);//existingSeller.getAds();
+            model.addAttribute("sellerAds", sellerAds);
 //            model.addAttribute("numPages", 3);
             return "redirect:/web/seller/dashboard";
         }
@@ -78,7 +79,7 @@ public class LoginController {
         String password2 = req.getParameter("password2");
 
         try {
-            sellerService.register(currentUser, password2);
+            sellerService.register(currentUser);
         } catch (Exception ex) {
             req.setAttribute("errorMsg", ex.getMessage());
             return "register";
@@ -97,14 +98,14 @@ public class LoginController {
 //        String email = (String) req.getSession().getAttribute("sellerEmail");
         String email = currentUser.getEmail();
 //        currentUser.setEmail(email);
-        try {
+
             sellerService.activateAccount(currentUser, activationCode);
             model.addAttribute("sellerAds", sellerAds);
-        } catch (SeneachatException se) {
-            LOG.error("Error while activating account for seller {}.", currentUser.getEmail(), se.getMessage());
-            req.setAttribute("errorMsg", se.getMessage());
-            return "registration-confirmation";
-        }
+
+//            LOG.error("Error while activating account for seller {}.", currentUser.getEmail(), se.getMessage());
+  //          req.setAttribute("errorMsg", se.getMessage());
+  //          return "registration-confirmation";
+
         return "sellerads";
     }
 
@@ -115,11 +116,9 @@ public class LoginController {
         HttpSession session = req.getSession();
         EntSeller currentSeller = (EntSeller) session.getAttribute("currentSeller");
 
-        try {
             sellerService.resendActivationCode(currentSeller);
-        } catch (SeneachatException se) {
-            model.addAttribute("errorMsg", se.getMessage());
-        }
+
+
 
         return "registration_confirmation";
     }

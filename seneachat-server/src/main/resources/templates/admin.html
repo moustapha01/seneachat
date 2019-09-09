@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form name="categoryForm" id="categoryForm" th:action="@{/web/admin/save}" th:object="${currentCategory}" method="post">
+    <div class="form-group">
+        <label for="name">Category Name</label>
+        <input class="form-control" type="text" id="name" th:field="${currentCategory.name}">
+    </div>
+    <div class="form-group">
+        <label for="parent">Category Name</label>
+        <select class="custom-select" id="parent" th:field="${currentCategory.parent.name}">
+            <option th:value=null>Selectionnez le type d'Annonce</option>
+            <option th:each="category : ${categories}" th:value="${category.name}"
+                    th:text="${category.name}">
+            </option>
+        </select>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">save</button>
+    </div>
+
+</form>
+</body>
+</html>
