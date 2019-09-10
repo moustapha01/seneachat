@@ -1,0 +1,13 @@
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x8773E5B8362F445C9B46A6EB888ACF2D,	'electronics',	NULL);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x06F8D1CCCB2B493CB20DDABF49BECE83,	'dvd', 0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x14DE5393628D40F48B17D339D4DFE453,	'computers',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x28F1ECA576074B1B8DE7A52BD9B11B9C,	'televisions',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x8EDBB9B95F964C4DBF635204ECF4D08E,	'accessories',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0xB8CF32ADA8DF46F188B26AB391ABFB6B,	'headphones',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0xBBADAF6CB4BF464DB2782E9874DA3C21,	'printers',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x96504FAAA60E435EBB00E8923ADB0EC7,	'tablets',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0xE165A3FB8DA3439683A3A709BB64497D,	'cameras',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0xEAD009CCFD8F494A9C07AD433670BA93,	'video_games',	0x8773E5B8362F445C9B46A6EB888ACF2D);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x88A938CD5BAD492EB81CA7C5B518CA78,	'cellphones',	NULL);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x90D92D4333FE4655A862EC7F59D9F7EB,	'apple',	0x88A938CD5BAD492EB81CA7C5B518CA78);
+insert into dbo.ad_categories (category_uuid, category_name, parent) values (0x79997454634243F2B97BE75AEC9A12C7,	'android',	0x88A938CD5BAD492EB81CA7C5B518CA78);
