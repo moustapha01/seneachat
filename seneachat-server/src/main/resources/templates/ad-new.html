@@ -22,6 +22,8 @@
                                 <form name="adForm" id="adForm" th:action="@{/web/advertisements/save}" th:object="${advertisement}"
                                        method="post">
                                     <input type="hidden" th:id="adUuid" th:field="${advertisement.id}">
+                                    <input type="hidden" th:id="status" th:field="${advertisement.status}">
+                                    <input type="hidden" th:id="numViews" th:field="${advertisement.numViews}">
                                 <div class="form-group row">
                                     <label for="category1" class="col-sm-2 col-form-label">Type</label>
                                     <div class="col-sm-8">
@@ -106,18 +108,19 @@
                                 <div>
                                     <h5><span class="fa fa-camera mr-2" style="color: gray;"></span>Photos</h5>
                                 </div>
-                                <div class="row mb-2" style="vertical-align: baseline;">
-                                    <form name="removePhotoForm" id="removePhotoForm" th:action="@{/web/advertisements/remove-photo}" method="POST">
+                                <div class="d-flex flex-row justify-content-around flex-wrap mb-2">
+<!--                                    <form name="removePhotoForm" id="removePhotoForm" th:action="@{/web/advertisements/remove-photo}" method="POST">
                                         <input type="hidden" name="photoUUID" id="photoUUID" />
+                                        <input type="hidden" name="adId">-->
                                         <div class="col-sm-3 col-xs-6" th:each="adPhoto : ${advertisement.photos}">
                                             <div align="center">
-                                                <img alt="" align="top" th:src="@{${'/web/adphotos/' + adPhotoStat.index}}"  style="vertical-align: baseline;"/>
+                                                <img alt="" align="top" th:src="@{${'/web/adphotos/' + adPhoto.id}}"  style="vertical-align: baseline;"/>
                                             </div>
                                             <div align="center" th:if="${action != 'view'}">
                                                 <i class="fa fa-trash" style="cursor: pointer" th:onclick="'removePhoto(\'' + ${adPhotoStat.index} + '\')'"></i>
                                             </div>
                                         </div>
-                                    </form>
+<!--                                    </form>-->
                                 </div>
 
                                 <div class="custom-file" th:if="${action != 'view'}">
@@ -125,6 +128,7 @@
                                     <input type="file" id="file" onchange="uploadPhoto();"
                                                name="file" class="custom-file-input col-sm-8" lang="fr" />
 
+                                        <input type="hidden" id="adId" name="adId">
                                     <label class="custom-file-label" for="file">Selectionner une photo</label>
                                     </form>
                                 </div>
@@ -167,7 +171,7 @@
     }
 
     function uploadPhoto() {
-        //document.getElementById('adForm').action = '/web/advertisements/ad-photo';
+        document.getElementById('adId').value = document.getElementById('adUuid').value;
         document.getElementById('adPhotoForm').submit();
     }
 

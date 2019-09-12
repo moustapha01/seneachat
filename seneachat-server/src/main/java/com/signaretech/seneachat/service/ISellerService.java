@@ -3,6 +3,8 @@ package com.signaretech.seneachat.service;
 import com.signaretech.seneachat.model.AuthenticationResult;
 import com.signaretech.seneachat.persistence.entity.EntSeller;
 
+import java.util.UUID;
+
 public interface ISellerService {
 
 
@@ -23,6 +25,12 @@ public interface ISellerService {
      * @return, the {@link EntSeller} object with email @param email.
      */
     EntSeller findByEmail(String email);
+
+    /**
+     * @param id, id of the seller to fetch
+     * @return, the {@link EntSeller} object with id @param id.
+     */
+    EntSeller findById(UUID id);
 
     /**
      * @param seller, a new Seller not yet activated into the system

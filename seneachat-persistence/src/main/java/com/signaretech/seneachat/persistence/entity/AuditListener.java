@@ -24,7 +24,9 @@ public class AuditListener {
     @PreUpdate
     private void preUpdate(AuditableEntity auditableEntity){
         LOG.info("The following entity is about to be updated: {}", auditableEntity.toString());
+        auditableEntity.setCreatedBy("SYSTEM");
         auditableEntity.setLastModifiedBy("SYSTEM");
+        auditableEntity.setCreatedDate(LocalDateTime.now());
         auditableEntity.setLastModifiedDate(LocalDateTime.now());
     }
 

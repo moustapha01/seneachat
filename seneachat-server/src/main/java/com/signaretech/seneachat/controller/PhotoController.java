@@ -2,6 +2,7 @@ package com.signaretech.seneachat.controller;
 
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntPhoto;
+import com.signaretech.seneachat.service.IPhotoService;
 import com.signaretech.seneachat.util.FileUtility;
 import com.signaretech.seneachat.util.ImageScalingFactor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,18 @@ public class PhotoController {
     private ServletContext context;
 
 
+    private IPhotoService photoService;
+
+    @Autowired
+    public PhotoController(IPhotoService photoService) {
+        this.photoService = photoService;
+    }
+
     @GetMapping("/web/adphotos/{photoUuid}")
     public void loadPhoto(@PathVariable String photoUuid, HttpServletRequest req, HttpServletResponse resp) {
 
-        EntAdvertisement ad = (EntAdvertisement)req.getSession().getAttribute("currAd");
-
-        List<EntPhoto> photos = ad.getPhotos();
-
-        //PhotoDTO photo = photos.stream().filter( p -> p.getId().equals(UUID.fromString(photoUuid))).findFirst().get();
-
-        EntPhoto photo = photos.get(Integer.parseInt(photoUuid));
+        UUID photoId = UUID.fromString(photoUuid);
+        EntPhoto photo = photoService.findPhotoById(photoId);
 
         try{
             writeImage(photo,resp, ImageScalingFactor.SMALL);

@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.validation.ConstraintViolationException;
+import java.util.UUID;
 
 @Service
 public class SellerService implements ISellerService {
@@ -58,6 +59,11 @@ public class SellerService implements ISellerService {
     @Override
     public EntSeller findByEmail(String email) {
         return sellerRepo.findByEmail(email);
+    }
+
+    @Override
+    public EntSeller findById(UUID id) {
+        return sellerRepo.findById(id).orElse(null);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.persistence.entity.EntPhoto;
 import com.signaretech.seneachat.persistence.entity.EntSeller;
+import com.signaretech.seneachat.persistence.utils.UUIDUtil;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.ICategoryService;
 import com.signaretech.seneachat.service.ISellerService;
@@ -74,7 +75,7 @@ public class AdvertisementController {
         EntSeller seller = (EntSeller) model.get("currentUser");
         advertisement.setSeller(seller);
 
-        adService.createAd(advertisement);
+        adService.updateAd(advertisement);
 
         List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), 0, 10);
         model.addAttribute("sellerAds", sellerAds);
@@ -99,13 +100,8 @@ public class AdvertisementController {
     }
 
     @PostMapping("/web/advertisements/update")
-    public String updateAd(Model model, HttpServletRequest req){
-        String adUuid = req.getParameter("adUuid");
-
-       // AdvertisementDTO ad = adService.fetchAd(UUID.fromString(adUuid));
-
-        EntAdvertisement ad = (EntAdvertisement) req.getSession().getAttribute("currAd");
-       // req.getSession().setAttribute("currAd", ad);
+    public String updateAd(@ModelAttribute("advertisement") EntAdvertisement advertisement, Model model, HttpServletRequest req){
+        EntAdvertisement ad = adService.fetchAd(advertisement.getId());
         setModelCategories(model, ad);
         model.addAttribute("advertisement", ad);
         model.addAttribute("action", "update");
@@ -115,30 +111,29 @@ public class AdvertisementController {
     @PostMapping("/web/advertisements/delete")
     public String deleteAd(Model model, HttpServletRequest req){
         String adUuid = req.getParameter("adUuid");
-
         EntAdvertisement ad = adService.fetchAd(UUID.fromString(adUuid));
-
         adService.deleteAd(ad);
 
         EntSeller sellerDTO = (EntSeller) req.getSession().getAttribute("currentUser");
 
         List<EntAdvertisement> sellerAds = sellerService.findByEmail(sellerDTO.getEmail()).getAds();
         model.addAttribute("sellerAds", sellerAds);
-
         return "sellerads";
     }
 
     @PostMapping("/web/advertisements/ad-photo")
     public String adPhoto(Model model, HttpServletRequest req) {
 
-        EntAdvertisement currAd = (EntAdvertisement) req.getSession().getAttribute("currAd");
+        String adUuid = req.getParameter("adId");
+        EntAdvertisement currAd = adService.fetchAd(UUID.fromString(adUuid));
+
+        EntSeller seller = (EntSeller) model.asMap().get("currentUser");
+    //    EntSeller dbSeller = sellerService.findById(seller.getId());
+        currAd.setSeller(seller);
 
         if(currAd == null) {
             currAd = new EntAdvertisement();
         }
-
-        EntSeller sellerDTO = (EntSeller)req.getSession().getAttribute("currentUser");
-        currAd.setSeller(sellerService.findByEmail(sellerDTO.getEmail()));
 
         setModelCategories(model, currAd);
 
@@ -158,9 +153,10 @@ public class AdvertisementController {
                     EntPhoto photo = new EntPhoto();
                     photo.setImageBytes(photoBytes);
                     photo.setName(fileName);
+                    photo.setAdvertisement(currAd);
                     currAd.getPhotos().add(photo);
-                    //                  AdvertisementDTO savedAd = adService.createAd(advertisement);
-                    req.getSession().setAttribute("currAd", currAd);
+                    photo.setPrimaryInd(false);
+                    EntAdvertisement savedAd = adService.updateAd(currAd);
                     model.addAttribute("advertisement", currAd);
                 }
             }
@@ -169,10 +165,7 @@ public class AdvertisementController {
             io.printStackTrace();
         }
 
-        //adService.createAd(advertisement);
-
         return "ad-new";
-
     }
 
     @PostMapping("/web/advertisements/remove-photo")
