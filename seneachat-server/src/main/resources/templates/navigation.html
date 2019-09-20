@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="navbar-main" class="col-sm-8">
+<div th:fragment="navbar-main" class="col-sm-9">
     <nav class="main-nav clearfix">
         <div class="mobile-menu-controll">Menu
             <i class="fa fa-align-justify"></i>
@@ -11,11 +11,11 @@
                 <a href="${senachatContext}/web/home"><i class="fa fa-home"></i>
                     Acceuil</a>
             </li>
-            <li>
-                <a href="${senachatContext}/web/advertisements/display-category?type=Cellulaires">
-                    Téléphones</a>
+            <li th:each="category : ${rootCategories}">
+                <a th:href="@{'/web/advertisements/' + ${category.name}}" th:text="${category.name}">
+                    </a>
             </li>
-            <li>
+<!--            <li>
                 <a href="${senachatContext}/web/advertisements/display-category?type=Immobiliers">
                     Immobiliers</a>
             </li>
@@ -34,7 +34,7 @@
             <li>
                 <a href="#">
                     Cosmetiques</a>
-            </li>
+            </li>-->
         </ul>
     </nav>
 

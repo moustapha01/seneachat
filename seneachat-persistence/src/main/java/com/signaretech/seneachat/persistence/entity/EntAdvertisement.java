@@ -4,7 +4,6 @@ import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +33,7 @@ public class EntAdvertisement extends AuditableEntity {
 
     @Basic
     @Column(name = "price", nullable = false)
-    private BigInteger price;
+    private Double price;
 
     @Basic
     @Column(name = "status", nullable = false, length = 1)
@@ -82,11 +81,11 @@ public class EntAdvertisement extends AuditableEntity {
         return description;
     }
 
-    public BigInteger getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigInteger price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

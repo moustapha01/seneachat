@@ -46,7 +46,7 @@ public class PhotoController {
 
     }
 
-    private void writeImage(EntPhoto photo, HttpServletResponse resp,
+    private synchronized void writeImage(EntPhoto photo, HttpServletResponse resp,
                             ImageScalingFactor scalingFactor) throws IOException {
 
         String mimeType = context.getMimeType(photo.getName());

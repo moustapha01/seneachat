@@ -1,5 +1,6 @@
 package com.signaretech.seneachat.controller;
 
+import com.signaretech.seneachat.model.PriceFilterEntry;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.persistence.entity.EntPhoto;
@@ -180,6 +181,20 @@ public class AdvertisementController {
         req.getSession().setAttribute("currAd", currAd);
 
         return "ad-new";
+    }
+
+    @GetMapping("/web/advertisements/{category}")
+    public String retrieveAdCategories(Model model, @PathVariable String category, HttpServletRequest req) {
+
+        List<EntAdvertisement> ads = adService.getCategoryAds(category);
+        List<PriceFilterEntry> priceFilters = adService.getPriceFilters(ads);
+        final List<EntCategory> rootCategories = categoryService.getRootCategories();
+
+        model.addAttribute("advertisements", ads);
+        model.addAttribute("priceFilters", priceFilters);
+        model.addAttribute("rootCategories", rootCategories);
+
+        return "category-ads";
     }
 
     private void setModelCategories(Model model, EntAdvertisement advertisement) {

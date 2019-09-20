@@ -1,13 +1,5 @@
 body {
-/*   font-family: 'Open Sans';
-  font-weight: 400; */
-  font-size: 0.85rem;
-/*   line-height: 21px;
-  word-spacing: 2px;
-  -webkit-font-smoothing: antialiased;
-  color: #8f9495;
-  overflow: hidden;
-  position: relative; */
+  font-size: 1rem;
 }
 
 .login-page,
