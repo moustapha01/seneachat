@@ -108,11 +108,20 @@
                                 <div>
                                     <h5><span class="fa fa-camera mr-2" style="color: gray;"></span>Photos</h5>
                                 </div>
-                                <div class="d-flex flex-row justify-content-around flex-wrap mb-2">
+                                <div class="custom-file mb-2" th:if="${action != 'view'}">
+                                    <form name="adPhotoForm" id="adPhotoForm"  th:action="@{/web/advertisements/ad-photo}" enctype="multipart/form-data" method="POST">
+                                        <input type="file" id="file" onchange="uploadPhoto();"
+                                               name="file" class="custom-file-input col-sm-8" lang="fr" />
+
+                                        <input type="hidden" id="adId" name="adId">
+                                        <label class="custom-file-label" for="file">Selectionner une photo</label>
+                                    </form>
+                                </div>
+                                <div class="photo-container">
 <!--                                    <form name="removePhotoForm" id="removePhotoForm" th:action="@{/web/advertisements/remove-photo}" method="POST">
                                         <input type="hidden" name="photoUUID" id="photoUUID" />
                                         <input type="hidden" name="adId">-->
-                                        <div class="col-sm-3 col-xs-6" th:each="adPhoto : ${advertisement.photos}">
+                                        <div class="img"  th:each="adPhoto : ${advertisement.photos}">
                                             <div align="center">
                                                 <img alt="" align="top" th:src="@{${'/web/adphotos/' + adPhoto.id}}"  style="vertical-align: baseline;"/>
                                             </div>
@@ -123,19 +132,11 @@
 <!--                                    </form>-->
                                 </div>
 
-                                <div class="custom-file" th:if="${action != 'view'}">
-                                    <form name="adPhotoForm" id="adPhotoForm"  th:action="@{/web/advertisements/ad-photo}" enctype="multipart/form-data" method="POST">
-                                    <input type="file" id="file" onchange="uploadPhoto();"
-                                               name="file" class="custom-file-input col-sm-8" lang="fr" />
 
-                                        <input type="hidden" id="adId" name="adId">
-                                    <label class="custom-file-label" for="file">Selectionner une photo</label>
-                                    </form>
-                                </div>
 
                             </div>
                         </div>
-                        <div>
+                        <div class="offset-sm-1">
                             <button th:type="submit" th:if="${action != 'view'}" class="btn btn-success btn-sm" onclick="submitAd()">Soumettre</button>
                             <button th:type="submit" th:if="${action == 'view'}" class="btn btn-success btn-sm" onclick="updateAd()">Modifier</button>
                             <button th:type="submit" th:if="${action == 'view'}" class="btn btn-default btn-sm" onclick="cancelAd()">Retour Aux Annonces</button>
