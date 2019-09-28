@@ -13,39 +13,40 @@
         <div class="d-flex flex-row justify-content-around" style="border-top: 1px solid lightgray;">
             <div class="col-sm-2" style="border-right: 1px solid lightgray;">
                 <div class="container-fluid h-100 mt-5 mb-5">
-                        <span class="font-weight-bold mb-3">Prix</span>
-                        <div th:each="priceFilter : ${priceFilters}" class="mt-2">
-                            <a th:text="${priceFilter.minValue} + ' to ' + ${priceFilter.maxValue}" href="#" class="text-secondary"></a>
-                        </div>
+                    <span class="font-weight-bold mb-3">Prix</span>
+                    <div th:each="priceFilter : ${priceFilters}" class="mt-2">
+                        <a th:text="${priceFilter.minValue} + ' to ' + ${priceFilter.maxValue}" href="#"
+                           class="text-secondary"></a>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-9">
-                <div th:each="ad : ${advertisements}" class="mt-5 mb-5">
-                    <div class="d-flex flex-row">
-                        <div class="mr-5">
+            <div class="col-sm-10 d-flex category-card ">
+                <div th:each="ad : ${advertisements}" class="card-body">
+                    <div class="">
+                        <div class="img-container mb-1">
                             <img th:src="@{${'/web/adphotos/' + ad.photos[0].id}}"/>
                         </div>
-                        <div>
-                            <div class="mb-2">
-                                <a th:text="${ad.title}" class="font-weight-bold text-blue text-left" href="#"></a>
-                            </div>
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <span th:text="${#numbers.formatCurrency(ad.price)}" class="mr-5 font-weight-bold" style="color: dimgray;"></span>
-                            </div>
-                            <div class="col-sm-10 p-0 mb-3">
-                                <span th:text="${ad.description}"></span>
-                            </div>
-                            <div>
-                                <i class="fa fa-map-marker mr-1" style="color: darkgray;"></i>
-                                <span th:text="${ad.adLocation}" class="mr-5"></span>
-
-                                <i class="fa fa-phone fa-flip-horizontal mr-1" style="color: dimgray;"></i>
-                                <span th:text="${ad.seller.cellPhone}" class="mr-5"></span>
-
-                                <i class="fa fa-envelope mr-1" style="color: dimgray;"></i>
-                                <span>Email</span>
-                            </div>
+                        <div >
+                            <a th:text="${ad.title}" class="category-title" href="#"></a>
+                            <span th:text="${ad.description}" class="p-0  description"></span>
                         </div>
+
+                        <div>
+                            <span th:text="${#numbers.formatCurrency(ad.price)}" class="font-weight-bold"
+                                  style="color: dimgray;"></span>
+                        </div>
+
+                        <!--                            <div>
+                                                        <i class="fa fa-map-marker mr-1" style="color: darkgray;"></i>
+                                                        <span th:text="${ad.adLocation}" class="mr-5"></span>
+
+                                                        <i class="fa fa-phone fa-flip-horizontal mr-1" style="color: dimgray;"></i>
+                                                        <span th:text="${ad.seller.cellPhone}" class="mr-5"></span>
+
+                                                        <i class="fa fa-envelope mr-1" style="color: dimgray;"></i>
+                                                        <span>Email</span>
+                                                    </div>-->
+
                     </div>
                 </div>
             </div>

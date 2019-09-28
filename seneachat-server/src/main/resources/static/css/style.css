@@ -6300,13 +6300,39 @@ footer .footer-copyright .copyright-txt {
     border-radius: 0;
 }
 
-.photo-container{
-	display: flex;
-	flex-wrap: wrap;
-	padding: 5px;
-	justify-content: flex-end;
+.photo-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    justify-content: flex-end;
 }
 
-.photo-container .img{
-	margin:0.5em;
+.photo-container .img {
+    margin: 1em;
+}
+
+.category-card {
+    flex-flow: wrap;
+}
+
+.category-card .img-container {
+    text-align: center;
+}
+
+.category-card .card-body{
+    margin: 0.5em ;
+    padding:0.75em !important;
+    flex: 0 1 15%;
+}
+.category-card .description {
+    width: 300px;
+    height: 75px;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: hidden;
+    text-align: justify;
+    display: inline-block;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
 }
