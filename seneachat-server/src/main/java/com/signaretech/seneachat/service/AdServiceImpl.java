@@ -58,6 +58,11 @@ public class AdServiceImpl implements IAdService {
         return adRepo.findById(id).orElse(null);
     }
 
+    @Override
+    public EntAdvertisement fetchAdDetail(UUID id) {
+        return adRepo.fetchAdDetail(id);
+    }
+
 
     @Override
     public void deleteAd(EntAdvertisement ad) {

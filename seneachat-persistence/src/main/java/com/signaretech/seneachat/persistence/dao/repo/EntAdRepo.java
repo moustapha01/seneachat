@@ -18,5 +18,8 @@ public interface EntAdRepo extends CrudRepository<EntAdvertisement, UUID> {
 
     List<EntAdvertisement> findBySellerId(UUID id);
 
+    @Query("Select ad from EntAdvertisement ad left join fetch ad.seller where ad.id=?1")
+    EntAdvertisement fetchAdDetail(UUID id);
+
    // List<EntAdvertisement> findBySellerIdByPage(UUID id, int from, int max);
 }

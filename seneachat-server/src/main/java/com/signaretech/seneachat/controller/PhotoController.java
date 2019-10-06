@@ -46,6 +46,20 @@ public class PhotoController {
 
     }
 
+    @GetMapping("/web/adphotos/{photoUuid}/{size}")
+    public void loadLargePhoto(@PathVariable String photoUuid, @PathVariable String size, HttpServletRequest req, HttpServletResponse resp) {
+
+        UUID photoId = UUID.fromString(photoUuid);
+        EntPhoto photo = photoService.findPhotoById(photoId);
+
+        try{
+            writeImage(photo,resp, ImageScalingFactor.XLARGE);
+        }catch (IOException ie) {
+            ie.printStackTrace();
+        }
+
+    }
+
     private synchronized void writeImage(EntPhoto photo, HttpServletResponse resp,
                             ImageScalingFactor scalingFactor) throws IOException {
 

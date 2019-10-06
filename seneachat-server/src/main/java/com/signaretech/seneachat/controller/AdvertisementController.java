@@ -94,10 +94,19 @@ public class AdvertisementController {
 
         EntAdvertisement ad = adService.fetchAd(UUID.fromString(adUuid));
         setModelCategories(model, ad);
-        setModelCategories(model, ad);
         model.addAttribute("advertisement", ad);
         model.addAttribute("action", "view");
         return "ad-new";
+    }
+
+    @GetMapping("/web/advertisements/view/{adId}")
+    public String viewAdDetails(Model model, @PathVariable String adId, HttpServletRequest req){
+        String adUuid = req.getParameter("adUuid");
+
+        EntAdvertisement ad = adService.fetchAd(UUID.fromString(adId));
+        model.addAttribute("advertisement", ad);
+        model.addAttribute("selectedId", ad.getPhotos().get(0).getId());
+        return "ad-detail";
     }
 
     @PostMapping("/web/advertisements/update")

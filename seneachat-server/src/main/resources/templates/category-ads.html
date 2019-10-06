@@ -26,8 +26,8 @@
                         <div class="img-container mb-1">
                             <img th:src="@{${'/web/adphotos/' + ad.photos[0].id}}"/>
                         </div>
-                        <div >
-                            <a th:text="${ad.title}" class="category-title" href="#"></a>
+                        <div>
+                            <a th:text="${ad.title}" class="category-title" th:href="@{'/web/advertisements/view/' + ${ad.id}}"></a>
                             <span th:text="${ad.description}" class="p-0  description"></span>
                         </div>
 

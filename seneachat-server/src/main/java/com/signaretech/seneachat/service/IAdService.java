@@ -15,6 +15,8 @@ public interface IAdService {
 
     EntAdvertisement fetchAd(UUID id);
 
+    EntAdvertisement fetchAdDetail(UUID id);
+
     void deleteAd(EntAdvertisement ad);
 
     List<EntAdvertisement> getSellerAds(UUID sellerId, int fromPage, int maxAds);
