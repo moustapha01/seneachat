@@ -95,18 +95,22 @@ public class AdServiceImpl implements IAdService {
         Double min = ads.stream().mapToDouble( v -> v.getPrice() ).min().orElseThrow(NoSuchElementException::new);
         Double max = ads.stream().mapToDouble( v -> v.getPrice() ).max().orElseThrow(NoSuchElementException::new);
 
+        Double minRange = Math.pow(10, (int) (Math.log10(min) + 1));
+        Double maxRange = Math.pow(10, (int) (Math.log10(max)));
+
         //Divide the price range into 10 steps.
-        Long step = (max.longValue() - min.longValue()) / 10;
+        Long step = (maxRange.longValue() - minRange.longValue()) / 10;
 
-        //Use the number of digits for the step as the multiplier that will be used to calculate the price range
-        //ex: [multiplier = 2, range increment = 100]; [multiplier = 3, range increment = 1000]
-        int multiplier = step.toString().length();
-        Double increment = Math.pow(10, multiplier);
+        Double increment =  Math.pow(10, (int) (Math.log10(step) + 1));
 
-        return IntStream.rangeClosed(1, 10).mapToObj( i -> {
-            Long minValue = i * increment.longValue();
-            return new PriceFilterEntry(minValue.toString(), minValue, minValue + increment.longValue());
-        }).collect(Collectors.toList());
+        List<PriceFilterEntry> priceFilters = new ArrayList<>();
+        priceFilters.add(new PriceFilterEntry(String.valueOf(min.longValue()), min.longValue(), increment.longValue()));
+        for(Double from = minRange; from < maxRange; from += increment) {
+            PriceFilterEntry entry = new PriceFilterEntry(from.toString(), from.longValue(), from.longValue() + increment.longValue());
+            priceFilters.add(entry);
+        }
+
+        return priceFilters;
     }
 }
 

@@ -198,10 +198,12 @@ public class AdvertisementController {
         List<EntAdvertisement> ads = adService.getCategoryAds(category);
         List<PriceFilterEntry> priceFilters = adService.getPriceFilters(ads);
         final List<EntCategory> rootCategories = categoryService.getRootCategories();
+        final List<EntCategory> childCategories = categoryService.getCategoriesByParent(category);
 
         model.addAttribute("advertisements", ads);
         model.addAttribute("priceFilters", priceFilters);
         model.addAttribute("rootCategories", rootCategories);
+        model.addAttribute("childCategories", childCategories);
 
         return "category-ads";
     }

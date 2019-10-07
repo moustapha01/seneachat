@@ -28,6 +28,14 @@ public class EntAdvertisement extends AuditableEntity {
     private String description;
 
     @Basic
+    @Column(name = "brand", nullable = true)
+    private String brand;
+
+    @Basic
+    @Column(name = "color", nullable = true)
+    private String color;
+
+    @Basic
     @Column(name = "summary", nullable = true)
     private String summary;
 
@@ -81,16 +89,32 @@ public class EntAdvertisement extends AuditableEntity {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     public Double getPrice() {
         return price;
     }
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public EntCategory getCategory() {
