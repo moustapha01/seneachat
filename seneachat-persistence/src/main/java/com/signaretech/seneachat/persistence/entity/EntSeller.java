@@ -35,7 +35,7 @@ public class EntSeller extends AuditableEntity{
     @Basic
     @NotBlank(message = "email cannot be null or empty")
     @Column( name = "email", unique = true)
-    private String email;
+    private String username;
 
     @Transient
     private String password;
@@ -70,10 +70,10 @@ public class EntSeller extends AuditableEntity{
     public EntSeller() {
     }
 
-    public EntSeller(String firstName, String lastName, String email) {
+    public EntSeller(String firstName, String lastName, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.username = username;
     }
 
     public UUID getId() {
@@ -100,12 +100,12 @@ public class EntSeller extends AuditableEntity{
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -195,7 +195,7 @@ public class EntSeller extends AuditableEntity{
                 .add("id", id)
                 .add("firstName", firstName)
                 .add("lastName", lastName)
-                .add("email", email)
+                .add("username", username)
                 .add("status", status).toString();
     }
 }

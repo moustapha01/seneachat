@@ -3,6 +3,7 @@ package com.signaretech.seneachat.service;
 import com.signaretech.seneachat.model.PriceFilterEntry;
 import com.signaretech.seneachat.persistence.dao.repo.EntAdRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntCategoryRepo;
+import com.signaretech.seneachat.persistence.dao.repo.EntPhotoRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntSellerRepo;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import org.junit.Assert;
@@ -32,10 +33,12 @@ public class AdServiceTest {
     private ICategoryService categoryService;
     @Mock
     private EntCategoryRepo categoryRepo;
+    @Mock
+    private EntPhotoRepo photoRepo;
 
     @Before
     public void init() {
-        this.adService = new AdServiceImpl(adRepo, sellerRepo, categoryService, categoryRepo);
+        this.adService = new AdServiceImpl(adRepo, sellerRepo, categoryService, categoryRepo, photoRepo);
     }
 
     @Test

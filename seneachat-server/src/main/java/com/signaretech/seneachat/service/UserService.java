@@ -12,29 +12,38 @@ import com.signaretech.seneachat.util.RandomCodeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.validation.ConstraintViolationException;
+import java.util.Collections;
 import java.util.UUID;
 
 @Service
-public class SellerService implements ISellerService {
+public class UserService implements IUserService, UserDetailsService {
 
-    private EntSellerRepo sellerRepo;
-    private IMailService mailService;
+    private final EntSellerRepo sellerRepo;
+    private final IMailService mailService;
+    private final BCryptPasswordEncoder passwordEncoder;
+
 
     private final EntityValidator entityValidator = new EntityValidator();
 
-    private static final Logger LOG = LoggerFactory.getLogger(SellerService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    public SellerService(IMailService mailService, EntSellerRepo sellerRepo){
+    public UserService(IMailService mailService, EntSellerRepo sellerRepo, BCryptPasswordEncoder passwordEncoder){
         this.mailService = mailService;
         this.sellerRepo = sellerRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -46,7 +55,7 @@ public class SellerService implements ISellerService {
         seller.setStatus(SellerStatus.PENDING.getValue());
         Authentication auth = new Authentication();
         String hashCode = auth.hash(seller.getPassword().toCharArray());
-        seller.setSecret(hashCode);
+        seller.setSecret(passwordEncoder.encode(seller.getPassword()));
         return sellerRepo.save(seller);
     }
 
@@ -58,7 +67,7 @@ public class SellerService implements ISellerService {
 
     @Override
     public EntSeller findByEmail(String email) {
-        return sellerRepo.findByEmail(email);
+        return sellerRepo.findByUsername(email);
     }
 
     @Override
@@ -68,16 +77,16 @@ public class SellerService implements ISellerService {
 
     @Override
     public void activateAccount(EntSeller seller, String activationCode) {
-        LOG.info("Activating account for seller {}", seller.getEmail());
+        LOG.info("Activating account for seller {}", seller.getUsername());
 
-        EntSeller dbSeller = findByEmail(seller.getEmail());
+        EntSeller dbSeller = findByEmail(seller.getUsername());
 
         if(!StringUtils.isEmpty(activationCode) &&
                 activationCode.equals(dbSeller.getActivationCode())){
 
             dbSeller.setStatus(SellerStatus.ACTIVE.getValue());
             updateSeller(dbSeller);
-            LOG.info("Account for seller {} has been successfully activated", seller.getEmail());
+            LOG.info("Account for seller {} has been successfully activated", seller.getUsername());
 
         }else{
             throw new SeneachatErrorException(MessageTranslator.getLocaleMessage("activationcode.invalid"));
@@ -91,12 +100,12 @@ public class SellerService implements ISellerService {
         String activationCode = RandomCodeGenerator.generateCode();
         String body = MessageTranslator.getLocaleMessage("registration.confirmation") + activationCode;
 
-        EntSeller dbSeller = findByEmail(seller.getEmail());
+        EntSeller dbSeller = findByEmail(seller.getUsername());
         dbSeller.setActivationCode(activationCode);
 
         try {
             updateSeller(dbSeller);
-            mailService.sendMail(dbSeller.getEmail(), "Code d'Activation", body);
+            mailService.sendMail(dbSeller.getUsername(), "Code d'Activation", body);
 
         } catch (AddressException adx) {
             throw new SeneachatErrorException("Error sending email to newly registered user. Please contact support");
@@ -110,13 +119,13 @@ public class SellerService implements ISellerService {
 
         try {
             entityValidator.validate(seller);
-            if (sellerRepo.existsByEmail(seller.getEmail())){
+            if (sellerRepo.existsByUsername(seller.getUsername())){
                 throw new SeneachatErrorException(MessageTranslator.getLocaleMessage("email.exist"));
             }
 
             EntSeller savedSeller = createSeller(seller);
             String body = MessageTranslator.getLocaleMessage("registration.confirmation") + savedSeller.getActivationCode();
-            mailService.sendMail(seller.getEmail(), "Code d'Activation", body);
+            mailService.sendMail(seller.getUsername(), "Code d'Activation", body);
 
         } catch (ConstraintViolationException vex) {
             throw new SeneachatErrorException(String.format(
@@ -124,28 +133,28 @@ public class SellerService implements ISellerService {
                     vex.getConstraintViolations().toString()));
 
         }catch (MessagingException mex) {
-                LOG.info("An error occured while registering seller {} due to {}", seller.getEmail(), mex);
+                LOG.info("An error occured while registering seller {} due to {}", seller.getUsername(), mex);
 
         } catch (Exception ex) {
-            LOG.info("An error occured while registering seller {}", seller.getEmail(), ex.getMessage());
+            LOG.info("An error occured while registering seller {}", seller.getUsername(), ex.getMessage());
             throw new SeneachatErrorException(String.format(
                     "The following error occurred while registering user %s. %s. Please contact support",
-                    seller.getEmail(), ex.getMessage()));
+                    seller.getUsername(), ex.getMessage()));
         }
 
     }
 
     @Override
-    public AuthenticationResult authenticateUser(EntSeller user) {
+    public AuthenticationResult authenticateUser(String userName, String password) {
 
-        EntSeller existingSeller = findByEmail(user.getEmail());
+        EntSeller existingSeller = findByEmail(userName);
         AuthenticationResult result = new AuthenticationResult(existingSeller.getStatus());
 
         if(existingSeller != null){
-            if(user.getPassword() != null){
+            if(password != null){
                 Authentication auth = new Authentication();
                 String passSecret = existingSeller.getSecret();
-                result.setAuthenticated(auth.authenticate(user.getPassword().toCharArray(), passSecret));
+                result.setAuthenticated(auth.authenticate(password.toCharArray(), passSecret));
 
                 if(!result.isAuthenticated()) {
                     result.setError(MessageTranslator.getLocaleMessage("password.invalid"));
@@ -158,6 +167,14 @@ public class SellerService implements ISellerService {
         }
 
         return result;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        EntSeller user = sellerRepo.findByUsername(userName);
+        if(user == null) throw new UsernameNotFoundException(userName);
+
+        return new User(user.getUsername(), user.getSecret(), Collections.singleton(new SimpleGrantedAuthority("SELLER")));
     }
 }
 

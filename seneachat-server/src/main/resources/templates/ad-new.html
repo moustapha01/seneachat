@@ -5,198 +5,225 @@
 </head>
 <body>
 
-<header th:replace="header :: header-main">
-</header>
+<div id="wrapper">
+    <header id="header" th:replace="header-fixed-top :: header-main">
+    </header>
 
-<section class="mb70">
-    <!-- START container for featured advertisement -->
-    <div class="container-fluid p-3 ad-category-container">
-        <div class="row justify-content-center">
-
-            <!-- MIDDLE container -->
-            <div class="col-md-11 bg-white border box-shadow pt15 pb15">
-                    <div class="pb15" th:if="${action == 'add'}"><h4>Nouvelle Annonce</h4></div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <form name="adForm" id="adForm" th:action="@{/web/advertisements/save}" th:object="${advertisement}"
-                                       method="post">
-                                    <input type="hidden" th:id="adUuid" th:field="${advertisement.id}">
-                                    <input type="hidden" th:id="status" th:field="${advertisement.status}">
-                                    <input type="hidden" th:id="numViews" th:field="${advertisement.numViews}">
-                                <div class="form-group row">
-                                    <label for="category1" class="col-sm-2 col-form-label">Type</label>
-                                    <div class="col-sm-8">
-                                    <select th:if="${categoriesLevel2 == null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.name}"
-                                            id="category1" onchange="getSubCategories()">
+    <section>
+        <!-- START container for featured advertisement -->
+        <div class="p-3 container-fluid ad-category-container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6 mt-5">
+                    <div class="stepper-container">
+                        <ul class="stepper-progress-bar">
+                            <li class="active">Info de l'annonce</li>
+                            <li>Photos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <!-- MIDDLE container -->
+                <div class="col-md-6 mt-5 mb-5">
+                    <div class="bg-white border box-shadow p-5">
+                        <div class="pb15" th:if="${action == 'add'}"><h4>Nouvelle Annonce</h4></div>
+                        <form name="adForm" id="adForm" class="custom-form-typography needs-validation" th:action="@{/web/dashboard/advertisements/save}"
+                              th:object="${advertisement}" enctype="multipart/form-data"
+                              method="post" novalidate>
+                            <input type="hidden" th:id="adUuid" th:field="${advertisement.id}">
+                            <input type="hidden" th:id="status" th:field="${advertisement.status}">
+                            <input type="hidden" th:id="numViews" th:field="${advertisement.numViews}">
+                            <div class="form-group row">
+                                <label for="category1" class="col-sm-2 col-form-label">Type</label>
+                                <div class="col-sm-8">
+                                    <select th:if="${categoriesLevel2 == null}" class="custom-select"
+                                            th:disabled="${action == 'view'}"
+                                            th:field="${advertisement.category.name}"
+                                            id="category1" onchange="getSubCategories()" required>
                                         <option th:value="None">Selectionnez le type d'Annonce</option>
                                         <option th:each="category : ${rootCategories}" th:value="${category.name}"
                                                 th:text="${category.name}">Option 1
                                         </option>
                                     </select>
-                                        <select th:if="${categoriesLevel2 != null && categoriesLevel3 == null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.parent.name}"
-                                                id="category1" onchange="getSubCategories()">
-                                            <option th:value="None">Selectionnez le type d'Annonce</option>
-                                            <option th:each="category : ${rootCategories}" th:value="${category.name}"
-                                                    th:text="${category.name}">Option 1
-                                            </option>
-                                        </select>
-                                    </div>
+                                    <select th:if="${categoriesLevel2 != null && categoriesLevel3 == null}"
+                                            class="custom-select" th:disabled="${action == 'view'}"
+                                            th:field="${advertisement.category.parent.name}"
+                                            id="category1" onchange="getSubCategories()" required>
+                                        <option th:value="None">Selectionnez le type d'Annonce</option>
+                                        <option th:each="category : ${rootCategories}" th:value="${category.name}"
+                                                th:text="${category.name}">Option 1
+                                        </option>
+                                    </select>
                                 </div>
-                                <div class="form-group row" th:if="${categoriesLevel2 != null && #lists.size(categoriesLevel2) > 0}">
-                                    <label for="category2" class="col-sm-2 col-form-label">Categorie I</label>
-                                    <div class="col-sm-8">
-                                    <select th:if="${categoriesLevel2 != null && categoriesLevel3 == null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.name}"
-                                            id="category2" onchange="getSubCategories()">
+                            </div>
+                            <div class="form-group row"
+                                 th:if="${categoriesLevel2 != null && #lists.size(categoriesLevel2) > 0}">
+                                <label for="category2" class="col-sm-2 col-form-label">Categorie</label>
+                                <div class="col-sm-8">
+                                    <select th:if="${categoriesLevel2 != null && categoriesLevel3 == null}"
+                                            class="custom-select" th:disabled="${action == 'view'}"
+                                            th:field="${advertisement.category.name}"
+                                            id="category2" onchange="getSubCategories()" required>
                                         <option th:value="None">Selectionnez une categorie</option>
                                         <option th:each="category : ${categoriesLevel2}" th:value="${category.name}"
                                                 th:text="${category.name}">
                                         </option>
                                     </select>
-                                        <select th:if="${categoriesLevel3 != null}" class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.parent.name}"
-                                                id="category2" onchange="getSubCategories()">
-                                            <option th:value="None">Selectionnez une categorie</option>
-                                            <option th:each="category : ${categoriesLevel2}" th:value="${category.name}"
-                                                    th:text="${category.name}">
-                                            </option>
-                                        </select>
-                                    </div>
+                                    <select th:if="${categoriesLevel3 != null}" class="custom-select"
+                                            th:disabled="${action == 'view'}"
+                                            th:field="${advertisement.category.parent.name}"
+                                            id="category2" onchange="getSubCategories()" required>
+                                        <option th:value="None">Selectionnez une categorie</option>
+                                        <option th:each="category : ${categoriesLevel2}" th:value="${category.name}"
+                                                th:text="${category.name}">
+                                        </option>
+                                    </select>
                                 </div>
-                                <div class="form-group row" th:if="${categoriesLevel3 != null && #lists.size(categoriesLevel3) > 0}">
-                                    <label for="category3" class="col-sm-2 col-form-label">Categorie II</label>
-                                    <div class="col-sm-8">
-                                    <select class="custom-select" th:disabled="${action == 'view'}" th:field="${advertisement.category.categoryLevel3}"
+                            </div>
+                            <div class="form-group row"
+                                 th:if="${categoriesLevel3 != null && #lists.size(categoriesLevel3) > 0}">
+                                <label for="category3" class="col-sm-2 col-form-label">Categorie II</label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select" th:disabled="${action == 'view'}"
+                                            th:field="${advertisement.category.categoryLevel3}"
                                             id="category3" onchange="getSubCategories()">
                                         <option th:value="None">Selectionnez une categorie</option>
                                         <option th:each="category : ${categoriesLevel3}" th:value="${category.name}"
                                                 th:text="${category.name}">
                                         </option>
                                     </select>
-                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="title" class="col-sm-2 col-form-label">Titre</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" th:disabled="${action == 'view'}" type="text" th:field="${advertisement.title}"
-                                               id="title" onchange="getSubCategories()">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="price" class="col-sm-2 col-form-label">Prix</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" th:disabled="${action == 'view'}" type="text" th:field="${advertisement.price}"
-                                               id="price" onchange="getSubCategories()">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="adLocation" class="col-sm-2 col-form-label">Emplacement</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" th:disabled="${action == 'view'}" type="text" onchange="getSubCategories()"
-                                               th:field="${advertisement.adLocation}" id="adLocation">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                        <label for="brand" class="col-sm-2 col-form-label">Marque</label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" th:disabled="${action == 'view'}" type="text"
-                                                   onchange="getSubCategories()"
-                                                   th:field="${advertisement.brand}" id="brand">
-                                        </div>
-                                </div>
-                                <div class="form-group row">
-                                        <label for="color" class="col-sm-2 col-form-label">Couleur</label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" th:disabled="${action == 'view'}" type="text"
-                                                   onchange="getSubCategories()"
-                                                   th:field="${advertisement.color}" id="color">
-                                        </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="description" class="col-sm-2 col-form-label">Description</label>
-                                    <div class="col-sm-8">
-                                    <textarea class="form-control" th:disabled="${action == 'view'}" th:field="${advertisement.description}"
-                                              id="description" onchange="getSubCategories()"></textarea>
-                                    </div>
-                                </div>
-                                </form>
                             </div>
-                            <div class="col-sm-6 border p-2">
-                                <div>
-                                    <h5><span class="fa fa-camera mr-2" style="color: gray;"></span>Photos</h5>
+                            <div class="form-group row">
+                                <label for="title" class="col-sm-2 col-form-label">Titre</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" th:disabled="${action == 'view'}" type="text"
+                                           th:field="${advertisement.title}"
+                                           id="title" required>
                                 </div>
-                                <div class="custom-file mb-2" th:if="${action != 'view'}">
-                                    <form name="adPhotoForm" id="adPhotoForm"  th:action="@{/web/advertisements/ad-photo}" enctype="multipart/form-data" method="POST">
-                                        <input type="file" id="file" onchange="uploadPhoto();"
-                                               name="file" class="custom-file-input col-sm-8" lang="fr" />
-
-                                        <input type="hidden" id="adId" name="adId">
-                                        <label class="custom-file-label" for="file">Selectionner une photo</label>
-                                    </form>
-                                </div>
-                                <div class="photo-container">
-<!--                                    <form name="removePhotoForm" id="removePhotoForm" th:action="@{/web/advertisements/remove-photo}" method="POST">
-                                        <input type="hidden" name="photoUUID" id="photoUUID" />
-                                        <input type="hidden" name="adId">-->
-                                        <div class="img"  th:each="adPhoto : ${advertisement.photos}">
-                                            <div align="center">
-                                                <img alt="" align="top" th:src="@{${'/web/adphotos/' + adPhoto.id}}"  style="vertical-align: baseline;"/>
-                                            </div>
-                                            <div align="center" th:if="${action != 'view'}">
-                                                <i class="fa fa-trash" style="cursor: pointer" th:onclick="'removePhoto(\'' + ${adPhotoStat.index} + '\')'"></i>
-                                            </div>
-                                        </div>
-<!--                                    </form>-->
-                                </div>
-
-
-
                             </div>
-                        </div>
-                        <div class="offset-sm-1">
-                            <button th:type="submit" th:if="${action != 'view'}" class="btn btn-success btn-sm" onclick="submitAd()">Soumettre</button>
-                            <button th:type="submit" th:if="${action == 'view'}" class="btn btn-success btn-sm" onclick="updateAd()">Modifier</button>
-                            <button th:type="submit" th:if="${action == 'view'}" class="btn btn-default btn-sm" onclick="cancelAd()">Retour Aux Annonces</button>
-                            <button th:type="submit" th:if="${action == 'newAd' || action == 'update'}" class="btn btn-default btn-sm" onclick="cancelAd()">Annuler</button>
-                        </div>
+                            <div class="form-group row">
+                                <label for="price" class="col-sm-2 col-form-label">Prix</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" th:disabled="${action == 'view'}" type="text"
+                                           th:field="${advertisement.price}"
+                                           id="price" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="adLocation" class="col-sm-2 col-form-label">Emplacement</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" th:disabled="${action == 'view'}" type="text"
+                                           th:field="${advertisement.adLocation}" id="adLocation" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="brand" class="col-sm-2 col-form-label">Marque</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" th:disabled="${action == 'view'}" type="text"
+                                           th:field="${advertisement.brand}" id="brand">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="color" class="col-sm-2 col-form-label">Couleur</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" th:disabled="${action == 'view'}" type="text"
+                                           th:field="${advertisement.color}" id="color">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-8">
+                                        <textarea class="form-control" th:disabled="${action == 'view'}"
+                                                  th:field="${advertisement.description}"
+                                                  id="description" required></textarea>
+                                </div>
+                            </div>
+                        </form>
                     </div>
+
+                    <div class="mt-3">
+                        <button type="submit" th:if="${action != 'view'}" class="btn btn-success btn-sm"
+                                onclick="submitAd()">Sauvegarder
+                        </button>
+                        <button th:type="submit" th:if="${action == 'view'}" class="btn btn-success btn-sm"
+                                onclick="updateAd()">Modifier
+                        </button>
+                        <button th:type="submit" th:if="${action == 'newAd' || action == 'update'}"
+                                class="btn btn-light btn-sm" onclick="cancelAd()">Annuler
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" th:if="${action == 'view'}"
+                                onclick="viewPhotos()">Photos
+                        </button>
+                        <button th:type="submit" th:if="${action == 'view'}" class="btn btn-light btn-sm"
+                                onclick="cancelAd()">Retour Aux Annonces
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<footer th:replace="footer :: footer-main">
+    </section>
+    <footer th:replace="footer :: footer-main">
 
-</footer>
+    </footer>
+</div>
 <script type="text/javascript">
     function getSubCategories() {
-        document.getElementById('adForm').action = '/web/advertisements/new';
+        document.getElementById('adForm').action = '/web/dashboard/advertisements/new';
         document.getElementById('adForm').submit();
     }
 
     function submitAd() {
-        document.getElementById('adForm').action = '/web/advertisements/save';
+        document.getElementById('adForm').action = '/web/dashboard/advertisements/save';
         document.getElementById('adForm').submit();
     }
 
     function updateAd() {
-        document.getElementById('adForm').action = '/web/advertisements/update';
+        document.getElementById('adForm').action = '/web/dashboard/advertisements/update';
         document.getElementById('adForm').submit();
     }
 
     function cancelAd() {
-        document.getElementById('adForm').action = '/web/advertisements/cancel';
+        document.getElementById('adForm').action = '/web/dashboard/advertisements/cancel';
         document.getElementById('adForm').submit();
     }
 
     function uploadPhoto() {
-        document.getElementById('adId').value = document.getElementById('adUuid').value;
-        document.getElementById('adPhotoForm').submit();
+        document.getElementById('adForm').action = '/web/dashboard/advertisements/new';
+        document.getElementById('adForm').submit();
     }
 
-    function removePhoto(uuid){
+    function removePhoto(uuid) {
         document.getElementById("photoUUID").value = uuid;
         alert(document.getElementById("photoUUID").value);
         document.removePhotoForm.submit();
     }
+
+    function viewPhotos() {
+        var uuid = document.getElementById('adUuid').value;
+        document.location.href = '/web/dashboard/advertisements/photos?currAdId=' + uuid;
+    }
+</script>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsById('adForm');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 </script>
 
 </body>

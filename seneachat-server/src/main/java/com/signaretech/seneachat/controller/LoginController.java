@@ -1,15 +1,21 @@
 package com.signaretech.seneachat.controller;
 
-import com.signaretech.seneachat.exception.SeneachatException;
+import com.google.common.collect.Lists;
 
 import com.signaretech.seneachat.model.AuthenticationResult;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntSeller;
 import com.signaretech.seneachat.service.IAdService;
-import com.signaretech.seneachat.service.ISellerService;
+import com.signaretech.seneachat.service.IUserService;
+import com.signaretech.seneachat.service.SignareAuthenticationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,16 +25,20 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-@SessionAttributes("currentUser")
 public class LoginController {
 
-    @Autowired
-    private ISellerService sellerService;
+    private final IUserService sellerService;
 
-    @Autowired
-    private IAdService adService;
+    private final IAdService adService;
+
+//    private final SignareAuthenticationManager authenticationManager;
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+
+    public LoginController(IUserService sellerService, IAdService adService) {
+        this.adService = adService;
+        this.sellerService = sellerService;
+    }
 
     @GetMapping("/web/login")
     public String loginForm(Model model){
@@ -38,7 +48,7 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/web/login")
+/*    @PostMapping("/web/login")
     public String loginSubmit(@ModelAttribute("currentUser") EntSeller currentUser, Model model, BindingResult result, HttpServletRequest req) {
         LOG.info("Login request from user {}", currentUser.getEmail());
 
@@ -46,24 +56,32 @@ public class LoginController {
             return "login";
         }
 
-        AuthenticationResult authResult = sellerService.authenticateUser(currentUser);
+        Authentication authResult = null;
 
-        if(authResult.isAuthenticated() && authResult.getSellerStatus().equals("A")){
-            EntSeller existingSeller = sellerService.findByEmail(currentUser.getEmail());
+        try{
+            authResult = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    currentUser.getEmail(), currentUser.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authResult);
+        }catch (BadCredentialsException bdex) {
+            req.setAttribute("errorMs", bdex.getMessage());
+        }
+
+        EntSeller existingSeller = sellerService.findByEmail(currentUser.getEmail());
+
+        if(authResult.isAuthenticated() && existingSeller.getStatus().equals("A")){
             model.addAttribute("currentUser", existingSeller);
             req.getSession().setAttribute("user", existingSeller);
             List<EntAdvertisement> sellerAds = adService.getSellerAds(existingSeller.getId(), 0, 10);//existingSeller.getAds();
             model.addAttribute("sellerAds", sellerAds);
-//            model.addAttribute("numPages", 3);
-            return "redirect:/web/seller/dashboard";
+            return "redirect:/web/dashboard";
         }
-        else if(authResult.isAuthenticated() && !authResult.getSellerStatus().equals("A")){
+        else if(authResult.isAuthenticated() && !existingSeller.getStatus().equals("A")){
             return "registration-confirmation";
         }
 
-        req.setAttribute("errorMsg", authResult.getError());
         return "login";
-    }
+    }*/
 
     @GetMapping("/web/register")
     public String register(Model model){
@@ -75,7 +93,7 @@ public class LoginController {
     public String register(@ModelAttribute("currentUser") EntSeller currentUser, Model model, BindingResult result,
                            HttpServletRequest req){
 
-        LOG.info("New user registration request from {}", currentUser.getEmail());
+        LOG.info("New user registration request from {}", currentUser.getUsername());
         String password2 = req.getParameter("password2");
 
         try {
@@ -85,7 +103,7 @@ public class LoginController {
             return "register";
         }
 
-        req.getSession().setAttribute("sellerEmail", currentUser.getEmail());
+        req.getSession().setAttribute("sellerEmail", currentUser.getUsername());
 
         return "registration-confirmation";
     }
@@ -96,7 +114,7 @@ public class LoginController {
         List<EntAdvertisement> sellerAds = null;
         String activationCode = req.getParameter("activationCode");
 //        String email = (String) req.getSession().getAttribute("sellerEmail");
-        String email = currentUser.getEmail();
+        String email = currentUser.getUsername();
 //        currentUser.setEmail(email);
 
             sellerService.activateAccount(currentUser, activationCode);

@@ -1,6 +1,5 @@
 package com.signaretech.seneachat.controller;
 
-import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntPhoto;
 import com.signaretech.seneachat.service.IPhotoService;
 import com.signaretech.seneachat.util.FileUtility;
@@ -11,81 +10,58 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
 public class PhotoController {
 
-
-    @Autowired
     private ServletContext context;
-
-
     private IPhotoService photoService;
 
     @Autowired
-    public PhotoController(IPhotoService photoService) {
+    public PhotoController(IPhotoService photoService, ServletContext context) {
         this.photoService = photoService;
+        this.context = context;
     }
 
-    @GetMapping("/web/adphotos/{photoUuid}")
-    public void loadPhoto(@PathVariable String photoUuid, HttpServletRequest req, HttpServletResponse resp) {
+    @GetMapping("/web/dashboard/adphotos/{photoUuid}/{size}")
+    public void loadPhoto(@PathVariable String photoUuid,
+                               @PathVariable String size,
+                               HttpServletResponse resp) {
 
         UUID photoId = UUID.fromString(photoUuid);
         EntPhoto photo = photoService.findPhotoById(photoId);
 
         try{
-            writeImage(photo,resp, ImageScalingFactor.SMALL);
+            writeImage(photo,resp, size);
         }catch (IOException ie) {
             ie.printStackTrace();
         }
-
     }
 
-    @GetMapping("/web/adphotos/{photoUuid}/{size}")
-    public void loadLargePhoto(@PathVariable String photoUuid, @PathVariable String size, HttpServletRequest req, HttpServletResponse resp) {
-
-        UUID photoId = UUID.fromString(photoUuid);
-        EntPhoto photo = photoService.findPhotoById(photoId);
-
-        try{
-            writeImage(photo,resp, ImageScalingFactor.XLARGE);
-        }catch (IOException ie) {
-            ie.printStackTrace();
-        }
-
-    }
-
-    private synchronized void writeImage(EntPhoto photo, HttpServletResponse resp,
-                            ImageScalingFactor scalingFactor) throws IOException {
+    /**
+     * Writes the image bytes from photo to the HttpServletResponse output stream.
+     * @param photo, {@link EntPhoto} object that contains the image bytes
+     * @param resp, {@link HttpServletResponse} object
+     * @param photoSize, determines the size of the image
+     * @throws IOException
+     */
+    private synchronized void writeImage(EntPhoto photo,
+                                         HttpServletResponse resp,
+                                         String photoSize) throws IOException {
 
         String mimeType = context.getMimeType(photo.getName());
         resp.setContentType(mimeType);
-
-        byte[] thumbnail = null;
-        switch (scalingFactor) {
-            case XLARGE:
-                thumbnail = FileUtility.resizeThumbnail(photo.getImageBytes(), "xlarge");
-                break;
-            case LARGE:
-                thumbnail = FileUtility.resizeThumbnail(photo.getImageBytes(), "large");
-                break;
-            case MEDIUM:
-                thumbnail = FileUtility.resizeThumbnail(photo.getImageBytes(), "medium");
-                break;
-            case SMALL:
-                thumbnail = FileUtility.resizeThumbnail(photo.getImageBytes(), "small");
-                break;
-            case FIXED:
-                thumbnail = FileUtility.resizeThumbnail(photo.getImageBytes(), "fixed");
-                break;
-            default:
-                break;
+        ImageScalingFactor scalingFactor = ImageScalingFactor.SMALL;
+        switch (photoSize){
+            case "S": scalingFactor = ImageScalingFactor.SMALL; break;
+            case "M": scalingFactor = ImageScalingFactor.MEDIUM; break;
+            case "L": scalingFactor = ImageScalingFactor.LARGE; break;
+            case "XL": scalingFactor = ImageScalingFactor.XLARGE; break;
         }
+        byte[] thumbnail = FileUtility.resizeThumbnail(photo.getImageBytes(), scalingFactor);
         resp.getOutputStream().write(thumbnail);
     }
 

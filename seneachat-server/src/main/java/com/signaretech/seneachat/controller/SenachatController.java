@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.List;
 
 @Controller
+@SessionAttributes("currentUser")
 public class SenachatController {
 
     private ICategoryService categoryService;
@@ -23,6 +25,6 @@ public class SenachatController {
     public String home(Model model) {
         final List<EntCategory> rootCategories = categoryService.getRootCategories();
         model.addAttribute("rootCategories", rootCategories);
-        return "index";
+        return "home";
     }
 }

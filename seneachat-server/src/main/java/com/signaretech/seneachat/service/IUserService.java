@@ -5,7 +5,7 @@ import com.signaretech.seneachat.persistence.entity.EntSeller;
 
 import java.util.UUID;
 
-public interface ISellerService {
+public interface IUserService {
 
 
     /**
@@ -42,5 +42,5 @@ public interface ISellerService {
 
     void register(EntSeller seller);
 
-    AuthenticationResult authenticateUser(EntSeller user);
+    AuthenticationResult authenticateUser(String userName, String password);
 }

@@ -1,74 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="head-section :: head-main">
 
 </head>
 <body>
-
-<header th:replace="header :: header-main">
-</header>
-
-<section class="mb70">
-    <!-- START container for featured advertisement -->
-    <div class="container-fluid p-3 ad-category-container">
-        <div class="row justify-content-center">
-
-            <!-- MIDDLE container -->
-            <div class="col-md-11 bg-white border box-shadow pt15 pb15">
-                <div class="pb15"><h4>Nouvelle Annonce</h4></div>
-
-                <div class="container-fluid">
-
-                    <div class="row">
-                        <div class="col-md-1">
-                            &nbsp;
+<div id="wrapper">
+    <header id="header" th:replace="header-fixed-top :: header-main">
+    </header>
+    <section>
+        <div class="container-fluid p-3 ad-category-container mt-5" style="min-height: 800px;">
+            <div class="row justify-content-center">
+                <div class="col-md-6 mt-5">
+                    <div class="stepper-container">
+                        <ul class="stepper-progress-bar">
+                            <li class="active">Info de l'annonce</li>
+                            <li class="active">Photos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center h-100">
+                <div class="col-sm-6 col-xs-10 mt-5 mb-5">
+                    <div class="border bg-white box-shadow p-4">
+                        <div>
+                            <h5><span class="fa fa-camera mr-2" style="color: gray;"></span>Photos</h5>
                         </div>
-                        <div class="col-md-10">
-                            <div class="box box-info">
-                                <div class="box-header with-border">
-                                    <span class="fa fa-camera" style="color: gray;"></span>
-                                    <h3 class="box-title">Telecharger Vos Photos</h3>
-                                </div>
-                                <div class="box-body">
-                                    <br/>
-                                    <form name="removePhotoForm" action="remove-photo" method="POST">
-                                        <div class="row" style="vertical-align: baseline;">
-                                            <div class="col-2" th:each="adPhoto : ${session.currAd.photos}">
-                                                <input type="hidden" name="photoUUID" id="photoUUID" />
-                                                <img alt="" align="top" th:src="@{${'/web/adphotos/' + adPhoto.uuidString}}"  style="vertical-align: baseline;"/>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <br />
-                                    <form name="adPhotoForm" id="adPhotoForm"  th:action="@{/web/advertisements/ad-photo}" enctype="multipart/form-data" method="POST">
-                                        <div class="input-group">
-                                            <input type="file" id="adPhoto" onchange="uploadPhoto();"
-                                                   name="file" translate="yes" class="form-control" />
-                                        </div>
-                                        <br />
-                                    </form>
-                                    <br />
-                                </div>
-                            </div>
+                        <div class="custom-file mt-2 mb-2">
+                            <form name="adPhotoForm" id="adPhotoForm"
+                                  th:action="@{${'/web/dashboard/advertisements/' + currAd.id + '/ad-photo'}}"
+                                  enctype="multipart/form-data" method="POST">
+                                <input th:if="${action != null && action == 'update'}" type="file" id="file"
+                                       onchange="uploadPhoto();"
+                                       name="file" class="custom-file-input col-sm-8" lang="fr"/>
+
+                                <input type="hidden" id="adUuid" name="adUuid" th:value="${currAd.id}">
+                                <label th:if="${action != null && action == 'update'}" class="custom-file-label"
+                                       for="file">Selectionner
+                                    une photo</label>
+                            </form>
                         </div>
-                        <div class="col-md-1">
-                            &nbsp;
+                        <div class="photo-container">
+                            <form name="removePhotoForm" id="removePhotoForm"
+                                  th:action="@{${'/web/dashboard/advertisements/' + currAd.id + '/remove-photo'}}" method="POST">
+                                <input type="hidden" name="photoUUID" id="photoUUID"/>
+                                <input type="hidden" name="adId">
+                                <div class="d-flex flex-row flex-wrap">
+                                    <div class="img" th:each="adPhoto : ${currAd.photos}">
+                                        <div align="center" class="border p-2 box-shadow">
+                                            <img alt="" align="top"
+                                                 th:src="@{${'/web/dashboard/adphotos/' + adPhoto.id + '/M'}}"
+                                                 style="vertical-align: baseline;"/>
+                                        </div>
+                                        <div align="center" th:if="${action == 'update'}" class="mt-1">
+                                            <i class="fa fa-trash" style="color: #b2b2b2; cursor: pointer"
+                                               th:onclick="'removePhoto(\'' + ${adPhoto.id} + '\')'"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-secondary" onclick="updateAd()">Retour a l'annonce</button>
+                    </div>
                 </div>
             </div>
         </div>
-</section>
-<footer th:replace="footer :: footer-main">
+    </section>
+    <footer th:replace="footer :: footer-main">
 
-</footer>
-<script type="text/javascript">
-    function uploadPhoto() {
-       document.getElementById('adPhotoForm').submit();
-    }
-</script>
+    </footer>
+    <script type="text/javascript">
 
+        function updateAd() {
+            document.getElementById('adPhotoForm').action = '/web/dashboard/advertisements/view';
+            document.getElementById('adPhotoForm').submit();
+        }
+
+        function uploadPhoto() {
+            //document.getElementById('adForm').action = '/web/advertisements/new';
+            document.getElementById('adPhotoForm').submit();
+        }
+
+        function removePhoto(uuid) {
+            document.getElementById("photoUUID").value = uuid;
+            document.removePhotoForm.submit();
+        }
+    </script>
+</div>
 </body>
 </html>
 

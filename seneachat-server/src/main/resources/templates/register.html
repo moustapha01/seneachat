@@ -59,7 +59,7 @@
         <span style="color: red;" th:text="${#request.getAttribute('errorMsg')}" th:unless="${#request == null}">[...]</span>
         <form name="registrationForm" th:action="@{/web/register}" th:object="${currentUser}" action="#" method="post">
             <div class="form-group has-feedback">
-                <input type="text" th:field="*{email}" class="form-control" placeholder="email" />
+                <input type="text" th:field="*{username}" class="form-control" placeholder="email" />
             </div>
             <br/>
             <div class="form-group has-feedback">

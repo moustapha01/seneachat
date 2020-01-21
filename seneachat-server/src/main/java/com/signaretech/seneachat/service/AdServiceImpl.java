@@ -3,39 +3,44 @@ package com.signaretech.seneachat.service;
 import com.signaretech.seneachat.model.PriceFilterEntry;
 import com.signaretech.seneachat.persistence.dao.repo.EntAdRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntCategoryRepo;
+import com.signaretech.seneachat.persistence.dao.repo.EntPhotoRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntSellerRepo;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.model.AdvertisementStatus;
+import com.signaretech.seneachat.persistence.entity.EntPhoto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class AdServiceImpl implements IAdService {
 
-    private EntAdRepo adRepo;
-    private EntSellerRepo sellerRepo;
-    private ICategoryService categoryService;
-    private EntCategoryRepo categoryRepo;
+    private final EntAdRepo adRepo;
+    private final EntSellerRepo sellerRepo;
+    private final ICategoryService categoryService;
+    private final EntCategoryRepo categoryRepo;
+    private final EntPhotoRepo photoRepo;
 
     private static final Logger LOG = LoggerFactory.getLogger(AdServiceImpl.class);
 
-    @Autowired
-    public AdServiceImpl(EntAdRepo adRepo, EntSellerRepo sellerRepo, ICategoryService categoryService,
-                         EntCategoryRepo categoryRepo){
+    public AdServiceImpl(EntAdRepo adRepo,
+                         EntSellerRepo sellerRepo,
+                         ICategoryService categoryService,
+                         EntCategoryRepo categoryRepo,
+                         EntPhotoRepo photoRepo){
         this.adRepo = adRepo;
         this.sellerRepo = sellerRepo;
         this.categoryService = categoryService;
         this.categoryRepo = categoryRepo;
+        this.photoRepo = photoRepo;
     }
 
     @Override
@@ -48,6 +53,9 @@ public class AdServiceImpl implements IAdService {
     @Override
     public EntAdvertisement updateAd(EntAdvertisement ad) {
         LOG.info("Updating advertisement with id {} and number of photos {}", ad.getId(), ad.getPhotos().size());
+        if(StringUtils.isEmpty(ad.getStatus())) {
+            ad.setStatus(AdvertisementStatus.PENDING.getValue());
+        }
         return adRepo.save(ad);
     }
 
@@ -67,6 +75,11 @@ public class AdServiceImpl implements IAdService {
     @Override
     public void deleteAd(EntAdvertisement ad) {
         adRepo.delete(ad);
+    }
+
+    @Override
+    public void deletePhoto(UUID photoId) {
+        photoRepo.deleteById(photoId);
     }
 
 
@@ -89,6 +102,7 @@ public class AdServiceImpl implements IAdService {
         final EntCategory category = categoryService.getCategoryByName(categoryName);
         return adRepo.findByCategory(category.getId());
     }
+
 
     @Override
     public List<PriceFilterEntry> getPriceFilters(List<EntAdvertisement> ads) {

@@ -9,7 +9,7 @@ import java.util.UUID;
 @Repository
 public interface EntSellerRepo extends CrudRepository<EntSeller, UUID> {
 
-    EntSeller findByEmail(String email);
+    EntSeller findByUsername(String username);
 
-    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
 }

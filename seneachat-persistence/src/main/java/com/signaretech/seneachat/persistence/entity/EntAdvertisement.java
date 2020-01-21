@@ -2,6 +2,7 @@ package com.signaretech.seneachat.persistence.entity;
 
 import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,10 +22,12 @@ public class EntAdvertisement extends AuditableEntity {
 
     @Basic
     @Column(name = "title", nullable = false)
+    @NotBlank(message = "m")
     private String title;
 
     @Basic
     @Column(name = "description", nullable = false)
+    @NotBlank
     private String description;
 
     @Basic

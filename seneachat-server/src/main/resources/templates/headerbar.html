@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-    <div th:fragment="top-bar" class="d-flex flex-row justify-content-around topbar lighten">
+    <div th:fragment="top-bar" class="d-flex flex-row justify-content-around topbar">
         <div class="col-sm-9">
             <ul class="contact-info clearfix">
                 <li><i class="fa fa-phone"></i>
@@ -11,22 +11,30 @@
                     <a href="mailto:example@example.com">info@seneachat.com</a></li>
             </ul>
         </div>
-        <div class="col-sm-2">
-            <ul class="nav justify-content-end mr-2">
-                <li class="nav-item dropdown">
-
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span class="glyphicon glyphicon-user" style="color:#8f9495;"> </span>
-                        Mon Compte
-                        <span class="caret"></span>
-                    </a>
-                    <div class="dropdown-menu">
+<!--        <div class="col-sm-2">-->
+            <div class="dropdown">
+                <a class="btn btn-success dropdown-toggle" href="#" role="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Mon Compte
+                </a>
+                <div class="dropdown-menu" aria-labelledby="userMenu">
                         <a class="dropdown-item" th:href="@{/web/login}" href="#">Accéder à mon compte</a>
                         <a class="dropdown-item" th:href="@{/web/register}" href="#">Créer un nouveau compte</a>
+                </div>
+            </div>
+<!--            <ul th:if="${currentUser != null}" class="nav justify-content-end mr-2">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user"></i>
+                        <span th:text="${currentUser.username}">Mouhamadou</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" th:href="@{/web/dashboard}" href="#">Mes annonces</a>
+                        <a class="dropdown-item" th:href="@{/web/register}" href="#">Mon profile</a>
+                        <a class="dropdown-item" th:href="@{/web/logout}" href="#">Logout</a>
                     </div>
                 </li>
-            </ul>
-        </div>
+            </ul>-->
+<!--        </div>-->
     </div>
 </body>
 </html>
