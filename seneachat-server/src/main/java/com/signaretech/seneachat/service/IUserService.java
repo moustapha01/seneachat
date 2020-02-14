@@ -33,10 +33,10 @@ public interface IUserService {
     EntSeller findById(UUID id);
 
     /**
-     * @param seller, a new Seller not yet activated into the system
+     * @param userName, user if for the new Seller not yet activated into the system
      * @param activationCode, a generated code sent to the Seller and used to activate the new Seller
      */
-    void activateAccount(EntSeller seller, String activationCode);
+    void activateAccount(String userName, String activationCode);
 
     void resendActivationCode(EntSeller seller);
 

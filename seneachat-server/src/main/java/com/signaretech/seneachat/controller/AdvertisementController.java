@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -75,24 +76,30 @@ public class AdvertisementController {
     }
 
     @PostMapping("/web/dashboard/advertisements/save")
-    public ModelAndView save(@ModelAttribute("advertisement") EntAdvertisement advertisement, ModelMap model, BindingResult binding, HttpServletRequest req) {
+    public ModelAndView save(@ModelAttribute("advertisement") @Valid EntAdvertisement advertisement,
+                             BindingResult bindingResult, ModelMap model, HttpServletRequest req) {
 
-        EntCategory category = categoryService.getCategoryByName(advertisement.getCategory().getName());
-        advertisement.setCategory(category);
-        String userName = securityService.getLoggedInUser();
-        EntSeller seller = sellerService.findByEmail(userName);
-        advertisement.setSeller(seller);
+        if(bindingResult.hasErrors()) {
+            return new ModelAndView("ad-new");
+        }
+        else {
+            EntCategory category = categoryService.getCategoryByName(advertisement.getCategory().getName());
+            advertisement.setCategory(category);
+            String userName = securityService.getLoggedInUser();
+            EntSeller seller = sellerService.findByEmail(userName);
+            advertisement.setSeller(seller);
 
-        EntAdvertisement ad = adService.updateAd(advertisement);
-        model.addAttribute("currAdId", ad.getId().toString());
+            EntAdvertisement ad = adService.updateAd(advertisement);
+            model.addAttribute("currAdId", ad.getId().toString());
 
 //        List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), 0, 10);
 //        model.addAttribute("sellerAds", sellerAds);
 //        return "sellerads";
 
-        model.addAttribute("action", "update");
+            model.addAttribute("action", "update");
 
-        return new ModelAndView("redirect:/web/dashboard/advertisements/photos", model);
+            return new ModelAndView("redirect:/web/dashboard/advertisements/photos", model);
+        }
     }
 
     @PostMapping("/web/dashboard/advertisements/cancel")
@@ -156,6 +163,7 @@ public class AdvertisementController {
             }
             currAd = adService.updateAd(currAd);
             model.addAttribute("currAd", currAd);
+            model.addAttribute("action", "update");
         }
         return "ad-photos";
     }

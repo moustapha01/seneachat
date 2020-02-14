@@ -2905,14 +2905,15 @@
 .main-wrap .img-holder {
 	overflow: hidden;
 	position: relative;
-	width: 100%;
+/*	width: 100%;*/
+	height: 12rem;
 }
 .main-wrap .img-holder img {
 	display: block;
 	max-width: 100%;
 	height: auto;
 	margin: 0 auto;
-	width: 100%;
+/*	width: 100%;*/
 }
 .main-wrap .footer {
 	overflow: hidden;
@@ -3308,13 +3309,17 @@ blockquote cite .image-holder img {
 .custom-checkbox .custom-control-label:after {
 	display: none;
 }
-
-@media (min-width: 1200px) {
-.container-fluid {
-	max-width: 1280px;
-	margin: 0 auto;
-}
 }*/
+@media (min-width: 1200px) {
+	.container-fluid-custom {
+		max-width: 1280px;
+		margin: 0 auto;
+		width: 100%;
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+}
+
 #wrapper {
 	overflow: hidden;
 }

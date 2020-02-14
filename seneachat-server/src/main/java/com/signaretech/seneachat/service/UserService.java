@@ -76,17 +76,17 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public void activateAccount(EntSeller seller, String activationCode) {
-        LOG.info("Activating account for seller {}", seller.getUsername());
+    public void activateAccount(String userName, String activationCode) {
+        LOG.info("Activating account for seller {}", userName);
 
-        EntSeller dbSeller = findByEmail(seller.getUsername());
+        EntSeller dbSeller = findByEmail(userName);
 
         if(!StringUtils.isEmpty(activationCode) &&
                 activationCode.equals(dbSeller.getActivationCode())){
 
             dbSeller.setStatus(SellerStatus.ACTIVE.getValue());
             updateSeller(dbSeller);
-            LOG.info("Account for seller {} has been successfully activated", seller.getUsername());
+            LOG.info("Account for seller {} has been successfully activated", userName);
 
         }else{
             throw new SeneachatErrorException(MessageTranslator.getLocaleMessage("activationcode.invalid"));

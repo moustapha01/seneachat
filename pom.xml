@@ -24,7 +24,7 @@
     <properties>
         <java.version>1.8</java.version>
         <flyway.version>5.2.4</flyway.version>
-        <hibernate.validation.version>5.3.5.Final</hibernate.validation.version>
+        <hibernate.validation.version>6.0.9.Final</hibernate.validation.version>
         <spring.version>5.0.6.RELEASE</spring.version>
         <jackson.version>2.9.4</jackson.version>
         <junit.version>4.12</junit.version>
@@ -52,9 +52,14 @@
                 <version>25.1-jre</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate.validation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>2.0.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

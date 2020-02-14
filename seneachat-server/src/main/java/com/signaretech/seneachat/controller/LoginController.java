@@ -3,10 +3,12 @@ package com.signaretech.seneachat.controller;
 import com.google.common.collect.Lists;
 
 import com.signaretech.seneachat.model.AuthenticationResult;
+import com.signaretech.seneachat.model.exceptions.SeneachatErrorException;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntSeller;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.IUserService;
+import com.signaretech.seneachat.service.SecurityService;
 import com.signaretech.seneachat.service.SignareAuthenticationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,22 +24,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 public class LoginController {
 
     private final IUserService sellerService;
-
-    private final IAdService adService;
-
-//    private final SignareAuthenticationManager authenticationManager;
+    private final SecurityService securityService;
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
-    public LoginController(IUserService sellerService, IAdService adService) {
-        this.adService = adService;
+    public LoginController(IUserService sellerService, SecurityService securityService) {
         this.sellerService = sellerService;
+        this.securityService = securityService;
     }
 
     @GetMapping("/web/login")
@@ -90,40 +90,40 @@ public class LoginController {
     }
 
     @PostMapping("/web/register")
-    public String register(@ModelAttribute("currentUser") EntSeller currentUser, Model model, BindingResult result,
+    public String register(@ModelAttribute("currentUser") @Valid EntSeller currentUser,
+                           BindingResult bindingResult,
+                           Model model,
                            HttpServletRequest req){
 
         LOG.info("New user registration request from {}", currentUser.getUsername());
         String password2 = req.getParameter("password2");
-
-        try {
-            sellerService.register(currentUser);
-        } catch (Exception ex) {
-            req.setAttribute("errorMsg", ex.getMessage());
+        if(bindingResult.hasErrors()){
             return "register";
         }
-
-        req.getSession().setAttribute("sellerEmail", currentUser.getUsername());
+        else{
+            try {
+                sellerService.register(currentUser);
+            } catch (Exception ex) {
+                req.setAttribute("errorMsg", ex.getMessage());
+                return "register";
+            }
+        }
 
         return "registration-confirmation";
     }
 
     @PostMapping("/web/activate")
     public String activateAccount(@ModelAttribute("currentUser") EntSeller currentUser, HttpServletRequest req, Model model){
-
-        List<EntAdvertisement> sellerAds = null;
         String activationCode = req.getParameter("activationCode");
-//        String email = (String) req.getSession().getAttribute("sellerEmail");
-        String email = currentUser.getUsername();
-//        currentUser.setEmail(email);
+        String email = securityService.getLoggedInUser();
+        try{
+            sellerService.activateAccount(email, activationCode);
+        }catch (SeneachatErrorException se){
+            model.addAttribute("errorMsg", se.getMessage());
+            return "registration-confirmation";
+        }
 
-            sellerService.activateAccount(currentUser, activationCode);
-            model.addAttribute("sellerAds", sellerAds);
-
-//            LOG.error("Error while activating account for seller {}.", currentUser.getEmail(), se.getMessage());
-  //          req.setAttribute("errorMsg", se.getMessage());
-  //          return "registration-confirmation";
-
+        model.addAttribute("sellerAds", null);
         return "sellerads";
     }
 

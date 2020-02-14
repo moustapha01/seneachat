@@ -36,6 +36,9 @@ public class SellerController {
 
         String loggedInUser = securityService.getLoggedInUser();
         EntSeller seller = sellerService.findByEmail(loggedInUser);
+        if(!(seller.getStatus().equals("A"))){
+            return "registration-confirmation";
+        }
         model.addAttribute("currentUser", seller.getUsername());
         List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), 0, 5);//existingSeller.getAds();
         model.addAttribute("sellerAds", sellerAds);

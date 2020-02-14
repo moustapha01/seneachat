@@ -4,9 +4,12 @@ import com.google.common.base.MoreObjects;
 import com.signaretech.seneachat.common.validation.Patterns;
 import com.signaretech.seneachat.common.validation.ValidPhone;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,33 +26,37 @@ public class EntSeller extends AuditableEntity{
     private UUID id;
 
     @Basic
-    //@NotBlank(message = "first name cannot be null or empty")
+    @NotBlank(message = "{firstname.notblank}")
     @Column( name = "first_name")
     private String firstName;
 
     @Basic
-    //@NotBlank(message = "last name cannot be null or empty")
+    @NotBlank(message = "{lastname.notblank}")
     @Column( name = "last_name")
     private String lastName;
 
     @Basic
-    @NotBlank(message = "email cannot be null or empty")
+    @NotBlank(message = "{email.notblank}")
     @Column( name = "email", unique = true)
     private String username;
 
     @Transient
+/*    @NotBlank(message = "{password.notblank}")
+    @Length(min = 8, max = 16, message = "{password.invalid}")*/
     private String password;
 
     @Transient
+/*    @NotBlank(message = "{password.notblank}")
+    @Length(min = 8, max = 16, message = "{password.invalid}")*/
     private String password2;
 
     @Basic
-    @ValidPhone(pattern = "\\d{9,10}")
+/*    @ValidPhone(pattern = "\\d{9,10}")*/
     @Column( name = "home_phone", length = 12)
     private String homePhone;
 
     @Basic
-    @ValidPhone(pattern = "\\d{9,10}")
+ /*   @ValidPhone(pattern = "\\d{9,10}")*/
     @Column( name = "cell_phone", length = 12)
     private String cellPhone;
 

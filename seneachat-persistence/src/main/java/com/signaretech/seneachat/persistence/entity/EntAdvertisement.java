@@ -2,9 +2,13 @@ package com.signaretech.seneachat.persistence.entity;
 
 import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Currency;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,12 +26,12 @@ public class EntAdvertisement extends AuditableEntity {
 
     @Basic
     @Column(name = "title", nullable = false)
-    @NotBlank(message = "m")
+    @NotBlank(message = "{title.notblank}")
     private String title;
 
     @Basic
     @Column(name = "description", nullable = false)
-    @NotBlank
+    @NotBlank(message = "{description.notblank}")
     private String description;
 
     @Basic
@@ -44,6 +48,9 @@ public class EntAdvertisement extends AuditableEntity {
 
     @Basic
     @Column(name = "price", nullable = false)
+    @NotNull(message = "{price.notblank}")
+    @Min(message = "{price.min}", value = 1)
+    @Max(message = "{price.max}", value = Long.MAX_VALUE)
     private Double price;
 
     @Basic
@@ -56,10 +63,12 @@ public class EntAdvertisement extends AuditableEntity {
 
     @Basic
     @Column ( name = "ad_location")
+    @NotBlank(message = "{location.notblank}")
     private String adLocation;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn( name = "category_uuid", referencedColumnName = "category_uuid", nullable = false)
+    @NotNull(message = "{category.notnull}")
     private EntCategory category;
 
     @ManyToOne(fetch = FetchType.LAZY)

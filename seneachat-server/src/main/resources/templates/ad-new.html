@@ -27,9 +27,9 @@
                 <div class="col-md-6 mt-5 mb-5">
                     <div class="bg-white border box-shadow p-5">
                         <div class="pb15" th:if="${action == 'add'}"><h4>Nouvelle Annonce</h4></div>
-                        <form name="adForm" id="adForm" class="custom-form-typography needs-validation" th:action="@{/web/dashboard/advertisements/save}"
+                        <form name="adForm" id="adForm" class="custom-form-typography" th:action="@{/web/dashboard/advertisements/save}"
                               th:object="${advertisement}" enctype="multipart/form-data"
-                              method="post" novalidate>
+                              method="post">
                             <input type="hidden" th:id="adUuid" th:field="${advertisement.id}">
                             <input type="hidden" th:id="status" th:field="${advertisement.status}">
                             <input type="hidden" th:id="numViews" th:field="${advertisement.numViews}">
@@ -54,6 +54,9 @@
                                                 th:text="${category.name}">Option 1
                                         </option>
                                     </select>
+                                    <div class="mt-2 error">
+                                        <span th:if="${#fields.hasErrors('category.name')}" th:errors="*{category.name}"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row"
@@ -100,6 +103,9 @@
                                     <input class="form-control" th:disabled="${action == 'view'}" type="text"
                                            th:field="${advertisement.title}"
                                            id="title" required>
+                                    <div class="mt-2 error">
+                                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -108,6 +114,9 @@
                                     <input class="form-control" th:disabled="${action == 'view'}" type="text"
                                            th:field="${advertisement.price}"
                                            id="price" required>
+                                    <div class="mt-2 error">
+                                        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -115,6 +124,9 @@
                                 <div class="col-sm-8">
                                     <input class="form-control" th:disabled="${action == 'view'}" type="text"
                                            th:field="${advertisement.adLocation}" id="adLocation" required>
+                                    <div class="mt-2 error">
+                                        <span th:if="${#fields.hasErrors('adLocation')}" th:errors="*{adLocation}"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -136,7 +148,10 @@
                                 <div class="col-sm-8">
                                         <textarea class="form-control" th:disabled="${action == 'view'}"
                                                   th:field="${advertisement.description}"
-                                                  id="description" required></textarea>
+                                                  id="description" required maxlength="150"></textarea>
+                                    <div class="mt-2 error">
+                                        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -149,7 +164,7 @@
                         <button th:type="submit" th:if="${action == 'view'}" class="btn btn-success btn-sm"
                                 onclick="updateAd()">Modifier
                         </button>
-                        <button th:type="submit" th:if="${action == 'newAd' || action == 'update'}"
+                        <button th:type="submit" th:if="${action != 'view'}"
                                 class="btn btn-light btn-sm" onclick="cancelAd()">Annuler
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" th:if="${action == 'view'}"
@@ -203,27 +218,6 @@
         var uuid = document.getElementById('adUuid').value;
         document.location.href = '/web/dashboard/advertisements/photos?currAdId=' + uuid;
     }
-</script>
-
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsById('adForm');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
 </script>
 
 </body>
