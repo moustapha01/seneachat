@@ -2,6 +2,7 @@ package com.signaretech.seneachat.persistence.entity;
 
 import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -14,14 +15,14 @@ public class EntPhoto extends AuditableEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "photo_uuid", nullable = false, updatable = false)
+    @Column(name = "photo_id", nullable = false, updatable = false)
     private UUID id;
 
     @Basic
     @Column( name = "photo_name", nullable = false)
     private String name;
 
-    @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
     @Column(name = "image_byte", nullable = false)
     private byte[] imageBytes;
 
@@ -30,7 +31,7 @@ public class EntPhoto extends AuditableEntity {
     private Boolean primaryInd;
 
     @ManyToOne
-    @JoinColumn(name = "advertisement_uuid", referencedColumnName = "advertisement_uuid", nullable = false)
+    @JoinColumn(name = "advertisement_id", referencedColumnName = "advertisement_id", nullable = false)
     private EntAdvertisement advertisement;
 
     public EntPhoto(){

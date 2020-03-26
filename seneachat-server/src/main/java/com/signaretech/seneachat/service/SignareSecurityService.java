@@ -10,14 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class SignareSecurityService implements SecurityService {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-
-    public SignareSecurityService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-    }
-
     @Override
     public String getLoggedInUser() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -25,19 +17,5 @@ public class SignareSecurityService implements SecurityService {
             return ((UserDetails)userDetails).getUsername();
         }
         return null;
-    }
-
-    @Override
-    public void authenticateUser(String userName, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-        UsernamePasswordAuthenticationToken token = new
-                UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-
-        authenticationManager.authenticate(token);
-
-        if(token.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(token);
-        }
-
     }
 }

@@ -1,10 +1,12 @@
 package com.signaretech.seneachat.common.validation;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolationException;
 
+@Ignore
 public class EntityValidatorTest {
 
     private final EntityValidator validator = new EntityValidator();

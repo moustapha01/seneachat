@@ -4,7 +4,7 @@ import com.signaretech.seneachat.model.PriceFilterEntry;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.persistence.entity.EntPhoto;
-import com.signaretech.seneachat.persistence.entity.EntSeller;
+import com.signaretech.seneachat.persistence.entity.EntUser;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.ICategoryService;
 import com.signaretech.seneachat.service.IUserService;
@@ -60,18 +60,9 @@ public class AdvertisementController {
     public String getAdSubCategories(@ModelAttribute("advertisement") EntAdvertisement advertisement, Model model, BindingResult binding,
                                      HttpServletRequest req) {
 
-
         setModelCategories(model, advertisement);
         EntAdvertisement currAd = (EntAdvertisement)req.getSession().getAttribute("currAd");
         model.addAttribute("action", "update");
-
-//        if(currAd == null){
-//            currAd = new EntAdvertisement();
-//        }
-//
-//        advertisement.getPhotos().addAll(currAd.getPhotos());
-//        req.getSession().setAttribute("currAd", advertisement);
-
         return "ad-new";
     }
 
@@ -86,16 +77,11 @@ public class AdvertisementController {
             EntCategory category = categoryService.getCategoryByName(advertisement.getCategory().getName());
             advertisement.setCategory(category);
             String userName = securityService.getLoggedInUser();
-            EntSeller seller = sellerService.findByEmail(userName);
-            advertisement.setSeller(seller);
+            EntUser seller = sellerService.findByEmail(userName);
+            advertisement.setUser(seller);
 
             EntAdvertisement ad = adService.updateAd(advertisement);
             model.addAttribute("currAdId", ad.getId().toString());
-
-//        List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), 0, 10);
-//        model.addAttribute("sellerAds", sellerAds);
-//        return "sellerads";
-
             model.addAttribute("action", "update");
 
             return new ModelAndView("redirect:/web/dashboard/advertisements/photos", model);

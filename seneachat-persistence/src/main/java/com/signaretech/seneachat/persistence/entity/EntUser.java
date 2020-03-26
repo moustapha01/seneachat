@@ -1,14 +1,9 @@
 package com.signaretech.seneachat.persistence.entity;
 
 import com.google.common.base.MoreObjects;
-import com.signaretech.seneachat.common.validation.Patterns;
-import com.signaretech.seneachat.common.validation.ValidPhone;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
@@ -16,13 +11,13 @@ import java.util.UUID;
 
 @EntityListeners(AuditListener.class)
 @Entity
-@Table(name = "seller")
-public class EntSeller extends AuditableEntity{
+@Table(name = "users")
+public class EntUser extends AuditableEntity{
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "seller_uuid", nullable = false, updatable = false)
+    @Column(name = "user_id", nullable = false, updatable = false)
     private UUID id;
 
     @Basic
@@ -40,9 +35,9 @@ public class EntSeller extends AuditableEntity{
     @Column( name = "email", unique = true)
     private String username;
 
-    @Transient
-/*    @NotBlank(message = "{password.notblank}")
-    @Length(min = 8, max = 16, message = "{password.invalid}")*/
+    @NotBlank(message = "{password.notblank}")
+/*    @Length(min = 8, max = 16, message = "{password.invalid}")*/
+    @Column( name = "secret")
     private String password;
 
     @Transient
@@ -67,17 +62,13 @@ public class EntSeller extends AuditableEntity{
     @Column( name = "activation_code", nullable = false, length = 6)
     private String activationCode;
 
-    @Basic
-    @Column( name = "secret", nullable = false)
-    private String secret;
-
-    @OneToMany(mappedBy = "seller", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<EntAdvertisement> ads;
 
-    public EntSeller() {
+    public EntUser() {
     }
 
-    public EntSeller(String firstName, String lastName, String username) {
+    public EntUser(String firstName, String lastName, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -166,14 +157,6 @@ public class EntSeller extends AuditableEntity{
         this.activationCode = activationCode;
     }
 
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
-
     public List<EntAdvertisement> getAds() {
         return ads;
     }
@@ -186,8 +169,8 @@ public class EntSeller extends AuditableEntity{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EntSeller entSeller = (EntSeller) o;
-        return Objects.equals(id, entSeller.id);
+        EntUser entUser = (EntUser) o;
+        return Objects.equals(id, entUser.id);
     }
 
     @Override

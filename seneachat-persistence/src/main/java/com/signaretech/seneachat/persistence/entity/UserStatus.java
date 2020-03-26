@@ -1,6 +1,6 @@
 package com.signaretech.seneachat.persistence.entity;
 
-public enum SellerStatus {
+public enum UserStatus {
 
     PENDING,
     ACTIVE,

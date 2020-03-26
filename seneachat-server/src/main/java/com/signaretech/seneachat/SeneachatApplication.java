@@ -28,27 +28,27 @@ public class SeneachatApplication {
     }
 
 
-    @Bean
-    //@Profile("local")
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        dataSource.setUsername("senachat");
-        dataSource.setPassword("welcome1");
-        dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=senachat;integratedSecurity=true;");
-
-        return dataSource;
-    }
-
-    @Bean
-    public Properties properties() {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServer2012Dialect");
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.show_sql", "true");
-
-        return properties;
-    }
+//    @Bean
+//    //@Profile("local")
+//    public DataSource dataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//        dataSource.setUsername("senachat");
+//        dataSource.setPassword("welcome1");
+//        dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=senachat;integratedSecurity=true;");
+//
+//        return dataSource;
+//    }
+//
+//    @Bean
+//    public Properties properties() {
+//        Properties properties = new Properties();
+//        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServer2012Dialect");
+//        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+//        properties.setProperty("hibernate.show_sql", "true");
+//
+//        return properties;
+//    }
 
 
 //    @Bean

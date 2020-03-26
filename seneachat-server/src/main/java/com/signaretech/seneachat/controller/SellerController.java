@@ -1,7 +1,7 @@
 package com.signaretech.seneachat.controller;
 
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
-import com.signaretech.seneachat.persistence.entity.EntSeller;
+import com.signaretech.seneachat.persistence.entity.EntUser;
 import com.signaretech.seneachat.service.IAdService;
 import com.signaretech.seneachat.service.IUserService;
 import com.signaretech.seneachat.service.SecurityService;
@@ -32,10 +32,10 @@ public class SellerController {
     }
 
     @GetMapping("/web/dashboard")
-    public String dashboard(Model model, HttpServletRequest req) {
+    public String dashboard(Model model) {
 
         String loggedInUser = securityService.getLoggedInUser();
-        EntSeller seller = sellerService.findByEmail(loggedInUser);
+        EntUser seller = sellerService.findByEmail(loggedInUser);
         if(!(seller.getStatus().equals("A"))){
             return "registration-confirmation";
         }
@@ -51,7 +51,7 @@ public class SellerController {
     public String getSellerAds(Model model, HttpServletRequest req) {
 
         HttpSession session = req.getSession();
-        EntSeller seller = (EntSeller) session.getAttribute("user");
+        EntUser seller = (EntUser) session.getAttribute("user");
 
         String selectedPage = (String)req.getParameter("adPage");
         List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), Integer.valueOf(selectedPage), 5);

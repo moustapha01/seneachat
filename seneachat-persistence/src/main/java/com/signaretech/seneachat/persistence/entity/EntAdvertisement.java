@@ -2,7 +2,6 @@ package com.signaretech.seneachat.persistence.entity;
 
 import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Currency;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -21,7 +20,7 @@ public class EntAdvertisement extends AuditableEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "advertisement_uuid", nullable = false, updatable = false)
+    @Column(name = "advertisement_id", nullable = false, updatable = false)
     private UUID id;
 
     @Basic
@@ -72,8 +71,8 @@ public class EntAdvertisement extends AuditableEntity {
     private EntCategory category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_uuid", referencedColumnName = "seller_uuid", nullable = false)
-    private EntSeller seller;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    private EntUser user;
 
     @OneToMany( mappedBy = "advertisement", cascade = CascadeType.ALL)
     private List<EntPhoto> photos = new ArrayList<>();
@@ -137,12 +136,12 @@ public class EntAdvertisement extends AuditableEntity {
         this.category = category;
     }
 
-    public EntSeller getSeller() {
-        return seller;
+    public EntUser getUser() {
+        return user;
     }
 
-    public void setSeller(EntSeller seller) {
-        this.seller = seller;
+    public void setUser(EntUser seller) {
+        this.user = seller;
     }
 
     public String getSummary() {

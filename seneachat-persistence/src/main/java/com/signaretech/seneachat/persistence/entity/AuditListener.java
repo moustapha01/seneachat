@@ -13,8 +13,9 @@ public class AuditListener {
     private static final Logger LOG = LoggerFactory.getLogger(AuditListener.class);
 
     @PrePersist
-    private void prePersist(AuditableEntity auditableEntity){
+    private void prePersist(AuditableEntity auditableEntity) throws InterruptedException {
         LOG.info("The following entity is about to be peristed: {}", auditableEntity.toString());
+        Thread.sleep(1000);
         auditableEntity.setCreatedBy("SYSTEM");
         auditableEntity.setLastModifiedBy("SYSTEM");
         auditableEntity.setCreatedDate(LocalDateTime.now());
@@ -22,8 +23,9 @@ public class AuditListener {
     }
 
     @PreUpdate
-    private void preUpdate(AuditableEntity auditableEntity){
+    private void preUpdate(AuditableEntity auditableEntity) throws InterruptedException {
         LOG.info("The following entity is about to be updated: {}", auditableEntity.toString());
+        Thread.sleep(1000);
         auditableEntity.setCreatedBy("SYSTEM");
         auditableEntity.setLastModifiedBy("SYSTEM");
         auditableEntity.setCreatedDate(LocalDateTime.now());

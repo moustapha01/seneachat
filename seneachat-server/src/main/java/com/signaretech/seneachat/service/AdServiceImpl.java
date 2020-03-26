@@ -4,15 +4,14 @@ import com.signaretech.seneachat.model.PriceFilterEntry;
 import com.signaretech.seneachat.persistence.dao.repo.EntAdRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntCategoryRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntPhotoRepo;
-import com.signaretech.seneachat.persistence.dao.repo.EntSellerRepo;
+import com.signaretech.seneachat.persistence.dao.repo.EntUserRepo;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.model.AdvertisementStatus;
-import com.signaretech.seneachat.persistence.entity.EntPhoto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.UUID;
 public class AdServiceImpl implements IAdService {
 
     private final EntAdRepo adRepo;
-    private final EntSellerRepo sellerRepo;
+    private final EntUserRepo sellerRepo;
     private final ICategoryService categoryService;
     private final EntCategoryRepo categoryRepo;
     private final EntPhotoRepo photoRepo;
@@ -32,7 +31,7 @@ public class AdServiceImpl implements IAdService {
     private static final Logger LOG = LoggerFactory.getLogger(AdServiceImpl.class);
 
     public AdServiceImpl(EntAdRepo adRepo,
-                         EntSellerRepo sellerRepo,
+                         EntUserRepo sellerRepo,
                          ICategoryService categoryService,
                          EntCategoryRepo categoryRepo,
                          EntPhotoRepo photoRepo){
@@ -61,6 +60,7 @@ public class AdServiceImpl implements IAdService {
 
 
     @Override
+    @Transactional( readOnly = true )
     public EntAdvertisement fetchAd(UUID id) {
         LOG.info("Fetching advertisement with id {}", id.toString());
         return adRepo.findById(id).orElse(null);
@@ -84,8 +84,8 @@ public class AdServiceImpl implements IAdService {
 
 
     @Override
-    public List<EntAdvertisement> getSellerAds(UUID sellerId, int fromPage, int maxAds) {
-                return adRepo.findBySellerId(sellerId);
+    public List<EntAdvertisement> getSellerAds(UUID userId, int fromPage, int maxAds) {
+                return adRepo.findByUserId(userId);
     }
 
 

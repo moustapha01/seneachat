@@ -2,6 +2,13 @@ body {
     font-size: 1rem;
 }
 
+.body-100 {
+    height: 100vh;
+}
+
+.body-main {
+    calc(100vh - 60px)
+}
 .login-page,
 .register-page {
     background: #d2d6de;

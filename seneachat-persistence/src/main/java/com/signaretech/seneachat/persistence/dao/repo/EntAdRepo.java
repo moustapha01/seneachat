@@ -13,12 +13,12 @@ public interface EntAdRepo extends CrudRepository<EntAdvertisement, UUID> {
 
     List<EntAdvertisement> findByCategoryId(UUID categoryId);
 
-    @Query("Select ad from EntAdvertisement ad left join fetch ad.seller where ad.category.id=?1 or ad.category.parent.id=?1")
+    @Query("Select ad from EntAdvertisement ad left join fetch ad.user where ad.category.id=?1 or ad.category.parent.id=?1")
     List<EntAdvertisement> findByCategory(UUID id);
 
-    List<EntAdvertisement> findBySellerId(UUID id);
+    List<EntAdvertisement> findByUserId(UUID id);
 
-    @Query("Select ad from EntAdvertisement ad left join fetch ad.seller where ad.id=?1")
+    @Query("Select ad from EntAdvertisement ad left join fetch ad.user where ad.id=?1")
     EntAdvertisement fetchAdDetail(UUID id);
 
    // List<EntAdvertisement> findBySellerIdByPage(UUID id, int from, int max);

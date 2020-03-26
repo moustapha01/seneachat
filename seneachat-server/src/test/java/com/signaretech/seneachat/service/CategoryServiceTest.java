@@ -7,6 +7,7 @@ import com.signaretech.seneachat.config.TestConfig;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.persistence.utils.UUIDUtil;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.stream.IntStream;
 @SpringBootTest(classes = {SeneachatApplication.class, TestConfig.class})
 @ActiveProfiles("junit")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Ignore
 public class CategoryServiceTest {
 
     @Autowired

@@ -1,7 +1,6 @@
 package com.signaretech.seneachat.service;
 
-import com.signaretech.seneachat.model.AuthenticationResult;
-import com.signaretech.seneachat.persistence.entity.EntSeller;
+import com.signaretech.seneachat.persistence.entity.EntUser;
 
 import java.util.UUID;
 
@@ -10,27 +9,27 @@ public interface IUserService {
 
     /**
      * Persists the seller object to the data store.
-     * @param seller, {@link EntSeller} model object to create
+     * @param seller, {@link EntUser} model object to create
      */
-    EntSeller createSeller(EntSeller seller);
+    EntUser createSeller(EntUser seller);
 
     /**
      * Updates the seller object to the data store
-     * @param seller, the {@link EntSeller} model object to update
+     * @param seller, the {@link EntUser} model object to update
      */
-    EntSeller updateSeller(EntSeller seller);
+    EntUser updateSeller(EntUser seller);
 
     /**
      * @param email, email id of the seller to fetch
-     * @return, the {@link EntSeller} object with email @param email.
+     * @return, the {@link EntUser} object with email @param email.
      */
-    EntSeller findByEmail(String email);
+    EntUser findByEmail(String email);
 
     /**
      * @param id, id of the seller to fetch
-     * @return, the {@link EntSeller} object with id @param id.
+     * @return, the {@link EntUser} object with id @param id.
      */
-    EntSeller findById(UUID id);
+    EntUser findById(UUID id);
 
     /**
      * @param userName, user if for the new Seller not yet activated into the system
@@ -38,9 +37,7 @@ public interface IUserService {
      */
     void activateAccount(String userName, String activationCode);
 
-    void resendActivationCode(EntSeller seller);
+    void resendActivationCode(String username);
 
-    void register(EntSeller seller);
-
-    AuthenticationResult authenticateUser(String userName, String password);
+    void register(EntUser seller);
 }

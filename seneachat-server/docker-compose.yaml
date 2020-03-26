@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  seneachat:
+    image: moustapha01/seneachat:0.0.1-SNAPSHOT
+    ports:
+    - "8080:8080"
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      RDS_HOSTNAME: postgres
+      RDS_PORT: 5432
+      RDS_USERNAME: postgres
+      RDS_PASSWORD: Rakadiou02
+
+  postgres:
+    image: postgres
+    ports:
+    - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Rakadiou02
+    volumes:
+    - postgres-database-data-volume:/var/lib/postgres/data
+
+volumes:
+  postgres-database-data-volume:
