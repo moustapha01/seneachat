@@ -1,184 +1,184 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="head-section :: head-main">
 
 </head>
-<body class="body-100">
-<div id="wrapper" class="body-100">
-    <header id="header" th:replace="header-fixed-top :: header-main">
-    </header>
-    <section style="height: 60vh;">
-        <!-- START container for featured advertisement -->
-        <div class="p-3 ad-category-container mt-5 h-100">
-            <div class="row justify-content-center h-100">
+<body>
 
-                <div class="col-md-11 p-0 mt-5 mb-5">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link" id="annonces-tab" data-toggle="tab" href="#annonces" role="tab"
-                               aria-controls="annonces" aria-selected="true">Mes Annonces</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="credits-tab" data-toggle="tab" href="#credits" role="tab"
-                               aria-controls="credits" aria-selected="false">Credits</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                               aria-controls="profile" aria-selected="false">Profile/Statistiques</a>
-                        </li>
-                    </ul>
+<header th:replace="header-fixed-top :: header-main">>
+</header>
+<!--================Header Menu Area =================-->
 
-                    <div class="tab-content border bg-white box-shadow pt-5 pb-5 pl-3 pr-3 h-100" id="myTabContent">
-                        <div class="tab-pane fade show active" id="annonces" role="tabpanel"
-                             aria-labelledby="annonces-tab">
-                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                <div class="alert alert-secondary mb-0"
-                                     th:if="${sellerAds == null || sellerAds.size() == 0}">
-                                    <strong>Note:</strong> Vous n'avez aucune annonce disponible sur votre compte en ce
-                                    moment. Cliquer sur le button nouvelle annonce pour ajouter une.
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-success"
-                                            onclick="createNewAd('/web/dashboard/advertisements/new')">
-                                        <i class="fa fa-plus"></i> Nouvelle Annonce
-                                    </button>
-                                </div>
+<!--================Home Banner Area =================-->
+<section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+        <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
+    </div>
+</section>
+<!--================End Home Banner Area =================-->
+
+<section style="min-height: 800px;">
+    <!-- START container for featured advertisement -->
+    <div class="p-3 ad-category-container mt-5 h-100">
+        <div class="row justify-content-center h-100">
+            <div class="col-md-11 p-0 mb-5 h-100">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="annonces-tab" data-toggle="tab" href="#annonces" role="tab"
+                           aria-controls="annonces" aria-selected="true">Mes Annonces</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="credits-tab" data-toggle="tab" href="#credits" role="tab"
+                           aria-controls="credits" aria-selected="false">Credits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                           aria-controls="profile" aria-selected="false">Profile/Statistiques</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content border bg-white box-shadow dashboard-tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="annonces" role="tabpanel"
+                         aria-labelledby="annonces-tab" aria-selected="true">
+                        <div>
+                            <div class="mb-2">
+                                <button type="button" class="btn btn-success"
+                                        onclick="createNewAd('/web/dashboard/advertisements/new')">
+                                    <i class="fa fa-plus"></i> Nouvelle Annonce
+                                </button>
                             </div>
-                            <!--                        <div class="search-container input-group input-group-sm" th:if="${sellerAds != null && sellerAds.size() > 10}">
-                                                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-                                                        <div class="input-group-btn">
-                                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                                        </div>
-                                                    </div>-->
-                            <div class="mt-5 mb-5 mr-3 ml-3" th:if="${sellerAds != null && sellerAds.size() > 0}">
-                                <form name="sellerAdsForm" id="sellerAdsForm"
-                                      th:action="@{/web/dashboard/advertisements/view}" method="POST">
-                                    <input type="hidden" name="adUuid" id="adUuid">
-                                    <input type="hidden" name="adPage" id="adPage">
-                                    <div class="box-body table-responsive no-padding">
-                                        <table class="table table-hover">
-                                            <thead>
-                                            <tr>
-                                                <th>Titre</th>
-                                                <th>Categorie</th>
-                                                <th>Prix</th>
-                                                <th>Statut</th>
-                                                <th>Date</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                            </thead>
-                                            <tr th:each="ad : ${sellerAds}">
-                                                <td><a th:text="${ad.title}" href="#"
-                                                       th:onclick="'viewAd(\'' + ${ad.id} + '\')'"></a></td>
-                                                <td th:text="${ad.category.name}"></td>
-                                                <td th:text="${ad.price}"></td>
-                                                <td>
-                                                    <span th:if="${ad.status == 'A'}" class="badge badge-success">approve</span>
-                                                    <span th:if="${ad.status == 'P'}"
-                                                          class="badge badge-warning">en cours</span>
-                                                    <span th:if="${ad.status == 'R'}"
-                                                          class="badge badge-danger">rejette</span>
-                                                </td>
-                                                <td th:text="${ad.lastModifiedDate}"></td>
-                                                <td>
-                                                    <!--<button type="button" class="btn btn-primary btn-sm btn-link" th:onclick="'deleteAd(\'' + ${ad.id} + '\')'">effacer</button>-->
-                                                    <i class="fa fa-trash" data-toggle="modal" style="color: #b2b2b2; cursor: pointer" data-target="#deleteConfirmAd"
-                                                       th:onclick="'setAdUuid(\'' + ${ad.id} + '\')'"></i>
-<!--                                                    <button type="button" class="btn btn- btn-primary"
-                                                            data-toggle="modal" data-target="#deleteConfirmAd">effacer
-                                                    </button>-->
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </form>
-                                <nav aria-label="Page navigation example" th:if="${ numPages > 1}">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <th:block th:each="i: ${#numbers.sequence(1, numPages)}">
-                                            <li class="page-item"><a class="page-link" href="#"
-                                                                     th:onclick="'viewAdsPage(\'' + ${i} + '\')'"
-                                                                     th:text="${i}"></a></li>
-                                        </th:block>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                            <div class="alert alert-secondary mt-3 w-50"
+                                 th:if="${sellerAds == null || sellerAds.size() == 0}">
+                                <strong>Note:</strong> Vous n'avez aucune annonce disponible sur votre compte en ce
+                                moment. Cliquer sur le button nouvelle annonce pour ajouter une.
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="credits" role="tabpanel" aria-labelledby="credits-tab">
-
+                        <div class="mt-5 mb-5 mr-3 ml-3" th:if="${sellerAds != null && sellerAds.size() > 0}">
+                            <div>
+                            <form name="sellerAdsForm" id="sellerAdsForm"
+                                  th:action="@{/web/dashboard/advertisements/view}" method="POST">
+                                <input type="hidden" name="adUuid" id="adUuid">
+                                <input type="hidden" name="adPage" id="adPage">
+                                <input type="hidden" name="listRange" id="listRange" th:value="${listRange}">
+                                <input type="hidden" name="oldRange" id="oldRange" th:value="${oldRange}">
+                                <div class="box-body table-responsive no-padding">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Titre</th>
+                                            <th>Categorie</th>
+                                            <th>Prix</th>
+                                            <th>Statut</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tr th:each="ad : ${sellerAds}">
+                                            <td><a th:text="${ad.title}" href="#"
+                                                   th:onclick="'viewAd(\'' + ${ad.id} + '\')'"></a></td>
+                                            <td th:text="${ad.category.name}"></td>
+                                            <td th:text="${ad.price}"></td>
+                                            <td>
+                                                <span th:if="${ad.status == 'A'}" class="badge badge-success">approve</span>
+                                                <span th:if="${ad.status == 'P'}"
+                                                      class="badge badge-warning">en cours</span>
+                                                <span th:if="${ad.status == 'R'}"
+                                                      class="badge badge-danger">rejette</span>
+                                            </td>
+                                            <td th:text="${ad.lastModifiedDate}"></td>
+                                            <td>
+                                                <i class="fa fa-trash" data-toggle="modal" style="color: #b2b2b2; cursor: pointer" data-target="#deleteConfirmAd"
+                                                   th:onclick="'setAdUuid(\'' + ${ad.id} + '\')'"></i>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                            </div>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    </div>
+                    <div class="tab-pane fade" id="credits" role="tabpanel" aria-labelledby="credits-tab">
 
-                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
                     </div>
 
-                    <!-- /.nav-tab-custom -->
-                </div>    <!-- /.col-md-10 -->
-            </div>    <!-- /.row -->
-        </div>
-    </section>
-    <div class="modal fade" id="deleteConfirmAd" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle">Effacer cette annonce</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
-                <div class="modal-body">
-                    Etes vous sure vous voulez effacer cette annonce?
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-sm btn-primary" data-dismiss="modal" type="button" onclick="deleteAd()">Effacer</button>
-                    <button class="btn btn-sm btn-secondary" data-dismiss="modal">Annuler</button>
-                </div>
+
+                <!-- /.nav-tab-custom -->
+            </div>    <!-- /.col-md-10 -->
+        </div>    <!-- /.row -->
+    </div>
+</section>
+<div class="modal fade" id="deleteConfirmAd" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Effacer cette annonce</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Etes vous sure vous voulez effacer cette annonce?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary" data-dismiss="modal" type="button" onclick="deleteAd()">Effacer</button>
+                <button class="btn btn-sm btn-secondary" data-dismiss="modal">Annuler</button>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        function viewAd(uuid) {
-            document.getElementById('adUuid').value = uuid;
-            document.getElementById('sellerAdsForm').action = '/web/dashboard/advertisements/view';
-            document.sellerAdsForm.submit();
-        }
-
-        function viewAdsPage(pageNumber) {
-            alert(pageNumber);
-            document.getElementById('adPage').value = pageNumber;
-            document.getElementById('sellerAdsForm').action = '/web/dashboard';
-            document.sellerAdsForm.submit();
-        }
-
-        function deleteAd() {
-            alert(document.getElementById('adUuid').value);
-            document.getElementById('sellerAdsForm').action = '/web/dashboard/advertisements/delete';
-            document.sellerAdsForm.submit();
-        }
-
-        function setAdUuid(uuid) {
-            document.getElementById('adUuid').value = uuid;
-        }
-    </script>
-    <footer th:replace="footer :: footer-main">
-
-    </footer>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!--================Footer Area =================-->
+<footer th:replace="footer :: footer-main">
+
+</footer>
+<!--================End Footer Area =================-->
+
+
+<script type="text/javascript">
+    function viewAd(uuid) {
+        document.getElementById('adUuid').value = uuid;
+        document.getElementById('sellerAdsForm').action = '/web/dashboard/advertisements/view';
+        document.sellerAdsForm.submit();
+    }
+
+    function viewAdsPage(pageNumber) {
+        alert(pageNumber);
+        document.getElementById('adPage').value = pageNumber;
+        document.getElementById('sellerAdsForm').action = '/web/dashboard';
+        document.sellerAdsForm.submit();
+    }
+
+    function deleteAd() {
+        alert(document.getElementById('adUuid').value);
+        document.getElementById('sellerAdsForm').action = '/web/dashboard/advertisements/delete';
+        document.sellerAdsForm.submit();
+    }
+
+    function setAdUuid(uuid) {
+        document.getElementById('adUuid').value = uuid;
+    }
+</script>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/stellar.js"></script>
+<script src="/vendors/lightbox/simpleLightbox.min.js"></script>
+<script src="/vendors/nice-select/js/jquery.nice-select.min.js"></script>
+<script src="/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="/vendors/isotope/isotope-min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/js/jquery.ajaxchimp.min.js"></script>
+<script src="/js/mail-script.js"></script>
+<script src="/vendors/counter-up/jquery.waypoints.min.js"></script>
+<script src="/vendors/counter-up/jquery.counterup.min.js"></script>
+<script src="/js/theme.js"></script>
+<script src="/js/page-scrolling.js"></script>
 </body>
 </html>
-

@@ -1,23 +1,22 @@
 package com.signaretech.seneachat.service;
 
-import com.signaretech.seneachat.model.PriceFilterEntry;
+import com.google.common.collect.Lists;
+import com.signaretech.seneachat.model.*;
 import com.signaretech.seneachat.persistence.dao.repo.EntAdRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntCategoryRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntPhotoRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntUserRepo;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
-import com.signaretech.seneachat.model.AdvertisementStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class AdServiceImpl implements IAdService {
@@ -88,9 +87,6 @@ public class AdServiceImpl implements IAdService {
                 return adRepo.findByUserId(userId);
     }
 
-
-
-
     @Override
     public EntAdvertisement approveAd(EntAdvertisement ad) {
         ad.setStatus(AdvertisementStatus.ACTIVE.name());
@@ -103,28 +99,54 @@ public class AdServiceImpl implements IAdService {
         return adRepo.findByCategory(category.getId());
     }
 
-
     @Override
-    public List<PriceFilterEntry> getPriceFilters(List<EntAdvertisement> ads) {
-        Double min = ads.stream().mapToDouble( v -> v.getPrice() ).min().orElseThrow(NoSuchElementException::new);
-        Double max = ads.stream().mapToDouble( v -> v.getPrice() ).max().orElseThrow(NoSuchElementException::new);
+    public List<EntAdvertisement> findByParentCategoryAndFilter(String categoryName, AdvertisementFilter adFilter) {
+        final EntCategory category = categoryService.getCategoryByName(categoryName);
 
-        Double minRange = Math.pow(10, (int) (Math.log10(min) + 1));
-        Double maxRange = Math.pow(10, (int) (Math.log10(max)));
-
-        //Divide the price range into 10 steps.
-        Long step = (maxRange.longValue() - minRange.longValue()) / 10;
-
-        Double increment =  Math.pow(10, (int) (Math.log10(step) + 1));
-
-        List<PriceFilterEntry> priceFilters = new ArrayList<>();
-        priceFilters.add(new PriceFilterEntry(String.valueOf(min.longValue()), min.longValue(), increment.longValue()));
-        for(Double from = minRange; from < maxRange; from += increment) {
-            PriceFilterEntry entry = new PriceFilterEntry(from.toString(), from.longValue(), from.longValue() + increment.longValue());
-            priceFilters.add(entry);
+        if(!adFilter.getSelectedCategories().isEmpty()) {
+            return findBySubCategoriesAndFilter(adFilter);
         }
 
-        return priceFilters;
+        List<ItemCondition> selectedItemConditions = getSelectedItemConditions(adFilter);
+
+        return adRepo.findByParentCategoryAndFilter(category.getId(),
+                adFilter.getSelectedPrice().doubleValue(),
+                selectedItemConditions);
+    }
+
+    @Override
+    public List<EntAdvertisement> findBySubCategoriesAndFilter(AdvertisementFilter adFilter) {
+
+        List<EntCategory> allCategories = StreamSupport
+                .stream(categoryService.getAllCategories().spliterator(), false)
+                .collect(Collectors.toList());
+
+        List<UUID> selectedCategoryIds = allCategories.stream()
+                .filter( cat -> adFilter.getSelectedCategories().contains(cat.getName()))
+                .map(EntCategory::getId)
+                .collect(Collectors.toList());
+
+        List<ItemCondition> selectedItemConditions = getSelectedItemConditions(adFilter);
+
+        List<EntAdvertisement> ads = adRepo.findBySubCategoryAndFilter(selectedCategoryIds,
+                adFilter.getSelectedPrice().doubleValue(),
+                selectedItemConditions);
+
+        return ads;
+    }
+
+
+    @Override
+    public PriceRange getPriceRange(List<EntAdvertisement> ads) {
+        Double min = ads.stream().mapToDouble( v -> v.getPrice() ).min().orElseThrow(NoSuchElementException::new);
+        Double max = ads.stream().mapToDouble( v -> v.getPrice() ).max().orElseThrow(NoSuchElementException::new);
+        return new PriceRange(Math.round(min), Math.round(max));
+    }
+
+    private List<ItemCondition> getSelectedItemConditions(AdvertisementFilter adFilter) {
+        return adFilter.getSelectedConditions().isEmpty() ?
+                Arrays.stream(ItemCondition.values()).collect(Collectors.toList()) :
+                adFilter.getSelectedConditions();
     }
 }
 

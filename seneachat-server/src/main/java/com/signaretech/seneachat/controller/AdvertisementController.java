@@ -1,6 +1,8 @@
 package com.signaretech.seneachat.controller;
 
+import com.signaretech.seneachat.model.AdvertisementFilter;
 import com.signaretech.seneachat.model.PriceFilterEntry;
+import com.signaretech.seneachat.model.PriceRange;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.persistence.entity.EntPhoto;
@@ -107,10 +109,8 @@ public class AdvertisementController {
     @GetMapping("/web/advertisements/view/{adId}")
     public String viewAdDetails(Model model, @PathVariable String adId, HttpServletRequest req){
         String adUuid = req.getParameter("adUuid");
-
         EntAdvertisement ad = adService.fetchAd(UUID.fromString(adId));
         model.addAttribute("advertisement", ad);
-        model.addAttribute("selectedId", ad.getPhotos().get(0).getId());
         return "ad-detail";
     }
 
@@ -200,15 +200,42 @@ public class AdvertisementController {
     @GetMapping("/web/advertisements/categories/{category}")
     public String retrieveAdCategories(Model model, @PathVariable String category, HttpServletRequest req) {
 
+        AdvertisementFilter adFilter = new AdvertisementFilter();
+
         List<EntAdvertisement> ads = adService.getCategoryAds(category);
-        List<PriceFilterEntry> priceFilters = adService.getPriceFilters(ads);
+        PriceRange priceRange = adService.getPriceRange(ads);
+        adFilter.setPriceRange(priceRange);
+
+        if(!model.containsAttribute("advertisementFilter")) {
+            model.addAttribute("advertisementFilter", adFilter);
+        }
+
         final List<EntCategory> rootCategories = categoryService.getRootCategories();
         final List<EntCategory> childCategories = categoryService.getCategoriesByParent(category);
 
         model.addAttribute("advertisements", ads);
-        model.addAttribute("priceFilters", priceFilters);
         model.addAttribute("rootCategories", rootCategories);
         model.addAttribute("childCategories", childCategories);
+        model.addAttribute("category", category);
+
+        return "category-ads";
+    }
+
+    @PostMapping("/web/advertisements/categories/{category}")
+    public String filterAdCategories(@ModelAttribute("advertisementFilter") AdvertisementFilter adFilter,
+                                     Model model, @PathVariable String category, HttpServletRequest req) {
+
+        List<EntAdvertisement> ads = adService.findByParentCategoryAndFilter(category, adFilter);
+
+        final List<EntCategory> rootCategories = categoryService.getRootCategories();
+        final List<EntCategory> childCategories = categoryService.getCategoriesByParent(category);
+
+        model.addAttribute("advertisements", ads);
+        model.addAttribute("rootCategories", rootCategories);
+        model.addAttribute("childCategories", childCategories);
+        model.addAttribute("category", category);
+
+        model.addAttribute("advertisementFilter", adFilter);
 
         return "category-ads";
     }

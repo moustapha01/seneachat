@@ -47,6 +47,21 @@ public class SellerController {
         return "sellerads";
     }
 
+    @PostMapping("/web/dashboard")
+    public String dashboardScroll(Model model, HttpServletRequest req) {
+        String loggedInUser = securityService.getLoggedInUser();
+        EntUser seller = sellerService.findByEmail(loggedInUser);
+        if(!(seller.getStatus().equals("A"))){
+            return "registration-confirmation";
+        }
+        model.addAttribute("currentUser", seller.getUsername());
+        List<EntAdvertisement> sellerAds = adService.getSellerAds(seller.getId(), 0, 5);//existingSeller.getAds();
+        model.addAttribute("sellerAds", sellerAds);
+        model.addAttribute("listRange", req.getParameter("listRange"));
+        model.addAttribute("oldRange", req.getParameter("oldRange"));
+        return "sellerads";
+    }
+
     @PostMapping("/web/seller/dashboard")
     public String getSellerAds(Model model, HttpServletRequest req) {
 

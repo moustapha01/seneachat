@@ -1,6 +1,6 @@
 package com.signaretech.seneachat.service;
 
-import com.signaretech.seneachat.model.PriceFilterEntry;
+import com.signaretech.seneachat.model.PriceRange;
 import com.signaretech.seneachat.persistence.dao.repo.EntAdRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntCategoryRepo;
 import com.signaretech.seneachat.persistence.dao.repo.EntPhotoRepo;
@@ -67,9 +67,9 @@ public class AdServiceTest {
         ads.add(ad4);
         ads.add(ad5);
 
-        List<PriceFilterEntry> priceFilters = adService.getPriceFilters(ads);
-
-        assertEquals(5, priceFilters.size());
+        PriceRange priceRange = adService.getPriceRange(ads);
+        assertEquals(Long.valueOf(5000), priceRange.getMaxValue());
+        assertEquals(Long.valueOf(1000), priceRange.getMinValue());
     }
 
     @Test

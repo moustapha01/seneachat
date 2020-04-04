@@ -41,6 +41,21 @@ public class PhotoController {
         }
     }
 
+    @GetMapping("/web/advertisements/adphotos/{photoUuid}/{size}")
+    public void viewPhoto(@PathVariable String photoUuid,
+                          @PathVariable String size,
+                          HttpServletResponse resp) {
+
+        UUID photoId = UUID.fromString(photoUuid);
+        EntPhoto photo = photoService.findPhotoById(photoId);
+
+        try{
+            writeImage(photo,resp, size);
+        }catch (IOException ie) {
+            ie.printStackTrace();
+        }
+    }
+
     /**
      * Writes the image bytes from photo to the HttpServletResponse output stream.
      * @param photo, {@link EntPhoto} object that contains the image bytes
