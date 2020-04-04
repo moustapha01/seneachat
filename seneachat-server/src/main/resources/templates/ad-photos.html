@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="head-section :: head-main">
 
 </head>
 <body>
-<div id="wrapper">
-    <header id="header" th:replace="header-fixed-top :: header-main">
-    </header>
+
+<header th:replace="header-fixed-top :: header-main">
+</header>
+<!--================Header Menu Area =================-->
+
+<!--================Home Banner Area =================-->
+<section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+        <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
+    </div>
+</section>
+<!--================End Home Banner Area =================-->
     <section>
-        <div class="container-fluid p-3 ad-category-container mt-5" style="min-height: 800px;">
+        <div class="container-fluid p-3 ad-category-container" style="min-height: 800px;">
             <div class="row justify-content-center">
-                <div class="col-md-6 mt-5">
+                <div class="col-md-6 mt-4">
                     <div class="stepper-container">
                         <ul class="stepper-progress-bar">
                             <li class="active">Info de l'annonce</li>
@@ -22,14 +31,14 @@
             <div class="row justify-content-center h-100">
                 <div class="col-sm-6 col-xs-10 mt-5 mb-5">
                     <div class="border bg-white box-shadow p-4">
-                        <div>
+                        <div class="mb-3">
                             <h5><span class="fa fa-camera mr-2" style="color: gray;"></span>Photos</h5>
                         </div>
                         <div class="custom-file mt-2 mb-2">
                             <form name="adPhotoForm" id="adPhotoForm"
                                   th:action="@{${'/web/dashboard/advertisements/' + currAd.id + '/ad-photo'}}"
                                   enctype="multipart/form-data" method="POST">
-                                <input th:if="${action != null && action == 'update'}" type="file" id="file"
+                                <input type="file" id="file" th:if="${action != null && action == 'update'}"
                                        onchange="uploadPhoto();"
                                        name="file" class="custom-file-input col-sm-8" lang="fr"/>
 
@@ -89,9 +98,21 @@
     </script>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/stellar.js"></script>
+<script src="/vendors/lightbox/simpleLightbox.min.js"></script>
+<script src="/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="/vendors/isotope/isotope-min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/js/jquery.ajaxchimp.min.js"></script>
+<script src="/js/mail-script.js"></script>
+<script src="/vendors/counter-up/jquery.waypoints.min.js"></script>
+<script src="/vendors/counter-up/jquery.counterup.min.js"></script>
+<script src="/js/theme.js"></script>
 </body>
 </html>
 

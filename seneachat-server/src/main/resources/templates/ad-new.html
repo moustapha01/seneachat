@@ -5,13 +5,21 @@
 </head>
 <body>
 
-<div id="wrapper">
-    <header id="header" th:replace="header-fixed-top :: header-main">
-    </header>
+<header th:replace="header-fixed-top :: header-main">
+</header>
+<!--================Header Menu Area =================-->
+
+<!--================Home Banner Area =================-->
+<section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+        <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
+    </div>
+</section>
+<!--================End Home Banner Area =================-->
 
     <section>
         <!-- START container for featured advertisement -->
-        <div class="p-3 container-fluid ad-category-container mt-5">
+        <div class="p-3 container-fluid ad-category-container">
             <div class="row justify-content-center">
                 <div class="col-md-6 mt-5">
                     <div class="stepper-container">
@@ -27,7 +35,7 @@
                 <div class="col-md-6 mt-5 mb-5">
                     <div class="bg-white border box-shadow p-5">
                         <div class="pb15" th:if="${action == 'add'}"><h4>Nouvelle Annonce</h4></div>
-                        <form name="adForm" id="adForm" class="custom-form-typography" th:action="@{/web/dashboard/advertisements/save}"
+                        <form name="adForm" id="adForm" class="ad-form" th:action="@{/web/dashboard/advertisements/save}"
                               th:object="${advertisement}" enctype="multipart/form-data"
                               method="post">
                             <input type="hidden" th:id="adUuid" th:field="${advertisement.id}">
@@ -137,6 +145,18 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="condition" class="col-sm-2 col-form-label">Etat</label>
+                                <div class="col-sm-8">
+                                    <select class="custom-select" th:disabled="${action == 'view'}"
+                                            th:field="${advertisement.condition}"
+                                            id="condition">
+                                        <option th:each="co : ${T(com.signaretech.seneachat.model.ItemCondition).values()}" th:value="${co}"
+                                                th:text="${co}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="color" class="col-sm-2 col-form-label">Couleur</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" th:disabled="${action == 'view'}" type="text"
@@ -148,7 +168,7 @@
                                 <div class="col-sm-8">
                                         <textarea class="form-control" th:disabled="${action == 'view'}"
                                                   th:field="${advertisement.description}"
-                                                  id="description" required maxlength="150"></textarea>
+                                                  id="description"></textarea>
                                     <div class="mt-2 error">
                                         <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
                                     </div>
@@ -220,9 +240,22 @@
     }
 </script>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/stellar.js"></script>
+<script src="/vendors/lightbox/simpleLightbox.min.js"></script>
+<!--<script src="/vendors/nice-select/js/jquery.nice-select.min.js"></script>-->
+<script src="/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="/vendors/isotope/isotope-min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/js/jquery.ajaxchimp.min.js"></script>
+<script src="/js/mail-script.js"></script>
+<script src="/vendors/counter-up/jquery.waypoints.min.js"></script>
+<script src="/vendors/counter-up/jquery.counterup.min.js"></script>
+<script src="/js/theme.js"></script>
 </body>
 </html>
 

@@ -16,5 +16,6 @@ public interface ICategoryService {
     EntCategory getCategoryByName(String name);
 
     EntCategory createCategory(EntCategory category);
+
 }
 

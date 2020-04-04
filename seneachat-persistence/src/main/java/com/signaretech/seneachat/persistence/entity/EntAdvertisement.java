@@ -1,6 +1,7 @@
 package com.signaretech.seneachat.persistence.entity;
 
 import com.google.common.base.MoreObjects;
+import com.signaretech.seneachat.model.ItemCondition;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -36,6 +37,10 @@ public class EntAdvertisement extends AuditableEntity {
     @Basic
     @Column(name = "brand", nullable = true)
     private String brand;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "item_condition", nullable = true)
+    private ItemCondition condition;
 
     @Basic
     @Column(name = "color", nullable = true)
@@ -110,6 +115,14 @@ public class EntAdvertisement extends AuditableEntity {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public ItemCondition getCondition() {
+        return condition;
+    }
+
+    public void setCondition(ItemCondition condition) {
+        this.condition = condition;
     }
 
     public String getColor() {

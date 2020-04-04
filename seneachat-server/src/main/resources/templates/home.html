@@ -1,615 +1,507 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="head-section :: head-main">
 
 </head>
 <body>
-<div id="wrapper">
-    <header id="header" th:replace="header :: header-main">
-    </header>
-    <div class="slideshow">
-        <div class="slideset">
-            <div class="slide">
-                <div class="bg-holder">
-                    <img src="/images/carousel_2.jpg" alt="">
+
+<header th:replace="header :: header-main">
+</header>
+
+<!--================Home Banner Area =================-->
+<section class="home_banner_area">
+    <div class="banner_inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="banner_content">
+                        <h2>La plateforme numero 1 <br />Du shopping en ligne</h2>
+                        <p>Trouver tous les produits de gammes sur le site Seneachat, telephones portables, ordinateurs, voitures, terrains et maisons. Publier egalement vos annonces gratuitement</p>
+                        <a class="banner_btn" href="#">Get Started</a>
+                        <a class="banner_btn2" href="#">Download</a>
+                    </div>
                 </div>
-            </div>
-            <div class="slide">
-                <div class="bg-holder">
-                    <img src="/images/img3.jpg" alt="">
-                </div>
-            </div>
-            <div class="slide">
-                <div class="bg-holder">
-                    <img src="/images/img2.jpg" alt="">
-                </div>
-            </div>
-            <div class="slide">
-                <div class="bg-holder">
-                    <img src="/images/img3.jpg" alt="">
-                </div>
-            </div>
-            <div class="slide">
-                <div class="bg-holder">
-                    <img src="/images/img1.jpg" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="cption-holder">
-            <div class="container">
-                <div>
-                    <h1>Find The Perfect Services For Your Business</h1>
-                    <div class="search-form">
-                        <div class="form-group">
-                            <input type="search" class="form-control" placeholder="Search">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                        </div>
-                        <ul class="search-suggestions">
-                            <li>Suggested:</li>
-                            <li><a href="#">Web Design</a></li>
-                            <li><a href="#">UI/UX Development</a></li>
-                            <li><a href="#">Blogger</a></li>
-                        </ul>
+                <div class="col-lg-7">
+                    <div class="home_left_img">
+                        <img class="img-fluid" src="/images/banner/home-left-1.png" alt="">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <ul class="patners-list">
-        <li><img src="/images/netflix.png" alt="image description"></li>
-        <li><img src="/images/google.png" alt="image description"></li>
-        <li><img src="/images/facebook.png" alt="image description"></li>
-    </ul>
-    <section class="main-section categories">
-        <div class="container-fluid-custom">
-            <div class="right-triangle"></div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <h3>Browser your category</h3>
-                    <p>It is a long established fact that a reader will.</p>
-                    <a class="view-all" href="#">View all <i class="fa fa-angle-right"></i></a>
-                </div>
-                <div class="col-lg-9 holder" >
-                    <div class="row">
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/house.svg" alt="image description">
-                                </div>
-                                Immobiliers
-                            </a>
-                        </div>
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/smartphone.svg" alt="image description">
-                                </div>
-                                Cellulaires
-                            </a>
-                        </div>
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/couch.svg" alt="image description">
-                                </div>
-                                Mobilers
-                            </a>
-                        </div>
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/laptop.svg" alt="image description">
-                                </div>
-                                Electroniques
-                            </a>
-                        </div>
+</section>
+<!--================End Home Banner Area =================-->
 
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/car.svg" alt="image description">
-                                </div>
-                                Automobiles
-                            </a>
+<!--================Work Area =================-->
+<section class="work_area p_120">
+    <div class="container">
+        <div class="main_title">
+            <h2>How It work for you</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+        <div class="work_inner row">
+            <div class="col-lg-4">
+                <div class="work_item">
+                    <i class="lnr lnr-screen"></i>
+                    <a href="#"><h4>Stunning Visuals</h4></a>
+                    <p>Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="work_item">
+                    <i class="lnr lnr-code"></i>
+                    <a href="#"><h4>Stunning Visuals</h4></a>
+                    <p>Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="work_item">
+                    <i class="lnr lnr-clock"></i>
+                    <a href="#"><h4>Stunning Visuals</h4></a>
+                    <p>Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Work Area =================-->
+
+<!--================Made Life Area =================-->
+<section class="made_life_area p_120">
+    <div class="container">
+        <div class="made_life_inner">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Easy to use</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Unlimited Colors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Unique Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="edge-tab" data-toggle="tab" href="#edge" role="tab" aria-controls="edge" aria-selected="false">Unique Features</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="row made_life_text">
+                        <div class="col-lg-6">
+                            <div class="left_side_text">
+                                <h3>We’ve made a life <br />that will change you</h3>
+                                <h6>We are here to listen from you deliver exellence</h6>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temp or incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
+                                <a class="main_btn" href="#">Get Started Now</a>
+                            </div>
                         </div>
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/refrigerator.svg" alt="image description">
-                                </div>
-                                Electromenagers
-                            </a>
+                        <div class="col-lg-6">
+                            <div class="chart_img">
+                                <img class="img-fluid" src="/images/chart.jpg" alt="">
+                            </div>
                         </div>
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/make-up.svg" alt="image description">
-                                </div>
-                                Cosmetiques
-                            </a>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="row made_life_text">
+                        <div class="col-lg-6">
+                            <div class="left_side_text">
+                                <h3>We’ve made a life <br />that will change you</h3>
+                                <h6>We are here to listen from you deliver exellence</h6>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temp or incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
+                                <a class="main_btn" href="#">Get Started Now</a>
+                            </div>
                         </div>
-                        <div class="col-md-4 col-lg-3">
-                            <a href="#" class="card">
-                                <div class="image-holder">
-                                    <img src="/images/coat.svg" alt="image description">
-                                </div>
-                                Vetements
-                            </a>
+                        <div class="col-lg-6">
+                            <div class="chart_img">
+                                <img class="img-fluid" src="/images/chart.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="row made_life_text">
+                        <div class="col-lg-6">
+                            <div class="left_side_text">
+                                <h3>We’ve made a life <br />that will change you</h3>
+                                <h6>We are here to listen from you deliver exellence</h6>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temp or incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
+                                <a class="main_btn" href="#">Get Started Now</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="chart_img">
+                                <img class="img-fluid" src="/images/chart.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="edge" role="tabpanel" aria-labelledby="edge-tab">
+                    <div class="row made_life_text">
+                        <div class="col-lg-6">
+                            <div class="left_side_text">
+                                <h3>We’ve made a life <br />that will change you</h3>
+                                <h6>We are here to listen from you deliver exellence</h6>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temp or incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
+                                <a class="main_btn" href="#">Get Started Now</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="chart_img">
+                                <img class="img-fluid" src="/images/chart.jpg" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <main id="main">
-        <div class="container-fluid-custom">
-            <section class="main-section pt0">
-                <div class="header">
-                    <h3>Featured Advertisements</h3>
-                    <a class="view-all" href="#">View all <i class="fa fa-angle-right"></i></a>
-                </div>
-                <div class="main-holder">
-                    <div class="slick-slider main-slider">
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Latif Manga</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/galaxy-black.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Youssou Ndiaye</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/galaxy-white.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Mohamed Faye</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/iphone-black.png" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Amadou Ndiaye</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/iphone-white.png" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Monica</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img4.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Monica</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img4.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="main-section info bg-gray">
-                <div class="header">
-                    <h3>Latest news</h3>
-                </div>
-                <div class="main-holder">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="image-holder">
-                                    <img src="/images/img5.jpg" alt="image description">
-                                </div>
-                                <h5>What is Lorem Ipsum</h5>
-                                <p>It is a long established fact that a reader will be distracted by the readable content <a href="#">more...</a> </p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="image-holder">
-                                    <img src="/images/img6.jpg" alt="image description">
-                                </div>
-                                <h5>Why do we use it</h5>
-                                <p>It is a long established fact that a reader will be distracted by the readable content <a href="#">more...</a></p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="image-holder">
-                                    <img src="/images/img7.jpg" alt="image description">
-                                </div>
-                                <h5>Where does it come from</h5>
-                                <p>It is a long established fact that a reader will be distracted by the readable content <a href="#">more...</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="main-section">
-                <div class="header">
-                    <h3>Recommended For You</h3>
-                </div>
-                <div class="main-holder second">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Johny Dep</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img01.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Monica</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img4.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Johny Dep</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img01.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Monica</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img4.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        <section class="main-section testimonials-holder bg-gray">
-            <div class="header">
-                <h3>What Our Users Say</h3>
-            </div>
-            <div class="main-holder">
-                <div class="testimonials-slider">
-                    <div class="slide">
-                        <blockquote>
-                            <q>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. </q>
-                            <cite>
-										<span class="image-holder">
-											<img src="/images/img01.jpg" alt="image description">
-										</span>
-                                <strong>Alex Smith</strong>
-                                Founder Alex&co
-                            </cite>
-                        </blockquote>
-                    </div>
-                    <div class="slide">
-                        <blockquote>
-                            <q>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. </q>
-                            <cite>
-										<span class="image-holder">
-											<img src="/images/img01.jpg" alt="image description">
-										</span>
-                                <strong>Alex Smith</strong>
-                                Founder Alex&co
-                            </cite>
-                        </blockquote>
-                    </div>
-                    <div class="slide">
-                        <blockquote>
-                            <q>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. </q>
-                            <cite>
-										<span class="image-holder">
-											<img src="/images/img01.jpg" alt="image description">
-										</span>
-                                <strong>Alex Smith</strong>
-                                Founder Alex&co
-                            </cite>
-                        </blockquote>
-                    </div>
-                    <div class="slide">
-                        <blockquote>
-                            <q>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. </q>
-                            <cite>
-										<span class="image-holder">
-											<img src="/images/img01.jpg" alt="image description">
-										</span>
-                                <strong>Alex Smith</strong>
-                                Founder Alex&co
-                            </cite>
-                        </blockquote>
-                    </div>
-                    <div class="slide">
-                        <blockquote>
-                            <q>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. </q>
-                            <cite>
-										<span class="image-holder">
-											<img src="/images/img01.jpg" alt="image description">
-										</span>
-                                <strong>Alex Smith</strong>
-                                Founder Alex&co
-                            </cite>
-                        </blockquote>
-                    </div>
+    </div>
+</section>
+<!--================End Made Life Area =================-->
 
+<!--================Screen Area =================-->
+<section class="screen_area text-center p_120">
+    <div class="container">
+        <div class="main_title">
+            <h2>Unique Screens that work perfectly</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+        <img class="img-fluid" src="/images/banner/home-left-1.png" alt="">
+    </div>
+</section>
+<!--================End Screen Area =================-->
+
+<!--================Made Life Area =================-->
+<section class="made_life_area p_120">
+    <div class="container">
+        <div class="made_life_inner">
+            <div class="row made_life_text">
+                <div class="col-lg-6">
+                    <div class="left_side_text">
+                        <h3>We’ve made a life <br />that will change you</h3>
+                        <h6>We are here to listen from you deliver exellence</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temp or incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
+                        <a class="main_btn" href="#">Get Started Now</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="chart_img">
+                        <img class="img-fluid" src="/images/browser.png" alt="">
+                    </div>
                 </div>
             </div>
-        </section>
-        <div class="container-fluid-custom">
-            <section class="main-section">
-                <div class="header">
-                    <h3>Recently Viewed</h3>
+        </div>
+    </div>
+</section>
+<!--================End Made Life Area =================-->
+
+<!--================Price Area =================-->
+<section class="price_area p_120">
+    <div class="container">
+        <div class="main_title">
+            <h2>Choose Your Price Plan</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+        <div class="price_inner row">
+            <div class="col-lg-4">
+                <div class="price_item">
+                    <div class="price_head">
+                        <h4>Real Basic</h4>
+                    </div>
+                    <div class="price_body">
+                        <ul class="list">
+                            <li><a href="#">2.5 GB Space</a></li>
+                            <li><a href="#">Secure Online Transfer</a></li>
+                            <li><a href="#">Unlimited Styles</a></li>
+                            <li><a href="#">Customer Service</a></li>
+                        </ul>
+                    </div>
+                    <div class="price_footer">
+                        <h3><span class="dlr">$</span> 39 <span class="month">Per <br />Month</span></h3>
+                        <a class="main_btn" href="#">Get Started</a>
+                    </div>
                 </div>
-                <div class="main-holder">
-                    <div class="slick-slider main-slider">
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Johny Dep</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img01.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="price_item">
+                    <div class="price_head">
+                        <h4>Real Standard</h4>
+                    </div>
+                    <div class="price_body">
+                        <ul class="list">
+                            <li><a href="#">10 GB Space</a></li>
+                            <li><a href="#">Secure Online Transfer</a></li>
+                            <li><a href="#">Unlimited Styles</a></li>
+                            <li><a href="#">Customer Service</a></li>
+                        </ul>
+                    </div>
+                    <div class="price_footer">
+                        <h3><span class="dlr">$</span> 69 <span class="month">Per <br />Month</span></h3>
+                        <a class="main_btn" href="#">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="price_item">
+                    <div class="price_head">
+                        <h4>Real Ultimate</h4>
+                    </div>
+                    <div class="price_body">
+                        <ul class="list">
+                            <li><a href="#">Unlimited Space</a></li>
+                            <li><a href="#">Secure Online Transfer</a></li>
+                            <li><a href="#">Unlimited Styles</a></li>
+                            <li><a href="#">Customer Service</a></li>
+                        </ul>
+                    </div>
+                    <div class="price_footer">
+                        <h3><span class="dlr">$</span> 99 <span class="month">Per <br />Month</span></h3>
+                        <a class="main_btn" href="#">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Price Area =================-->
+
+<!--================Testimonials Area =================-->
+<section class="testimonials_area p_120">
+    <div class="container">
+        <div class="main_title">
+            <h2>Feedback from Customers</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+        <div class="testi_slider owl-carousel">
+            <div class="item">
+                <div class="testi_item">
+                    <div class="media">
+                        <div class="d-flex">
+                            <img src="/images/testimonials/testi-1.png" alt="">
                         </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Johny Dep</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img01.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Johny Dep</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img01.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <div class="main-wrap">
-                                <div class="head">
-                                    <a href="#" class="fa fa-heart-o like"></a>
-                                    <span class="title">Level 1 Seller</span>
-                                    <strong class="heading">Johny Dep</strong>
-                                </div>
-                                <div class="img-holder">
-                                    <img src="/images/img01.jpg" alt="img description">
-                                </div>
-                                <div class="footer">
-                                    <div class="price-holder">
-                                        <ul class="price-list">
-                                            <li><span class="fa fa-star"></span>4.9 <i>(1k+)</i></li>
-                                        </ul>
-                                        <div class="text-wrap">
-                                            <span class="badge">Starting at</span>
-                                            $15
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="media-body">
+                            <p>Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware.</p>
+                            <h4>Mark Alviro Wiens</h4>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+            <div class="item">
+                <div class="testi_item">
+                    <div class="media">
+                        <div class="d-flex">
+                            <img src="/images/testimonials/testi-2.png" alt="">
+                        </div>
+                        <div class="media-body">
+                            <p>Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware.</p>
+                            <h4>Mark Alviro Wiens</h4>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="testi_item">
+                    <div class="media">
+                        <div class="d-flex">
+                            <img src="/images/testimonials/testi-1.png" alt="">
+                        </div>
+                        <div class="media-body">
+                            <p>Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware.</p>
+                            <h4>Mark Alviro Wiens</h4>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="testi_item">
+                    <div class="media">
+                        <div class="d-flex">
+                            <img src="/images/testimonials/testi-2.png" alt="">
+                        </div>
+                        <div class="media-body">
+                            <p>Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware.</p>
+                            <h4>Mark Alviro Wiens</h4>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="testi_item">
+                    <div class="media">
+                        <div class="d-flex">
+                            <img src="/images/testimonials/testi-1.png" alt="">
+                        </div>
+                        <div class="media-body">
+                            <p>Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware.</p>
+                            <h4>Mark Alviro Wiens</h4>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="testi_item">
+                    <div class="media">
+                        <div class="d-flex">
+                            <img src="/images/testimonials/testi-2.png" alt="">
+                        </div>
+                        <div class="media-body">
+                            <p>Accessories Here you can find the best computer accessory for your laptop, monitor, printer, scanner, speaker, projector, hardware.</p>
+                            <h4>Mark Alviro Wiens</h4>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
-    <footer th:replace="footer :: footer-main">
+    </div>
+</section>
+<!--================End Testimonials Area =================-->
 
-    </footer>
-</div>
+<!--================Made Life Area =================-->
+<section class="made_life_area made_white p_120">
+    <div class="container">
+        <div class="made_life_inner">
+            <div class="row made_life_text">
+                <div class="col-lg-6">
+                    <div class="chart_img">
+                        <img class="img-fluid" src="/images/banner/home-left-1.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="left_side_text">
+                        <h3>We’ve made a life <br />that will change you</h3>
+                        <h6>We are here to listen from you deliver exellence</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod temp or incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
+                        <a class="main_btn" href="#">Get Started Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Made Life Area =================-->
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!--================Impress Area =================-->
+<section class="impress_area p_120">
+    <div class="container">
+        <div class="impress_inner">
+            <h2>Got Impressed to our features?</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+            <a class="banner_btn2" href="#">Request Free Demo</a>
+        </div>
+    </div>
+</section>
+<!--================End Impress Area =================-->
+
+<!--================Footer Area =================-->
+<footer class="footer_area p_120">
+    <div class="container">
+        <div class="row footer_inner">
+            <div class="col-lg-5 col-sm-6">
+                <aside class="f_widget ab_widget">
+                    <div class="f_title">
+                        <h3>About Me</h3>
+                    </div>
+                    <p>Do you want to be even more successful? Learn to love learning and growth. The more effort you put into improving your skills,</p>
+                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                </aside>
+            </div>
+            <div class="col-lg-5 col-sm-6">
+                <aside class="f_widget news_widget">
+                    <div class="f_title">
+                        <h3>Newsletter</h3>
+                    </div>
+                    <p>Stay updated with our latest trends</p>
+                    <div id="mc_embed_signup">
+                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" class="subscribe_form relative">
+                            <div class="input-group d-flex flex-row">
+                                <input name="EMAIL" placeholder="Enter email address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address '" required="" type="email">
+                                <button class="btn sub-btn"><span class="lnr lnr-arrow-right"></span></button>
+                            </div>
+                            <div class="mt-10 info"></div>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+            <div class="col-lg-2">
+                <aside class="f_widget social_widget">
+                    <div class="f_title">
+                        <h3>Follow Me</h3>
+                    </div>
+                    <p>Let us be social</p>
+                    <ul class="list">
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--================End Footer Area =================-->
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/stellar.js"></script>
+<script src="/vendors/lightbox/simpleLightbox.min.js"></script>
+<script src="/vendors/nice-select/js/jquery.nice-select.min.js"></script>
+<script src="/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="/vendors/isotope/isotope-min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/js/jquery.ajaxchimp.min.js"></script>
+<script src="/vendors/counter-up/jquery.waypoints.min.js"></script>
+<script src="/vendors/counter-up/jquery.counterup.min.js"></script>
+<script src="/js/mail-script.js"></script>
+<!--gmaps Js-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+<script src="/js/gmaps.min.js"></script>
+<script src="/js/theme.js"></script>
 </body>
 </html>

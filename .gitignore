@@ -1,5 +1,10 @@
 HELP.md
 /target/
+seneachat-common/target/
+seneachat-model/target/
+seneachat-persistence/target/
+seneachat-server/target/
+
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

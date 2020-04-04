@@ -5,52 +5,111 @@
 </head>
 <body>
 
-<header th:replace="header :: header-main">
+<header th:replace="header-fixed-top :: header-main">>
 </header>
+<!--================Header Menu Area =================-->
+
+<!--================Home Banner Area =================-->
+<section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+        <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0"
+             data-background=""></div>
+    </div>
+</section>
 
 <section>
     <div class="container-fluid">
         <div class="d-flex flex-row justify-content-around" style="border-top: 1px solid lightgray;">
             <div class="col-sm-2" style="border-right: 1px solid lightgray;">
-                <div class="container-fluid h-100 mt-5 mb-5">
-                    <span class="font-weight-bold mb-3">Prix</span>
-                    <div th:each="priceFilter : ${priceFilters}" class="mt-2">
-                        <a th:text="${priceFilter.minValue} + ' to ' + ${priceFilter.maxValue}" href="#"
-                           class="text-secondary"></a>
+                <form name="adFilterForm" id="adFilterForm" class="ad-filter-form" th:object="${advertisementFilter}" method="post">
+                    <div class="container-fluid h-100 mt-5 mb-5">
+                        <div class="mb-3">
+                            <span class="font-weight-bold">Filtrer par prix</span>
+                            <div class="slidecontainer">
+                                <input type="range" th:min="${advertisementFilter.priceRange.minValue}" th:value="${advertisementFilter.priceRange.maxValue}" th:field="*{selectedPrice}"
+                                       th:max="${advertisementFilter.priceRange.maxValue}" class="slider" name="priceFilter" id="priceFilter" onchange="submitForm()">
+
+                                <input type="hidden" name="minValue" th:field="*{priceRange.minValue}">
+                                <input type="hidden" name="maxValue" th:field="*{priceRange.maxValue}">
+                                <p>Max: <span id="demo"></span></p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-weight-bold">Filtrer par marque</span>
+                            <div th:each="cat : ${childCategories}" class="custom-control custom-checkbox d-flex justify-content-between">
+                                <input type="checkbox" class="form-check-input" name="categoryFilter" th:value="${cat.name}"
+                                       onchange="submitForm()" th:field="*{selectedCategories}">
+                                <label class="form-check-label" for="categoryFilter" th:text="${cat.name}"></label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-weight-bold">Filtrer par etat</span>
+                            <div th:each="co : ${T(com.signaretech.seneachat.model.ItemCondition).values()}" class="custom-control custom-checkbox d-flex justify-content-between">
+                                <input type="checkbox" class="form-check-input" name="itemConditionFilter" th:value="${co}"
+                                       th:field="*{selectedConditions}" onchange="submitForm()">
+                                <label class="form-check-label" for="itemConditionFilter" th:text="${co}"></label>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
-            <div class="col-sm-10 d-flex category-card ">
-                <div th:each="ad : ${advertisements}" class="card-body">
-                    <div class="">
-                        <div class="img-container mb-1">
-                            <img th:src="@{${'/web/adphotos/' + ad.photos[0].id}}"/>
+            <div class="col-sm-10">
+                <div class="mt-5 ml-3">
+                    <span>
+                        <h4>Les Annnonces <span th:text="${category}"></span></h4>
+                    </span>
+                </div>
+                <div class="d-flex flex-sm-wrap">
+                    <div th:each="ad : ${advertisements}"
+                         class="price_item d-flex flex-column justify-content-between m-3">
+                        <div class="price_head">
+                            <a th:text="${ad.title}" class="category-title"
+                               th:href="@{'/web/advertisements/view/' + ${ad.id}}"></a>
                         </div>
-                        <div>
-                            <a th:text="${ad.title}" class="category-title" th:href="@{'/web/advertisements/view/' + ${ad.id}}"></a>
-                            <span th:text="${ad.description}" class="p-0  description"></span>
+                        <div class="price_body">
+                            <div th:if="${#lists.isEmpty(ad.photos)}">
+                                <i class="fa fa-4x fa-camera"></i>
+                            </div>
+                            <div th:if="${#lists.size(ad.photos) > 0}">
+                                <img th:src="@{${'/web/advertisements/adphotos/' + ad.photos[0].id + '/M'}}"/>
+                            </div>
                         </div>
-
-                        <div>
-                            <span th:text="${#numbers.formatCurrency(ad.price)}" class="font-weight-bold"
-                                  style="color: dimgray;"></span>
+                        <div class="ad-summary">
+                            <div class="price">
+                                <span th:text="${#numbers.formatCurrency(ad.price)}"></span>
+                            </div>
+                            <div class="d-flex flex-row justify-content-around mt-2">
+                                <div class="d-flex flex-column align-items-start">
+                                    <div class="ad-footer-label">
+                                        <span>Lieu</span>
+                                    </div>
+                                    <div class="ad-footer-text">
+                                        <span th:text="${ad.adLocation}"></span>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-start">
+                                    <div class="ad-footer-label">
+                                        <span>Nom</span>
+                                    </div>
+                                    <div class="ad-footer-text">
+                                        <span>Moussa Sy</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-start">
+                                    <div class="ad-footer-label">
+                                        <span>Tel</span>
+                                    </div>
+                                    <div class="ad-footer-text">
+                                        <span>405-328-8268</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <!--                            <div>
-                                                        <i class="fa fa-map-marker mr-1" style="color: darkgray;"></i>
-                                                        <span th:text="${ad.adLocation}" class="mr-5"></span>
-
-                                                        <i class="fa fa-phone fa-flip-horizontal mr-1" style="color: dimgray;"></i>
-                                                        <span th:text="${ad.seller.cellPhone}" class="mr-5"></span>
-
-                                                        <i class="fa fa-envelope mr-1" style="color: dimgray;"></i>
-                                                        <span>Email</span>
-                                                    </div>-->
-
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
     </div>
 </section>
@@ -58,8 +117,38 @@
 
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+    var slider = document.getElementById("priceFilter");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value; // Display the default slider value
+
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+    }
+
+    function submitForm() {
+        document.getElementById("adFilterForm").method = 'POST'
+        document.getElementById("adFilterForm").action = '/web/advertisements/categories/Cellulaires';
+        document.getElementById("adFilterForm").submit();
+    }
+</script>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/stellar.js"></script>
+<script src="/vendors/lightbox/simpleLightbox.min.js"></script>
+<script src="/vendors/nice-select/js/jquery.nice-select.min.js"></script>
+<script src="/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="/vendors/isotope/isotope-min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/js/jquery.ajaxchimp.min.js"></script>
+<script src="/js/mail-script.js"></script>
+<script src="/vendors/counter-up/jquery.waypoints.min.js"></script>
+<script src="/vendors/counter-up/jquery.counterup.min.js"></script>
+<script src="/js/theme.js"></script>
+<script src="/js/page-scrolling.js"></script>
 </body>
 </html>

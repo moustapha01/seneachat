@@ -5,44 +5,38 @@
 </head>
 <body>
 
-<header id="header" class="shrink" th:fragment="header-main">
-    <div class="container-fluid">
-        <div class="header-holder">
-            <div class="logo">
-                <a href="#">
-                    <img src="/images/logo.png" alt="image description">
-                </a>
-            </div>
-            <div class="search-form">
-                <div class="form-group">
-                    <input type="search" class="form-control" placeholder="Search">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+<header class="header_area" th:fragment="header-main">
+    <div class="main_menu">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container box_1620">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav menu_nav justify-content-center">
+                        <li class="nav-item active"><a class="nav-link" th:href="@{/web/home}" >Acceuil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about-us.html">La Compagnie</a></li>
+                        <li class="nav-item"><a class="nav-link" href="services.html">Nous Contacter</a>
+                        <li class="nav-item" th:if="${currentUser == null}"><a class="nav-link" th:href="@{/web/login}">Se Connecter</a></li>
+                        <li class="nav-item submenu dropdown" th:if="${currentUser != null}">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mon Compte</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" th:href="@{/web/dashboard}" >Mes Annonces</a></li>
+                                <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/web/logout}" th:if="${currentUser != null}">De-connecter</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a href="#" class="tickets_btn">Free Trial</a></li>
+                    </ul>
                 </div>
             </div>
-            <nav id="nav">
-                <ul class="right-nav">
-                    <li>
-                        <a href="#">Home</a>
-                    </li>
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li th:if="${currentUser == null}">
-                        <a th:href="@{/web/login}" href="#"><i class="fa fa-user fa-xs"></i>Se Connecter</a>
-                    </li>
-                    <li th:if="${currentUser != null}">
-                        <a th:href="@{/web/dashboard}"><i class="fa fa-user"></i><span>Mon Compte</span></a>
-                    </li>
-                    <li th:if="${currentUser != null}">
-                        <a th:href="@{/web/logout}"><i class="fa fa-sign-out-alt" aria-hidden="true"></i><span>Deconnecter</span></a>
-                    </li>
-                </ul>
-            </nav>
-            <a href="#" class="search-opener"><i class="fa fa-search"></i></a>
-            <a href="#" class="nav-opener"><span></span></a>
-        </div>
+        </nav>
     </div>
 </header>

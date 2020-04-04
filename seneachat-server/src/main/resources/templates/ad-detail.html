@@ -5,28 +5,35 @@
 </head>
 <body>
 
-<header th:replace="header :: header-main">
+<header th:replace="header-fixed-top :: header-main">>
 </header>
+<!--================Header Menu Area =================-->
+
+<!--================Home Banner Area =================-->
+<section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+        <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0"
+             data-background=""></div>
+    </div>
+</section>
 
 <section>
     <div class="container-fluid">
-        <div class="d-flex flex-row justify-content-around" style="border-top: 1px solid lightgray;">
-            <div class="col-sm-2" style="border-right: 1px solid lightgray;">
-                <div class="container-fluid h-100 mt-5 mb-5">
-                    <span class="font-weight-bold mb-3"></span>
-                </div>
-            </div>
-            <div class="col-sm-10">
+        <div class="d-flex flex-row justify-content-around">
+            <div class="col-sm-8">
                 <div class="row">
                     <div class="col-sm-6 p-3">
-                        <div class="w-100 d-flex flex-row justify-content-center border border-light p-3">
-                            <img id="photomain" th:src="@{${'/web/adphotos/' + advertisement.photos[0].id + '/large'}}"/>
+                        <div th:if="${#lists.isEmpty(advertisement.photos)}">
+                            <i class="fa fa-4x fa-camera"></i>
+                        </div>
+                        <div th:if="${#lists.size(advertisement.photos) > 0}" class="w-100 d-flex flex-row justify-content-center border border-light p-3">
+                            <img id="photomain" th:src="@{${'/web/advertisements/adphotos/' + advertisement.photos[0].id + '/XL'}}"/>
                         </div>
 
                         <div class="d-flex flex-row justify-content-around mt-5 align-items-end">
                             <div class="col" th:each="photo : ${advertisement.photos}">
-                                <a href="#" th:onclick="'loadPhoto(\'' + ${photo.id} + '\')'">
-                                    <img th:src="@{${'/web/adphotos/' + photo.id}}"/>
+                                <a href="#" th:onmouseover="'loadPhoto(\'' + ${photo.id} + '\')'">
+                                    <img th:src="@{${'/web/advertisements/adphotos/' + photo.id + '/S'}}"/>
                                 </a>
                             </div>
                             </c:forEach>
@@ -34,19 +41,38 @@
                         </div>
                     </div>
 
-                    <div id="addDetailContainer" class="col-sm-6 p-3">
+                    <div id="addDetailContainer" class="col-sm-6 p-4">
                         <h3 th:text="${advertisement.title}"></h3>
                         <span th:text="${advertisement.description}"></span><br/>
 
                         <div class="d-flex flex-row align-items-center mt-5">
-                                <div class="mr-2">
-                                    <i class="fa fa-phone"></i>
+                                <div class="mr-3">
+                                    <i class="fa fa-map-marker"></i>
+                                    <span th:text="${advertisement.adLocation}"></span>
+                                </div>
+                                <div class="mr-3">
+                                    <i class="fa fa-mobile"></i>
                                     <span th:text="${advertisement.user.cellPhone}"></span>
                                 </div>
                                 <div>
                                     <i class="fa fa-envelope"></i>
-                                    <span th:text="${advertisement.user.email}"></span>
+                                    <span th:text="${advertisement.user.username}"></span>
                                 </div>
+                        </div>
+                        <hr/>
+                        <div class="d-flex flex-row align-items-center mt-5">
+                            <div class="mr-3">
+                                <span>Marque: </span>
+                                <span th:text="${advertisement.brand}"></span>
+                            </div>
+                            <div class="mr-3">
+                                <span>couleur: </span>
+                                <span th:text="${advertisement.color}"></span>
+                            </div>
+                            <div>
+                                <span>Etat: </span>
+                                <span th:text="${advertisement.condition}"></span>
+                            </div>
                         </div>
                         <hr/>
                         <div>
@@ -64,16 +90,29 @@
 </footer>
 <script type="text/javascript">
     function loadPhoto(id) {
-        document.getElementById('photomain').src = '/web/adphotos/' + id + '/large';
+        document.getElementById('photomain').src = '/web/advertisements/adphotos/' + id + '/XL';
         //document.getElementById('adForm').submit();
     }
 
 </script>
 
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/stellar.js"></script>
+<script src="/vendors/lightbox/simpleLightbox.min.js"></script>
+<script src="/vendors/nice-select/js/jquery.nice-select.min.js"></script>
+<script src="/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="/vendors/isotope/isotope-min.js"></script>
+<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="/js/jquery.ajaxchimp.min.js"></script>
+<script src="/js/mail-script.js"></script>
+<script src="/vendors/counter-up/jquery.waypoints.min.js"></script>
+<script src="/vendors/counter-up/jquery.counterup.min.js"></script>
+<script src="/js/theme.js"></script>
+<script src="/js/page-scrolling.js"></script>
 </body>
 </html>
 

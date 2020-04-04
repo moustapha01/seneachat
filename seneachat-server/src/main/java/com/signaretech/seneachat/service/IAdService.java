@@ -1,6 +1,8 @@
 package com.signaretech.seneachat.service;
 
+import com.signaretech.seneachat.model.AdvertisementFilter;
 import com.signaretech.seneachat.model.PriceFilterEntry;
+import com.signaretech.seneachat.model.PriceRange;
 import com.signaretech.seneachat.persistence.entity.EntAdvertisement;
 import com.signaretech.seneachat.persistence.entity.EntCategory;
 import com.signaretech.seneachat.persistence.entity.EntPhoto;
@@ -28,5 +30,9 @@ public interface IAdService {
 
     List<EntAdvertisement> getCategoryAds(String categoryName);
 
-    List<PriceFilterEntry> getPriceFilters(List<EntAdvertisement> ads);
+    List<EntAdvertisement> findByParentCategoryAndFilter(String categoryName, AdvertisementFilter adFilter);
+
+    List<EntAdvertisement> findBySubCategoriesAndFilter(AdvertisementFilter adFilter);
+
+    PriceRange getPriceRange(List<EntAdvertisement> ads);
 }

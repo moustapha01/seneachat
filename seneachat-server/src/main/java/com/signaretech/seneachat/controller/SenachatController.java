@@ -22,6 +22,11 @@ public class SenachatController {
     }
 
     @GetMapping("/")
+    public String index(Model model) {
+        return "redirect:/web/home";
+    }
+
+    @GetMapping("/web/home")
     public String home(Model model) {
         final List<EntCategory> rootCategories = categoryService.getRootCategories();
         model.addAttribute("rootCategories", rootCategories);
